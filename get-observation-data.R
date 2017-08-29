@@ -21,6 +21,8 @@ if (is.na(suppressWarnings(as.numeric(inat.taxon.id)))) {
               "\n"))
 }
 
+# The L. xanthoides file has mix-ups in data; not sure why
+
 page.num <- 1
 finished <- FALSE
 obs.data <- NULL
