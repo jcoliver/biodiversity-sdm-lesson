@@ -11,7 +11,7 @@ rm(list = ls())
 library("dismo")
 library("maptools") # For drawing maps
 
-inat.taxon.id <- 59125 # L. xanthoides
+inat.taxon.id <- 50931 # S. melinus
 page.num <- 1
 finished <- FALSE
 obs.data <- NULL
@@ -41,9 +41,6 @@ while (!finished & page.num < 100) {
 }
 
 # iNaturalist data of interest are in columns "latitude" and "longitude"
-# iNaturalist.data <- read.delim(file = "data/inaturalist/59125-iNaturalist.txt",
-#                                stringsAsFactors = FALSE)
-# obs.data <- iNaturalist.data[, c("longitude", "latitude")]
 obs.data <- obs.data[, c("longitude", "latitude")]
 colnames(obs.data) <- c("lon", "lat")
 
@@ -119,10 +116,10 @@ plot(predict.presence, main = "BIOCLIM, raw")
 plot(wrld_simpl, add = TRUE, border = "dark grey")
 plot(predict.presence > bc.threshold, main = "Presence/Absence")
 plot(wrld_simpl, add = TRUE, border = "dark grey")
-points(presence.train, pch = "+")
+points(presence.train, pch = "+", cex = 0.2)
 par(mfrow = c(1, 1))
 
-png(filename = "output/sdm-lycaena-xanthoides.png")
-plot(predict.presence, main = "Lycaena xanthoides")
+png(filename = "output/sdm-strymon-melinus.png")
+plot(predict.presence, main = "Strymon melinus")
 plot(wrld_simpl, add = TRUE, border = "dark grey")
 dev.off()
