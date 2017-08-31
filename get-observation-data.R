@@ -5,7 +5,7 @@
 
 ################################################################################
 args = commandArgs(trailingOnly = TRUE)
-usage.string <- "Usage: Rscript get-observation-data.R <taxon_id>"
+usage.string <- "Usage: Rscript --vanilla get-observation-data.R <taxon_id>"
 
 if (length(args) < 1) {
   stop(paste("get-observation-data requires a numerical taxon id", 
@@ -37,7 +37,7 @@ while (!finished & page.num < 100) {
                     "&page=", 
                     page.num,
                     "&quality_grade=research&has[]=geo")
-  temp.data <- read.csv(file = obs.url)
+  temp.data <- read.csv(file = obs.url, stringsAsFactors = FALSE)
   if (nrow(temp.data) > 0) {
     if (is.null(obs.data)) {
       obs.data <- temp.data
@@ -60,11 +60,10 @@ if (nrow(obs.data) > 0) {
     dir.create("data/inaturalist")
   }
   outfile <- paste0("data/inaturalist/", inat.taxon.id, "-iNaturalist.txt")
-  write.table(x = obs.data, 
-              file = outfile,
-              row.names = FALSE,
-              quote = FALSE,
-              sep = "\t")
+  write.csv(x = obs.data, 
+            file = outfile,
+            row.names = FALSE,
+            quote = TRUE) # Gotta quote strings, as they are likely to contain common seps (i.e. "," and "\t")
   cat(paste0(nrow(obs.data), " records for taxon id ", inat.taxon.id, " written to ", outfile, "\n"))
 } else {
   cat(paste0("No records returned for taxon id = ", inat.taxon.id, "\n"))
