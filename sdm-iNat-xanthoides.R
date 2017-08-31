@@ -12,39 +12,12 @@ library("dismo")
 library("maptools") # For drawing maps
 
 inat.taxon.id <- 59125 # L. xanthoides
-page.num <- 1
-finished <- FALSE
-obs.data <- NULL
-# Retrieving information from iNaturalist API
-# Don't know a priori how many pages of records there will be, so for now we'll
-# just keep doing GET requests, incrementing the `page` key until we get a 
-# result with zero observations (up to 99 requests, more than that requires 
-# authentication)
-while (!finished & page.num < 100) {
-  obs.url <- paste0("http://inaturalist.org/observations.csv?&taxon_id=", 
-                    inat.taxon.id, 
-                    "&page=", 
-                    page.num,
-                    "&quality_grade=research&has[]=geo")
-  temp.data <- read.csv(file = obs.url)
-  if (nrow(temp.data) > 0) {
-    if (is.null(obs.data)) {
-      obs.data <- temp.data
-    } else {
-      obs.data <- rbind(obs.data, temp.data)
-    }
-  } else {
-    finished <- TRUE
-  }
-  page.num <- page.num + 1
-  rm(temp.data)
-}
+infile <- paste0("data/inaturalist/", inat.taxon.id, "-iNaturalist.txt")
 
 # iNaturalist data of interest are in columns "latitude" and "longitude"
-# iNaturalist.data <- read.delim(file = "data/inaturalist/59125-iNaturalist.txt",
-#                                stringsAsFactors = FALSE)
-# obs.data <- iNaturalist.data[, c("longitude", "latitude")]
-obs.data <- obs.data[, c("longitude", "latitude")]
+iNaturalist.data <- read.csv(file = infile,
+                             stringsAsFactors = FALSE)
+obs.data <- iNaturalist.data[, c("longitude", "latitude")]
 colnames(obs.data) <- c("lon", "lat")
 
 # Remove duplicate rows
@@ -77,7 +50,7 @@ raster.files <- list.files(path = paste0(system.file(package = "dismo"), "/ex"),
                            pattern = "grd", full.names = TRUE)
 mask <- raster(raster.files[1])
 # Random points (same number as our observed points)
-set.seed(inat.taxon.id)
+# set.seed(inat.taxon.id)
 bg <- randomPoints(mask = mask, n = nrow(obs.data), ext = geographic.extent, extf = 1.25)
 colnames(bg) <- c("lon", "lat")
 
@@ -121,8 +94,3 @@ plot(predict.presence > bc.threshold, main = "Presence/Absence")
 plot(wrld_simpl, add = TRUE, border = "dark grey")
 points(presence.train, pch = "+")
 par(mfrow = c(1, 1))
-
-png(filename = "output/sdm-lycaena-xanthoides.png")
-plot(predict.presence, main = "Lycaena xanthoides")
-plot(wrld_simpl, add = TRUE, border = "dark grey")
-dev.off()

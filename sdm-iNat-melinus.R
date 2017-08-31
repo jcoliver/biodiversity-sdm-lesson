@@ -12,36 +12,12 @@ library("dismo")
 library("maptools") # For drawing maps
 
 inat.taxon.id <- 50931 # S. melinus
-page.num <- 1
-finished <- FALSE
-obs.data <- NULL
-# Retrieving information from iNaturalist API
-# Don't know a priori how many pages of records there will be, so for now we'll
-# just keep doing GET requests, incrementing the `page` key until we get a 
-# result with zero observations (up to 99 requests, more than that requires 
-# authentication)
-while (!finished & page.num < 100) {
-  obs.url <- paste0("http://inaturalist.org/observations.csv?&taxon_id=", 
-                    inat.taxon.id, 
-                    "&page=", 
-                    page.num,
-                    "&quality_grade=research&has[]=geo")
-  temp.data <- read.csv(file = obs.url)
-  if (nrow(temp.data) > 0) {
-    if (is.null(obs.data)) {
-      obs.data <- temp.data
-    } else {
-      obs.data <- rbind(obs.data, temp.data)
-    }
-  } else {
-    finished <- TRUE
-  }
-  page.num <- page.num + 1
-  rm(temp.data)
-}
+infile <- paste0("data/inaturalist/", inat.taxon.id, "-iNaturalist.txt")
 
 # iNaturalist data of interest are in columns "latitude" and "longitude"
-obs.data <- obs.data[, c("longitude", "latitude")]
+iNaturalist.data <- read.csv(file = infile,
+                             stringsAsFactors = FALSE)
+obs.data <- iNaturalist.data[, c("longitude", "latitude")]
 colnames(obs.data) <- c("lon", "lat")
 
 # Remove duplicate rows
