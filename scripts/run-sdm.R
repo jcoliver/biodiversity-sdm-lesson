@@ -148,13 +148,13 @@ par(mar = c(5, 4, 4, 2) + 0.1)
 dev.off()
 
 # Save raster to files
-writeRaster(x = predict.presence, 
-            filename = paste0("output/rasters/", outprefix, "-prediction.grd"),
-            format = "raster",
-            overwrite = TRUE)
+suppressMessages(writeRaster(x = predict.presence, 
+                             filename = paste0("output/rasters/", outprefix, "-prediction.grd"),
+                             format = "raster",
+                             overwrite = TRUE))
 
-writeRaster(x = predict.presence > bc.threshold, 
-            filename = paste0("output/rasters/", outprefix, "-prediction-threshold.grd"),
-            format = "raster",
-            overwrite = TRUE)
+suppressMessages(writeRaster(x = predict.presence > bc.threshold, 
+                             filename = paste0("output/rasters/", outprefix, "-prediction-threshold.grd"),
+                             format = "raster",
+                             overwrite = TRUE))
 cat("Finished with file writing.\n")

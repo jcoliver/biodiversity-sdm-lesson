@@ -1,13 +1,10 @@
-# SDM on iNaturalist data for Lycaena xanthoides (incl. subspecies)
+# SDM image for ACIC class
 # Jeff Oliver
 # jcoliver@email.arizona.edu
-# 2017-08-22
+# 2017-08-30
 
 rm(list = ls())
 ################################################################################
-# See
-# https://cran.r-project.org/web/packages/dismo/vignettes/sdm.pdf
-
 library("dismo")
 library("maptools") # For drawing maps
 
@@ -24,19 +21,12 @@ colnames(obs.data) <- c("lon", "lat")
 duplicate.rows <- duplicated(x = obs.data)
 obs.data <- obs.data[!duplicate.rows, ]
 
-# Determine geographic extent of our data
-max.lat = ceiling(max(obs.data$lat))
-min.lat = floor(min(obs.data$lat))
-max.lon = ceiling(max(obs.data$lon))
-min.lon = floor(min(obs.data$lon))
+# Set map boundaries
+max.lat = 50
+min.lat = 18
+max.lon = -68
+min.lon = -125
 geographic.extent <- extent(x = c(min.lon, max.lon, min.lat, max.lat))
-
-# Reality check - plot points
-data(wrld_simpl)
-plot(wrld_simpl, xlim = c(min.lon, max.lon), ylim = c(min.lat, max.lat), axes = TRUE, col = "light yellow")
-box()
-points(obs.data$lon, obs.data$lat, col = "orange", pch = 20, cex = 0.75)
-points(obs.data$lon, obs.data$lat, col = "red", cex = 0.75)
 
 # Get the biolim data
 bioclim.data <- getData(name = "worldclim",
@@ -54,12 +44,6 @@ set.seed(inat.taxon.id)
 bg <- randomPoints(mask = mask, n = nrow(obs.data), ext = geographic.extent, extf = 1.25)
 colnames(bg) <- c("lon", "lat")
 
-# Reality check to make sure they're OK
-plot(wrld_simpl, xlim = c(min.lon, max.lon), ylim = c(min.lat, max.lat), axes = TRUE, col = "light yellow")
-box()
-plot(geographic.extent, add = TRUE, col = "red")
-points(bg, cex = 0.5)
-
 # Data for observation sites (presence and background)
 presence.values <- extract(x = bioclim.data, y = obs.data)
 absence.values <- extract(x = bioclim.data, y = bg)
@@ -73,29 +57,46 @@ group.bg <- kfold(bg, 5)
 bg.train <- bg[group.bg != testing.group, ]
 bg.test <- bg[group.bg == testing.group, ]
 
-# Reality check - Look at distribution of training and testing data
-plot(wrld_simpl, xlim = c(min.lon, max.lon), ylim = c(min.lat, max.lat), axes = TRUE, col = "light yellow")
-box()
-plot(geographic.extent, add = TRUE, col = "red", lwd = 2)
-points(bg.train, pch = "-", col = "magenta")
-points(bg.test, pch = "-", col = "black")
-points(presence.train, pch = "+", col = "green")
-points(presence.test, pch = "+", col = "blue")
 
 # Do species distribution model and draw a plot
 bc <- bioclim(x = bioclim.data, p = presence.train)
 bc.eval <- evaluate(presence.test, bg.test, bc, bioclim.data)
 bc.threshold <- threshold(bc.eval, "spec_sens")
 predict.presence <- predict(x = bioclim.data, object = bc, ext = geographic.extent, progress = "")
-par(mfrow = c(1, 2))
-plot(predict.presence, main = "BIOCLIM, raw")
-plot(wrld_simpl, add = TRUE, border = "dark grey")
-plot(predict.presence > bc.threshold, main = "Presence/Absence")
-plot(wrld_simpl, add = TRUE, border = "dark grey")
-points(presence.train, pch = "+", cex = 0.2)
-par(mfrow = c(1, 1))
+data("wrld_simpl")
+png(file = "output/images/melinus-observed.png", width = 960, height = 960)
+plot(wrld_simpl, 
+     xlim = c(-125, -68), 
+     ylim = c(18, 50), 
+     axes = TRUE, 
+     col = "#F2F2F2",
+     border = "dark grey",
+     main = "Observed data")
+points(obs.data$lon, obs.data$lat, col = "darkred", pch = 20)
+box()
+dev.off()
 
-png(filename = "output/sdm-strymon-melinus.png")
-plot(predict.presence, main = "Strymon melinus")
-plot(wrld_simpl, add = TRUE, border = "dark grey")
+png(file = "output/images/melinus-predicted.png", width = 960, height = 960)
+plot(wrld_simpl, 
+     xlim = c(-125, -68), 
+     ylim = c(18, 50), 
+     axes = TRUE, 
+     add = FALSE,
+     col = "#F2F2F2",
+     border = "dark grey",
+     main = "Probability of occurrence")
+plot(predict.presence, 
+     add = TRUE,
+     legend = FALSE)
+plot(predict.presence,
+     legend.only = TRUE,
+     smallplot = c(0.15, 0.17, 0.2, 0.4))
+plot(wrld_simpl, 
+     add = TRUE, 
+     border = "dark grey")
+box()
+dev.off()
+
+png(file = "output/images/bioclim-example-plot.png", width = 960, height = 960)
+plot(bioclim.data)
 dev.off()
