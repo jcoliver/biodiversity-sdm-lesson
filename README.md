@@ -7,6 +7,7 @@ would also use data from the [eButterfly](http://www.e-butterfly.org) project.
 
 ## Dependancies
 Four additional R packages are required:
+
 + raster
 + sp
 + dismo
@@ -15,6 +16,9 @@ Four additional R packages are required:
 ## Structure
 + data
   + inaturalist: data harvested from [iNaturalist](http://www.inaturalist.org)
+    + 50931-iNaturalist.txt: Gray Hairstreak, _Strymon melinus_
+    + 509627-iNaturalist.txt: Western Giant Swallowtail, _Papilio rumiko_
+    + 59125-iNaturalist.txt: Great Copper, _Lycaena xanthoides_
   + wc2-5: climate data at 2.5 minute resolution from [WorldClim](http://www.worldclim.org)
 + output (not included in repository, but this structure is assumed on local)
   + images
