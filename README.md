@@ -5,7 +5,13 @@ Code and sample data for running species distribution models from data
 harvested from [iNaturalist](http://www.inaturalist.org). Future implementations 
 would also use data from the [eButterfly](http://www.e-butterfly.org) project.
 
-################################################################################
+## Dependancies
+Four additional R packages are required:
++ raster
++ sp
++ dismo
++ maptools
+
 ## Structure
 + data
   + inaturalist: data harvested from [iNaturalist](http://www.inaturalist.org)
