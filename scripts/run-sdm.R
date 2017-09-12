@@ -10,7 +10,7 @@ rm(list = ls())
 # Gather path information
 # Load dependancies
 args = commandArgs(trailingOnly = TRUE)
-usage.string <- "Usage: Rscript --vanilla run-sdm.R <path/to/data> <output-file-prefix>"
+usage.string <- "Usage: Rscript --vanilla run-sdm.R <path/to/data/file> <output-file-prefix> <path/to/output/directory/>"
 
 # Make sure a readable file is first argument
 if (length(args) < 1) {
@@ -36,8 +36,20 @@ if (length(args) < 2) {
 }
 outprefix <- args[2]
 
+# Make sure the third argument is there for output directory
+if (length(args) < 3) {
+  stop(paste("run-sdm requires an output directory",
+             usage.string,
+             sep = "\n"))
+}
+outpath <- args[3]
+# Make sure the path ends with "/"
+if (substring(text = outpath, first = nchar(outpath), last = nchar(outpath)) != "/") {
+  outpath <- paste0(outpath, "/")
+}
+
 # Make sure directories are writable
-required.writables <- c("data", "output", "output/images", "output/rasters")
+required.writables <- c("data", outpath)
 write.access <- file.access(names = required.writables)
 if (any(write.access != 0)) {
   stop(paste0("You do not have sufficient write access to one or more directories. ",
@@ -129,7 +141,7 @@ predict.presence <- predict(x = bioclim.data, object = bc, ext = geographic.exte
 
 # Save image to file
 data(wrld_simpl) # Need this for the map
-png(filename = paste0("output/images/", outprefix, "-prediction.png"))
+png(filename = paste0(outpath, outprefix, "-prediction.png"))
 par(mar = c(3, 3, 3, 1) + 0.1)
 plot(wrld_simpl, 
      xlim = c(min.lon, max.lon), 
@@ -149,12 +161,12 @@ dev.off()
 
 # Save raster to files
 suppressMessages(writeRaster(x = predict.presence, 
-                             filename = paste0("output/rasters/", outprefix, "-prediction.grd"),
+                             filename = paste0(outpath, outprefix, "-prediction.grd"),
                              format = "raster",
                              overwrite = TRUE))
 
 suppressMessages(writeRaster(x = predict.presence > bc.threshold, 
-                             filename = paste0("output/rasters/", outprefix, "-prediction-threshold.grd"),
+                             filename = paste0(outpath, outprefix, "-prediction-threshold.grd"),
                              format = "raster",
                              overwrite = TRUE))
 cat("Finished with file writing.\n")
