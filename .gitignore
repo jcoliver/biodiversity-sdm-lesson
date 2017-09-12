@@ -1,4 +1,10 @@
 .Rproj.user
 data/cropped-bioclim-2.5.grd
 data/wc2-5
-output/
+output/*
+!*.gitkeep
+!output/*/
+output/images/*
+!output/images/.gitkeep
+output/rasters/*
+!output/rasters/.gitkeep
