@@ -2,7 +2,7 @@
 
 ## Overview
 Code and sample data for running species distribution models from data 
-harvested from [iNaturalist](http://www.inaturalist.org. Future implementations 
+harvested from [iNaturalist](http://www.inaturalist.org)d. Future implementations 
 would also use data from the [eButterfly](http://www.e-butterfly.org) project.
 
 ################################################################################
