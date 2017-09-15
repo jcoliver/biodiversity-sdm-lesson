@@ -59,3 +59,7 @@ Repeat steps 3-7 for remaining species
 ### Tests of spatial overlap
 + [http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0056568](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0056568)
 + [http://onlinelibrary.wiley.com/doi/10.1111/geb.12455/pdf](http://onlinelibrary.wiley.com/doi/10.1111/geb.12455/pdf)
+
+### iNaturalist
++ [API documentation](https://www.inaturalist.org/pages/api+reference)
++ Google groups [discussion](https://groups.google.com/d/topic/inaturalist/gDpfMWXNxvE/discussion) about taxon_id
