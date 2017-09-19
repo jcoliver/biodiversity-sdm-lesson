@@ -27,9 +27,11 @@ Four additional R packages are required:
   + get-observation-data.R: Harvest data from iNaturalist using their API; 
   called from command line terminal
     + Usage: `Rscript --vanilla get-observation-data.R <taxon_id>`
+    + Example: `Rscript --vanilla get-observation-data.R 60606`
   + run-sdm.R: Run species distribution model and create map and raster output; 
   called from command line terminal
     + Usage: `Rscript --vanilla run-sdm.R <path/to/data> <output-file-prefix>`
+    + Example: `Rscript --vanilla run-sdm.R data/inaturalist/60606-iNaturalist.txt 60606`
   + sdm-for-ACIC-lecture.R: Script to create map graphic used in ACIC lecture
   + sdm-iNat-melinus.R: Pilot species distribution modeling for _Strymon melinus_
   + sdm-iNat-xanthoides.R: Pilot species distribution modeling for _Lycaena xanthoides_
