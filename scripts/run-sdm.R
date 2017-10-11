@@ -111,12 +111,12 @@ mask <- raster(raster.files[1])
 
 # Random points for background (same number as our observed points)
 set.seed(19470909)
-bg <- randomPoints(mask = mask, n = nrow(obs.data), ext = geographic.extent, extf = 1.25)
-colnames(bg) <- c("lon", "lat")
+background.points <- randomPoints(mask = mask, n = nrow(obs.data), ext = geographic.extent, extf = 1.25)
+colnames(background.points) <- c("lon", "lat")
 
 # Data for observation sites (presence and background)
 presence.values <- extract(x = bioclim.data, y = obs.data)
-absence.values <- extract(x = bioclim.data, y = bg)
+absence.values <- extract(x = bioclim.data, y = background.points)
 
 ################################################################################
 # ANALYSIS
@@ -129,15 +129,22 @@ group.presence <- kfold(obs.data, 5)
 testing.group <- 1
 presence.train <- obs.data[group.presence != testing.group, ]
 presence.test <- obs.data[group.presence == testing.group, ]
-group.bg <- kfold(bg, 5)
-bg.train <- bg[group.bg != testing.group, ]
-bg.test <- bg[group.bg == testing.group, ]
+group.background <- kfold(background.points, 5)
+background.train <- background.points[group.background != testing.group, ]
+background.test <- background.points[group.background == testing.group, ]
 
 # Do species distribution modeling
-bc <- bioclim(x = bioclim.data, p = presence.train)
-bc.eval <- evaluate(presence.test, bg.test, bc, bioclim.data)
-bc.threshold <- threshold(bc.eval, "spec_sens")
-predict.presence <- predict(x = bioclim.data, object = bc, ext = geographic.extent, progress = "")
+sdm.model <- bioclim(x = bioclim.data, p = presence.train)
+sdm.model.eval <- evaluate(p = presence.test, 
+                           a = background.test, 
+                           model = sdm.model, 
+                           x = bioclim.data)
+sdm.model.threshold <- threshold(x = sdm.model.eval, 
+                                 stat = "spec_sens")
+predict.presence <- predict(x = bioclim.data, 
+                            object = sdm.model, 
+                            ext = geographic.extent, 
+                            progress = "")
 
 # Save image to file
 data(wrld_simpl) # Need this for the map
@@ -148,14 +155,16 @@ plot(wrld_simpl,
      ylim = c(min.lat, max.lat), 
      col = "#F2F2F2",
      axes = TRUE)
-plot(predict.presence > bc.threshold, 
+plot(predict.presence > sdm.model.threshold, 
      main = "Presence/Absence",
      legend = FALSE,
      add = TRUE)
-plot(wrld_simpl, 
+# Redraw borders
+plot(wrld_simpl,
      add = TRUE,
      border = "dark grey")
 box()
+# Restore default margins
 par(mar = c(5, 4, 4, 2) + 0.1)
 dev.off()
 
@@ -165,7 +174,7 @@ suppressMessages(writeRaster(x = predict.presence,
                              format = "raster",
                              overwrite = TRUE))
 
-suppressMessages(writeRaster(x = predict.presence > bc.threshold, 
+suppressMessages(writeRaster(x = predict.presence > sdm.model.threshold, 
                              filename = paste0(outpath, outprefix, "-prediction-threshold.grd"),
                              format = "raster",
                              overwrite = TRUE))
