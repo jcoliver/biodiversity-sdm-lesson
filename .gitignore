@@ -3,3 +3,13 @@
 .RData
 .Ruserdata
 biodiversity-sdm-lesson.Rproj
+data/cropped-bioclim-2.5.grd
+data/wc2-5
+data/gbif
+output/*
+!*.gitkeep
+!output/*/
+output/images/*
+!output/images/.gitkeep
+output/rasters/*
+!output/rasters/.gitkeep
