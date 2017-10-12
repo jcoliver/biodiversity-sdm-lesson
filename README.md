@@ -49,6 +49,26 @@ Four additional R packages are required:
 Repeat steps 4-7 for remaining months  
 Repeat steps 3-7 for remaining species
 
+### Species Identifiers
+**Challenge**: To perform analyses on all North American species of butterflies, 
+we will need the taxon_id for all species we are interested in. There is not an 
+easy way to do this using the iNaturalist API (see the [discussion](#inaturalist)
+in the Resources section below). However, we can download an iNaturalist database 
+dump from GBIF at [https://www.google.com/url?q=https%3A%2F%2Fwww.gbif.org%2Fdataset%2F50c9509d-22c7-4a22-a47d-8c48425ef4a7&sa=D&sntz=1&usg=AFQjCNEzY1KC-xcJO1vgk6fhrSW-1_FoCA](https://www.google.com/url?q=https%3A%2F%2Fwww.gbif.org%2Fdataset%2F50c9509d-22c7-4a22-a47d-8c48425ef4a7&sa=D&sntz=1&usg=AFQjCNEzY1KC-xcJO1vgk6fhrSW-1_FoCA).
+The flat csv file does not contain enough information; namely it lack the taxon_id
+field. However, the Darwin Core archive _does_ include files with the necessary 
+information. The files occurrence.txt and verbatim.txt have the fields we need; the 
+latter is a smaller file, so we'll use that one (the column headers appear identical
+in both files, but some curation was performed to produce the occurrence.txt file).
+Among other fields, the ones we will be interested in are:
+
++ countryCode: We want US, CA, and MX records only
++ taxonID: This field has values to use in the taxon_id field in the iNaturalist API
++ order: For a first-pass filtration on Lepidoptera
++ family: Because the suborder Papilionoidea is not supported, we will have to do 
+filtration for multiple values (Hesperiidae, Papilionidae, Pieridae, etc.)
+
+
 ## Resources
 ### Species distribution models in R
 + [Vignette for `dismo` package](https://cran.r-project.org/web/packages/dismo/vignettes/sdm.pdf)
