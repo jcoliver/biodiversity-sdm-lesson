@@ -1,0 +1,3 @@
+This branch is meant to be a "fossil" of the original clone from https://github.com/jcoliver/ebutterfly-sdm
+
+It was intended for potential pull requests between the two projects, but it doesn't look like it is actually possible...
