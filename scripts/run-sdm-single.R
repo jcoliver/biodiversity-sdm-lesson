@@ -9,41 +9,23 @@ rm(list = ls())
 # SETUP
 # Gather path information
 # Load dependancies
-args = commandArgs(trailingOnly = TRUE)
-usage.string <- "Usage: Rscript --vanilla run-sdm.R <path/to/data/file> <output-file-prefix> <path/to/output/directory/>"
 
-# Make sure a readable file is first argument
-if (length(args) < 1) {
-  stop(paste("run-sdm requires an input file", 
-             usage.string,
-             sep = "\n"))
-}
+# Things to set:
+infile <- "data/butterfly/L_xanthoides.txt"
+outprefix <- "L_xanthoides"
+outpath <- "output/"
 
-infile <- args[1]
+# Make sure the input file exists
 if (!file.exists(infile)) {
-  stop(paste0("Cannot find ", infile, ", file does not exist.\n", usage.string, "\n"))
+  stop(paste0("Cannot find ", infile, ", file does not exist.\n"))
 }
 
+# Make sure the input file is readable
 if (file.access(names = infile, mode = 4) != 0) {
   stop(paste0("You do not have sufficient access to read ", infile, "\n"))
 }
 
-# Make sure the second argument is there for output file prefix
-if (length(args) < 2) {
-  stop(paste("run-sdm requires an output file prefix",
-             usage.string,
-             sep = "\n"))
-}
-outprefix <- args[2]
-
-# Make sure the third argument is there for output directory
-if (length(args) < 3) {
-  stop(paste("run-sdm requires an output directory",
-             usage.string,
-             sep = "\n"))
-}
-outpath <- args[3]
-# Make sure the path ends with "/"
+# Make sure the output path ends with "/" (and append one if it doesn't)
 if (substring(text = outpath, first = nchar(outpath), last = nchar(outpath)) != "/") {
   outpath <- paste0(outpath, "/")
 }
