@@ -24,26 +24,16 @@ Four additional R packages are required:
 For 2, the basic workflow will be:
 1. Run the models & create single-species raster files
     + data/butterfly.csv -> butterfly.model -> butterfly.map (raster)
-    + data/plant1.csv -> plant1.model -> plant1.map (raster)
-    + data/plant2.csv -> plant2.model -> plant2.map (raster)
-    + data/plant3.csv -> plant3.model -> plant3.map (raster)
-2. Combine all the plant rasters into a single map (raster)
-    + plant1.map + plant2.map + plant3.map = plant.map
-    + will use `raster::mosaic` function to add these one by one
-3. Take the butterfly map and composite plant map and overlay the former on the
+    + data/plant.csv -> plant.model -> plant.map (raster)
+2. Take the butterfly map and composite plant map and overlay the former on the
 latter; have some means of showing areas we predict the plant(s) but not the bug
 (vice-versa should not happen often, but if it does, it's a discussion point)
 
 For 3, the predictions would be based on the models developed in 2.1
 1. Run predictions based on forecast climate data (CMIP5) and models
-    + butterfly.model + CMIP5 -> butterfly.forecast (raster)
-    + plant1.model + CMIP5 -> plant1.forecast (raster)
-    + plant2.model + CMIP5 -> plant2.forecast (raster)
-    + plant3.model + CMIP5 -> plant3.forecast (raster)
-2. Combine all the plant forcast rasters into a single map (raster)
-    + plant1.forecast + plant2.forecast + plant3.forecast = plant.forecast
-    + will use `raster::mosaic` function to add these one by one
-3. Add together as before and...what would be the most useful output?
+    + data/butterfly.csv -> butterfly.model + CMIP5 -> butterfly.forecast (raster)
+    + data/plant.csv -> plant.model  + CMIP5 -> plant.forecast (raster)
+2. Add together as before and...what would be the most useful output?
     + Separate range maps for butterfly and plant(s)? This could have 
     current and future ranges on one another
         + raster pixels would have values of 1, 2, 1 by default; would 
@@ -60,44 +50,6 @@ For 3, the predictions would be based on the models developed in 2.1
 + Code to create rasters and models for [2]
 + Code to use models from [2] and forecast data to create maps for [3]
 
-### Psuedocode
-```
-# Current models
-butterfly.model <- getCurrentSDM(<folder with butterfly data>)
-plant.model <- getCurrentSDM(<folder with plant data>)
-current.overlap <- combineRasters(butterfly.model$raster, butterfly.model$raster)
-exportOverlap(current.overlap, <output filename>)
-
-# Future models
-butterfly.future <- getFutureSDM(butterfly.model$models)
-butterfly.both <- combineRasters(butterfly.model$raster, butterfly.future$raster)
-exportOverlap(butterfly.both, <output filename>)
-
-plant.future <- getFutureSDM(plant.model$models)
-plant.both <- combineRasters(plant.model$raster, plant.future$raster)
-exportOverlap(plant.both, <output filename>)
-
-# Future overlap/discord
-future.overlap <- combineRasters(butterfly.future$raster, plant.future$raster)
-exportOverlap(future.overlap, <output filename>)
-```
-
-`getCurrentSDM`:
-Runs SDM (dealing with pseudo-absence et al.), does prediction
-Returns list:
-$ `models`: a list of the output of `bioclim` (has to be list 'cause we will 
-need each plant model separately)
-$ `raster`: a **single** raster of presence/absence (`raster::writeRaster`?); for 
-plants, this will be a composite of multiple model runs
-
-`combineRasters`:
-use raster::mosaic to join the two rasters
-
-`exportOverlap`:
-write maps to an image file (png)
-
-`getFutureSDM`:
-takes list of models and creates a raster of presence/absence
 **TODO** how are we going to get the threshold without training/testing data...
 
 ## Structure
