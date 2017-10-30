@@ -11,6 +11,12 @@ rm(list = ls())
 # Load dependancies
 
 # Things to set:
+# TODO: 
+# change infile -> butterfly.data.file
+# make plant.data.file
+# update the outprefix
+# write code for overlap map
+
 infile <- "data/MY_SPECIES.csv"
 outprefix <- "MY_SPECIES"
 outpath <- "output/"
