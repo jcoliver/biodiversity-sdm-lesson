@@ -17,19 +17,16 @@ rm(list = ls())
 # update the outprefix
 # write code for overlap map
 
-infile <- "data/MY_SPECIES.csv"
+butterfly.data.file <- "data/BUTTERFLY_DATA.csv"
+plant.data.file <- "data/PLANT_DATA.csv"
 outprefix <- "MY_SPECIES"
 outpath <- "output/"
 
-# Make sure the input file exists
-if (!file.exists(infile)) {
-  stop(paste0("Cannot find ", infile, ", file does not exist.\n"))
-}
+# TESTING REPLACE
+butterfly.data.file <- "data/L_xanthoides.csv"
+plant.data.file <- "data/R_salicifolius.csv"
+outprefix <- "L_xanthoides"
 
-# Make sure the input file is readable
-if (file.access(names = infile, mode = 4) != 0) {
-  stop(paste0("You do not have sufficient access to read ", infile, "\n"))
-}
 
 # Make sure the output path ends with "/" (and append one if it doesn't)
 if (substring(text = outpath, first = nchar(outpath), last = nchar(outpath)) != "/") {
@@ -58,12 +55,29 @@ if (length(missing.packages) > 0) {
   stop(paste0("Missing one or more required packages. The following packages are required for run-sdm: ", paste(missing.packages, sep = "", collapse = ", ")), ".\n")
 }
 
+source(file = "functions/prepareData.R")
+
 ################################################################################
 # DATA
 # Read in raw data
 # Extract data of interest
 # Data cleanup and extent
 # Create pseudo-absence points
+
+butterfly.data <- prepareData(file = butterfly.data.file)
+plant.data <- prepareData(file = plant.data.file)
+
+
+
+
+# Determine geographic extent of our data
+max.lat = ceiling(max(obs.butterfly.data$lat))
+min.lat = floor(min(obs.butterfly.data$lat))
+max.lon = ceiling(max(obs.butterfly.data$lon))
+min.lon = floor(min(obs.butterfly.data$lon))
+geographic.extent <- extent(x = c(min.lon, max.lon, min.lat, max.lat))
+
+############  OLD read in starts here
 iNaturalist.data <- read.csv(file = infile,
                              stringsAsFactors = FALSE)
 if (!(any(colnames(iNaturalist.data) == "longitude") 

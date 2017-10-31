@@ -18,5 +18,8 @@
     Change `"BUTTERFLY_DATA.csv"` so it matches the file of butterfly data you saved in [Setup](#setup), step 2.
     2. `plant.data.file <- "data/PLANT_DATA.csv"`
     Change `"PLANT_DATA.csv"` so it matches the file of plant data you saved in [Setup](#setup), step 3.
-    3. Save the file with these updates
+    3. `outprefix <- "MY_SPECIES"` 
+    Replace `"MY_SPECIES"` with the name of the butterfly species. Use underscores instead of spaces; so for the species _L. xanthoides_, the line would read: 
+    `outprefix <- "L_xanthoides"`
+    4. Save the file with these updates
 3. Run the analyses by typing the following command in the **Console**: `source(file = "scripts/<species>-sdm-pairwise.R")`, replacing `<species>` with the species name as in step 1 of [Running analyses](#running-analyses)
