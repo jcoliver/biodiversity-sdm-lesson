@@ -64,18 +64,36 @@ source(file = "functions/prepareData.R")
 # Data cleanup and extent
 # Create pseudo-absence points
 
-butterfly.data <- prepareData(file = butterfly.data.file)
-plant.data <- prepareData(file = plant.data.file)
+butterfly.data <- PrepareData(file = butterfly.data.file)
+plant.data <- PrepareData(file = plant.data.file)
 
+butterfly.raster <- SDMRaster(data = butterfly.data)
+plant.raster <- SDMRaster(data = plant.data)
 
+combined.raster <- StackTwoRasters(raster1 = butterfly.raster,
+                                   raster2 = plant.raster)
 
+# TODO: figure out why raster summation is requiring this extra 
+# addition
+combined.raster <- combined.raster + 1
 
-# Determine geographic extent of our data
-max.lat = ceiling(max(obs.butterfly.data$lat))
-min.lat = floor(min(obs.butterfly.data$lat))
-max.lon = ceiling(max(obs.butterfly.data$lon))
-min.lon = floor(min(obs.butterfly.data$lon))
-geographic.extent <- extent(x = c(min.lon, max.lon, min.lat, max.lat))
+xmin <- extent(combined.raster)[1]
+xmax <- extent(combined.raster)[2]
+ymin <- extent(combined.raster)[3]
+ymax <- extent(combined.raster)[4]
+
+# Load in data for map borders
+png(file = "~/Desktop/combined.png")
+
+breakpoints <- c(0, 1, 2, 3, 4)
+plot.colors <- c("white", "orange","forestgreen", "violet", "black")
+
+data(wrld_simpl)
+plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = "gray95")
+plot(combined.raster, add = TRUE, breaks = breakpoints, col = plot.colors)
+plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", col = NA)
+dev.off()
+
 
 ############  OLD read in starts here
 iNaturalist.data <- read.csv(file = infile,
