@@ -73,9 +73,16 @@ plant.raster <- SDMRaster(data = plant.data)
 combined.raster <- StackTwoRasters(raster1 = butterfly.raster,
                                    raster2 = plant.raster)
 
-# TODO: figure out why raster summation is requiring this extra 
-# addition
-combined.raster <- combined.raster + 1
+# TODO: figure out why raster summation is requiring this extra addition
+# Maybe an issue with plot, where breakpoints are inclusive on the 
+# lower end:
+# 0 <= x <= 1 colored as 0
+# 1 < x <= 2 colored as 1
+# 2 < x <= 3 colored as 2
+# 3 < x <= 4 colored as 3
+# This is likely the problem, as the addition below produces a map with 
+# the expected (desired) colors:
+combined.raster <- combined.raster + 0.00001
 
 xmin <- extent(combined.raster)[1]
 xmax <- extent(combined.raster)[2]
@@ -83,119 +90,13 @@ ymin <- extent(combined.raster)[3]
 ymax <- extent(combined.raster)[4]
 
 # Load in data for map borders
-png(file = "~/Desktop/combined.png")
-
+# png(file = "~/Desktop/combined.png")
+pdf(file = "~/Desktop/combined.pdf", useDingbats = FALSE)
 breakpoints <- c(0, 1, 2, 3, 4)
-plot.colors <- c("white", "orange","forestgreen", "violet", "black")
+plot.colors <- c("white", "plum3","darkolivegreen3", "orangered4", "black")
 
 data(wrld_simpl)
 plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = "gray95")
 plot(combined.raster, add = TRUE, breaks = breakpoints, col = plot.colors)
 plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", col = NA)
 dev.off()
-
-
-############  OLD read in starts here
-iNaturalist.data <- read.csv(file = infile,
-                             stringsAsFactors = FALSE)
-if (!(any(colnames(iNaturalist.data) == "longitude") 
-    && any(colnames(iNaturalist.data) == "latitude"))) {
-  stop("Missing required column(s); input file must have 'latitude' and 'longitude' columns.\n")
-}
-
-obs.data <- iNaturalist.data[, c("longitude", "latitude")]
-colnames(obs.data) <- c("lon", "lat")
-
-# Remove duplicate rows
-duplicate.rows <- duplicated(x = obs.data)
-obs.data <- obs.data[!duplicate.rows, ]
-
-# Determine geographic extent of our data
-max.lat = ceiling(max(obs.data$lat))
-min.lat = floor(min(obs.data$lat))
-max.lon = ceiling(max(obs.data$lon))
-min.lon = floor(min(obs.data$lon))
-geographic.extent <- extent(x = c(min.lon, max.lon, min.lat, max.lat))
-
-# Get the biolim data
-bioclim.data <- getData(name = "worldclim",
-                        var = "bio",
-                        res = 2.5, # Could try for better resolution, 0.5, but would then need to provide lat & long...
-                        path = "data/")
-bioclim.data <- crop(x = bioclim.data, y = geographic.extent)
-
-# Create pseudo-absence points (making them up, using 'background' approach)
-raster.files <- list.files(path = paste0(system.file(package = "dismo"), "/ex"),
-                           pattern = "grd", full.names = TRUE)
-mask <- raster(raster.files[1])
-
-# Random points for background (same number as our observed points)
-set.seed(19470909)
-background.points <- randomPoints(mask = mask, n = nrow(obs.data), ext = geographic.extent, extf = 1.25)
-colnames(background.points) <- c("lon", "lat")
-
-# Data for observation sites (presence and background)
-presence.values <- extract(x = bioclim.data, y = obs.data)
-absence.values <- extract(x = bioclim.data, y = background.points)
-
-################################################################################
-# ANALYSIS
-# Divide data into testing and training
-# Run SDM
-# Save graphics and raster files
-
-# Separate training & testing data
-group.presence <- kfold(obs.data, 5)
-testing.group <- 1
-presence.train <- obs.data[group.presence != testing.group, ]
-presence.test <- obs.data[group.presence == testing.group, ]
-group.background <- kfold(background.points, 5)
-background.train <- background.points[group.background != testing.group, ]
-background.test <- background.points[group.background == testing.group, ]
-
-# Do species distribution modeling
-sdm.model <- bioclim(x = bioclim.data, p = presence.train)
-sdm.model.eval <- evaluate(p = presence.test, 
-                           a = background.test, 
-                           model = sdm.model, 
-                           x = bioclim.data)
-sdm.model.threshold <- threshold(x = sdm.model.eval, 
-                                 stat = "spec_sens")
-predict.presence <- predict(x = bioclim.data, 
-                            object = sdm.model, 
-                            ext = geographic.extent, 
-                            progress = "")
-
-# Save image to file
-data(wrld_simpl) # Need this for the map
-png(filename = paste0(outpath, outprefix, "-prediction.png"))
-par(mar = c(3, 3, 3, 1) + 0.1)
-plot(wrld_simpl, 
-     xlim = c(min.lon, max.lon), 
-     ylim = c(min.lat, max.lat), 
-     col = "#F2F2F2",
-     axes = TRUE)
-plot(predict.presence > sdm.model.threshold, 
-     main = "Presence/Absence",
-     legend = FALSE,
-     add = TRUE)
-# Redraw borders
-plot(wrld_simpl,
-     add = TRUE,
-     border = "dark grey")
-box()
-# Restore default margins
-par(mar = c(5, 4, 4, 2) + 0.1)
-dev.off()
-
-# Save raster to files
-suppressMessages(writeRaster(x = predict.presence, 
-                             filename = paste0(outpath, outprefix, "-prediction.grd"),
-                             format = "raster",
-                             overwrite = TRUE))
-
-suppressMessages(writeRaster(x = predict.presence > sdm.model.threshold, 
-                             filename = paste0(outpath, outprefix, "-prediction-threshold.grd"),
-                             format = "raster",
-                             overwrite = TRUE))
-cat("Finished with file writing.\n")
