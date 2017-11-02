@@ -1,7 +1,7 @@
-# Script to run Species Distribution Model using "bioclim" approach
+# Script to run Species Distribution Model on L. xanthoides and R. salicifolius
 # Jeff Oliver
 # jcoliver@email.arizona.edu
-# 2017-09-07
+# 2017-11-01
 
 rm(list = ls())
 
@@ -10,9 +10,9 @@ rm(list = ls())
 # Gather path information
 # Load dependancies
 
-butterfly.data.file <- "data/BUTTERFLY_DATA.csv"
-plant.data.file <- "data/PLANT_DATA.csv"
-outprefix <- "MY_SPECIES"
+butterfly.data.file <- "data/L_xanthoides.csv"
+plant.data.file <- "data/R_salicifolius.csv"
+outprefix <- "L_xanthoides"
 outpath <- "output/"
 
 # Make sure the output path ends with "/" (and append one if it doesn't)
@@ -97,3 +97,4 @@ legend("topright", legend = c("Butterfly", "Plant", "Both"), fill = plot.colors[
 plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", col = NA)
 dev.off()
 
+rm(list = ls())
