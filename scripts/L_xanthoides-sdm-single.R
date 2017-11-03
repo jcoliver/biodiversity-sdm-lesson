@@ -11,9 +11,10 @@ rm(list = ls())
 # Load dependancies
 
 # Things to set:
-infile <- "data/MY_SPECIES.csv"
-outprefix <- "MY_SPECIES"
+infile <- "data/L_xanthoides.csv"
+outprefix <- "L_xanthoides"
 outpath <- "output/"
+
 
 # Make sure the input file exists
 if (!file.exists(infile)) {
