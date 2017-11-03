@@ -62,6 +62,12 @@ plant.raster <- SDMRaster(data = plant.data)
 combined.raster <- StackTwoRasters(raster1 = butterfly.raster,
                                    raster2 = plant.raster)
 
+# Calculate the % of plant range occupied by butterfly
+pixel.freqs <- freq(combined.raster)
+plants <- pixel.freqs[which(pixel.freqs[, 1] == 2), 2]
+both <- pixel.freqs[which(pixel.freqs[, 1] == 3), 2]
+plant.percent <- round(100 * (both/(plants + both)), 2)
+
 ################################################################################
 # PLOT
 # Determine size of plot
@@ -77,7 +83,8 @@ ymin <- extent(combined.raster)[3]
 ymax <- extent(combined.raster)[4]
 
 # Plot the models for butterfly, plant and overlap; save to pdf
-pdf(file = paste0(outpath, outprefix, "-prediction.pdf"), useDingbats = FALSE)
+plot.file <- paste0(outpath, outprefix, "-prediction.pdf")
+pdf(file = plot.file, useDingbats = FALSE)
 breakpoints <- c(0, 1, 2, 3, 4)
 plot.colors <- c("white", "plum3","darkolivegreen3", "orangered4", "black")
 
@@ -91,9 +98,14 @@ plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = 
 plot(combined.raster, legend = FALSE, add = TRUE, breaks = breakpoints, col = plot.colors)
 
 # Add the legend
-legend("topright", legend = c("Butterfly", "Plant", "Both"), fill = plot.colors[2:4], bg = "#FFFFFF")
+legend("topright", legend = c("Insect", "Plant", "Both"), fill = plot.colors[2:4], bg = "#FFFFFF")
 
 # Redraw the borders of the base map
 plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", col = NA)
 dev.off()
 
+# Let user know analysis is done.
+message(paste0("\nAnalysis complete. Map image written to ", plot.file, "."))
+message(paste0("Amount of plant range occupied by insect: ", plant.percent, "%."))
+
+rm(list = ls())
