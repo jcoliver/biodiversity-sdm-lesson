@@ -10,7 +10,7 @@
 
 ################################################################################
 # Install dependencies
-required <- c("raster", "sp", "dismo", "maptools")
+required <- c("rgdal", "raster", "sp", "dismo", "maptools")
 install.packages(required)
 
 ################################################################################
