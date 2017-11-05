@@ -10,9 +10,9 @@ rm(list = ls())
 # Gather path information
 # Load dependancies
 
-butterfly.data.file <- "data/BUTTERFLY_DATA.csv"
-plant.data.file <- "data/PLANT_DATA.csv"
-outprefix <- "MY_SPECIES"
+butterfly.data.file <- "data/L_xanthoides.csv"
+plant.data.file <- "data/R_salicifolius.csv"
+outprefix <- "L_xanthoides"
 outpath <- "output/"
 
 # Make sure the output path ends with "/" (and append one if it doesn't)
@@ -55,8 +55,8 @@ butterfly.data <- PrepareData(file = butterfly.data.file)
 plant.data <- PrepareData(file = plant.data.file)
 
 # Run species distribution modeling
-butterfly.raster <- SDMRaster(data = butterfly.data)
-plant.raster <- SDMRaster(data = plant.data)
+butterfly.raster <- SDMForecast(data = butterfly.data)
+plant.raster <- SDMForecast(data = plant.data)
 
 # Combine results from butterflies and plants
 combined.raster <- StackTwoRasters(raster1 = butterfly.raster,
@@ -83,7 +83,7 @@ ymin <- extent(combined.raster)[3]
 ymax <- extent(combined.raster)[4]
 
 # Plot the models for butterfly, plant and overlap; save to pdf
-plot.file <- paste0(outpath, outprefix, "-prediction.pdf")
+plot.file <- paste0(outpath, outprefix, "-future-prediction.pdf")
 pdf(file = plot.file, useDingbats = FALSE)
 breakpoints <- c(0, 1, 2, 3, 4)
 plot.colors <- c("white", "plum3","darkolivegreen3", "orangered4", "black")
