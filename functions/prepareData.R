@@ -21,7 +21,7 @@ PrepareData <- function(file, sep = ",") {
   
   # Make sure the input files are readable
   if (file.access(names = file, mode = 4) != 0) {
-    stop(paste0("You do not have sufficient access to read ", butterfly.data.file, "\n"))
+    stop(paste0("You do not have sufficient access to read ", file, "\n"))
   }
 
   # Read data into data.frame

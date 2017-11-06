@@ -123,14 +123,27 @@ sdm.model.eval <- evaluate(p = presence.test,
                            x = bioclim.data)
 sdm.model.threshold <- threshold(x = sdm.model.eval, 
                                  stat = "spec_sens")
-predict.presence <- predict(x = bioclim.data, 
+
+# Get forcast data
+forecast.data <- getData(name = "CMIP5", # forecast
+                         var = "bio", # bioclim
+                         res = 2.5,
+                         path = "data/",
+                         model = "GD", # GFDL-ESM2G
+                         rcp = "45", # CO2 increase 4.5
+                         year = 70) # 2070
+forecast.data <- crop(x = forecast.data, y = geographic.extent)
+names(forecast.data) <- names(bioclim.data)
+
+# Predict presence probability from model and bioclim data
+predict.presence <- predict(x = forecast.data, 
                             object = sdm.model, 
                             ext = geographic.extent, 
                             progress = "")
 
 # Save image to file
 data(wrld_simpl) # Need this for the map
-plot.file <- paste0(outpath, outprefix, "-single-prediction.pdf")
+plot.file <- paste0(outpath, outprefix, "-single-future-prediction.pdf")
 pdf(file = plot.file, useDingbats = FALSE)
 par(mar = c(3, 3, 3, 1) + 0.1)
 plot(wrld_simpl, 
@@ -153,12 +166,12 @@ dev.off()
 
 # Save raster to files
 suppressMessages(writeRaster(x = predict.presence, 
-                             filename = paste0(outpath, outprefix, "-single-prediction.grd"),
+                             filename = paste0(outpath, outprefix, "-single-future-prediction.grd"),
                              format = "raster",
                              overwrite = TRUE))
 
 suppressMessages(writeRaster(x = predict.presence > sdm.model.threshold, 
-                             filename = paste0(outpath, outprefix, "-single-prediction-threshold.grd"),
+                             filename = paste0(outpath, outprefix, "-single-future-prediction-threshold.grd"),
                              format = "raster",
                              overwrite = TRUE))
 cat("Finished with file writing.\n")

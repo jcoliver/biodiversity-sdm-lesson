@@ -130,7 +130,8 @@ predict.presence <- predict(x = bioclim.data,
 
 # Save image to file
 data(wrld_simpl) # Need this for the map
-png(filename = paste0(outpath, outprefix, "-prediction.png"))
+plot.file <- paste0(outpath, outprefix, "-single-prediction.pdf")
+pdf(file = plot.file, useDingbats = FALSE)
 par(mar = c(3, 3, 3, 1) + 0.1)
 plot(wrld_simpl, 
      xlim = c(min.lon, max.lon), 
@@ -152,12 +153,12 @@ dev.off()
 
 # Save raster to files
 suppressMessages(writeRaster(x = predict.presence, 
-                             filename = paste0(outpath, outprefix, "-prediction.grd"),
+                             filename = paste0(outpath, outprefix, "-single-prediction.grd"),
                              format = "raster",
                              overwrite = TRUE))
 
 suppressMessages(writeRaster(x = predict.presence > sdm.model.threshold, 
-                             filename = paste0(outpath, outprefix, "-prediction-threshold.grd"),
+                             filename = paste0(outpath, outprefix, "-single-prediction-threshold.grd"),
                              format = "raster",
                              overwrite = TRUE))
 cat("Finished with file writing.\n")

@@ -83,7 +83,7 @@ ymin <- extent(combined.raster)[3]
 ymax <- extent(combined.raster)[4]
 
 # Plot the models for butterfly, plant and overlap; save to pdf
-plot.file <- paste0(outpath, outprefix, "-prediction.pdf")
+plot.file <- paste0(outpath, outprefix, "-pairwise-prediction.pdf")
 pdf(file = plot.file, useDingbats = FALSE)
 breakpoints <- c(0, 1, 2, 3, 4)
 plot.colors <- c("white", "plum3","darkolivegreen3", "orangered4", "black")
