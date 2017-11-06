@@ -28,4 +28,4 @@
 3. Run the analyses by typing the following command in the **Console**: `source(file = "scripts/<species>-sdm-pairwise.R")`, replacing `<species>` with the species name as in step 1 of [Running analyses](#running-analyses).  After running this script, two things to note:
     1. A map will be saved in the `output` folder; the file name will start with the value you used for "MY_SPECIES" in step 2.3, above.
     2. In the console you should see the % of the modeled plant's range that is occupied by the insect. Comparing this to the map, the value is the fraction of the area that is red, relative to the total red and green areas.
-    
+4. For forecast models (the year 2070), the template files are called `scripts/run-future-sdm-single.R` and `scripts/run-future-sdm-pairwise.R` for single species and pairwise (butterflies & plants) analyses, respectively. They can be copied, altered, and run as in steps 1-3 above.    
