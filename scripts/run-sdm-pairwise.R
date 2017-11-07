@@ -97,11 +97,11 @@ plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = 
 # Add the model rasters
 plot(combined.raster, legend = FALSE, add = TRUE, breaks = breakpoints, col = plot.colors)
 
-# Add the legend
-legend("topright", legend = c("Insect", "Plant", "Both"), fill = plot.colors[2:4], bg = "#FFFFFF")
-
 # Redraw the borders of the base map
 plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", col = NA)
+
+# Add the legend
+legend("topright", legend = c("Insect", "Plant", "Both"), fill = plot.colors[2:4], bg = "#FFFFFF")
 dev.off()
 
 # Let user know analysis is done.

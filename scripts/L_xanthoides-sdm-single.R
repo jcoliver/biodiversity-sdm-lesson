@@ -14,6 +14,8 @@ rm(list = ls())
 infile <- "data/L_xanthoides.csv"
 outprefix <- "L_xanthoides"
 outpath <- "output/"
+replicates <- 10
+threshold <- 0.9
 
 # Make sure the input file exists
 if (!file.exists(infile)) {
@@ -96,7 +98,6 @@ mask <- raster(bil.files[1])
 # Random points for background (same number as our observed points)
 set.seed(19470909)
 background.points <- randomPoints(mask = mask, n = nrow(obs.data), ext = geographic.extent, extf = 1.25)
-bil.background.points <- randomPoints(mask = bil.mask, n = nrow(obs.data), ext = geographic.extent, extf = 1.25)
 colnames(background.points) <- c("lon", "lat")
 
 # Data for observation sites (presence and background)
