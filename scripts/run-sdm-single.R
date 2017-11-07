@@ -71,6 +71,7 @@ colnames(obs.data) <- c("lon", "lat")
 # Remove duplicate rows
 duplicate.rows <- duplicated(x = obs.data)
 obs.data <- obs.data[!duplicate.rows, ]
+obs.data <- na.omit(obs.data)
 
 # Determine geographic extent of our data
 max.lat = ceiling(max(obs.data$lat))

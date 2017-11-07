@@ -43,7 +43,8 @@ PrepareData <- function(file, sep = ",") {
   # Remove duplicate rows
   duplicate.rows <- duplicated(x = coordinate.data)
   coordinate.data <- coordinate.data[!duplicate.rows, ]
-  
+  coordinate.data <- na.omit(coordinate.data)
+
   return(coordinate.data)
 }
 
