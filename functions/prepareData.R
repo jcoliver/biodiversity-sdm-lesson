@@ -215,9 +215,13 @@ SDMBioclim <- function(data) {
   bioclim.data <- crop(x = bioclim.data, y = geographic.extent)
   
   # Create pseudo-absence points (making them up, using 'background' approach)
-  raster.files <- list.files(path = paste0(system.file(package = "dismo"), "/ex"),
-                             pattern = "grd", full.names = TRUE)
-  mask <- raster(raster.files[1])
+  # raster.files <- list.files(path = paste0(system.file(package = "dismo"), "/ex"),
+  #                            pattern = "grd", full.names = TRUE)
+  # mask <- raster(raster.files[1])
+  bil.files <- list.files(path = "data/wc2-5/", 
+                          pattern = "*.bil", 
+                          full.names = TRUE)
+  mask <- raster(bil.files[1])
   
   # Random points for background (same number as our observed points)
   set.seed(19470909)
@@ -287,9 +291,10 @@ SDMGLM <- function(data) {
   bioclim.data <- crop(x = bioclim.data, y = geographic.extent)
   
   # Create pseudo-absence points (making them up, using 'background' approach)
-  raster.files <- list.files(path = paste0(system.file(package = "dismo"), "/ex"),
-                             pattern = "grd", full.names = TRUE)
-  mask <- raster(raster.files[1])
+  bil.files <- list.files(path = "data/wc2-5/", 
+                          pattern = "*.bil", 
+                          full.names = TRUE)
+  mask <- raster(bil.files[1])
   
   # Random points for background (same number as our observed points)
   set.seed(19470909)
