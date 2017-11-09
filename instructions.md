@@ -15,7 +15,7 @@
 4. Download data for **plant** species from iNaturalist as a CSV file, save it in the `biodiversity-sdm-lesson/data` folder
 
 ### Running analyses
-1. Copy the file `run-sdm-pairwise.R` and rename the copy `<species>-sdm-pairwise.R`, replacing `<single>` with the name of the butterfly species. Use underscores instead of spaces; so for the species _L. xanthoides_, the file name would be `L_xanthoides-sdm-pairwise.R`.
+1. Copy the file `run-sdm-pairwise.R` and rename the copy `<species>-sdm-pairwise.R`, replacing `<species>` with the name of the butterfly species. Use underscores instead of spaces; so for the species _L. xanthoides_, the file name would be `L_xanthoides-sdm-pairwise.R`.
 2. Open this new file and update the following values:
     1. `butterfly.data.file <- "data/BUTTERFLY_DATA.csv"`
     Change `"BUTTERFLY_DATA.csv"` so it matches the file of butterfly data you saved in [Setup](#setup), step 2.
