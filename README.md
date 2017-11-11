@@ -1,4 +1,5 @@
 # Lesson on biodiversity data and species distribution models
+## v0.9.0
 
 ## Overview
 Introductory lesson to generate range maps for butterfly-host plant interactions and predict distributional shifts using publicly available biodiversity data and data science tools.
