@@ -218,8 +218,8 @@ SDMBioclim <- function(data) {
   # raster.files <- list.files(path = paste0(system.file(package = "dismo"), "/ex"),
   #                            pattern = "grd", full.names = TRUE)
   # mask <- raster(raster.files[1])
-  bil.files <- list.files(path = "data/wc2-5/", 
-                          pattern = "*.bil", 
+  bil.files <- list.files(path = "data/wc2-5", 
+                          pattern = "*.bil$", 
                           full.names = TRUE)
   mask <- raster(bil.files[1])
   
@@ -291,8 +291,8 @@ SDMGLM <- function(data) {
   bioclim.data <- crop(x = bioclim.data, y = geographic.extent)
   
   # Create pseudo-absence points (making them up, using 'background' approach)
-  bil.files <- list.files(path = "data/wc2-5/", 
-                          pattern = "*.bil", 
+  bil.files <- list.files(path = "data/wc2-5", 
+                          pattern = "*.bil$", 
                           full.names = TRUE)
   mask <- raster(bil.files[1])
   
