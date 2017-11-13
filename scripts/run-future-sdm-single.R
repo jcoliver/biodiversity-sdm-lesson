@@ -88,8 +88,9 @@ bioclim.data <- getData(name = "worldclim",
 bioclim.data <- crop(x = bioclim.data, y = geographic.extent)
 
 # Create pseudo-absence points (making them up, using 'background' approach)
-bil.files <- list.files(path = "data/wc2-5/", 
-                        pattern = "*.bil", 
+# Using worldclim data rasters (which we know exist)
+bil.files <- list.files(path = "data/wc2-5", 
+                        pattern = "*.bil$", 
                         full.names = TRUE)
 mask <- raster(bil.files[1])
 
