@@ -2,19 +2,22 @@
 ## Instructions
 
 ### Installations
-1. Install R
-2. Install RStudio
-3. Install Git
+1. Install [R](http://cran.r-project.org/mirrors.html)
+2. Install [RStudio](https://www.rstudio.com/products/rstudio/)
+3. Install [Git](https://git-scm.org/downloads)
 
 ### Setup
-1. In RStudio, clone the Git repository at [https://github.com/jcoliver/biodiversity-sdm-lesson.git](https://github.com/jcoliver/biodiversity-sdm-lesson.git)
-2. Run the setup script in RStudio by running this command in the Console:
+1. Open RStudio and clone the Git repository at [https://github.com/jcoliver/biodiversity-sdm-lesson.git](https://github.com/jcoliver/biodiversity-sdm-lesson.git)
+2. Run the setup script in RStudio by running this command in the **Console** tab of RStudio:
     `source(file = "scripts/setup.R")`
-    This script may take a while to run, depending on the speed of your machine and internet connection. Note also that it may ask you if you want to restart R before installing/upgrading packages; if you receive this prompt, answer **Yes** to restarting R.
+    This script may take a while to run, depending on the speed of your machine and internet connection. Note also that it may ask you if you want to restart R before installing/upgrading packages; if you receive this prompt, answer **Yes** to restarting R. This script installs additional R packages necessary for analyses, makes sure the `data` folder exists, and downloads climate data necessary to run the species distribution models.
 3. Download data for **butterfly** species from iNaturalist as a CSV file, save it in the `biodiversity-sdm-lesson/data` folder
 4. Download data for **plant** species from iNaturalist as a CSV file, save it in the `biodiversity-sdm-lesson/data` folder
 
 ### Running analyses
+#### Single species models, current climate data
+
+#### Pairwise species (butterfly & plant) models, current climate data
 1. Copy the file `run-sdm-pairwise.R` and rename the copy `<species>-sdm-pairwise.R`, replacing `<species>` with the name of the butterfly species. Use underscores instead of spaces; so for the species _L. xanthoides_, the file name would be `L_xanthoides-sdm-pairwise.R`.
 2. Open this new file and update the following values:
     1. `butterfly.data.file <- "data/BUTTERFLY_DATA.csv"`
@@ -25,7 +28,22 @@
     Replace `"MY_SPECIES"` with the name of the butterfly species. Use underscores instead of spaces; so for the species _L. xanthoides_, the line would read: 
     `outprefix <- "L_xanthoides"`
     4. Save the file with these updates
-3. Run the analyses by typing the following command in the **Console**: `source(file = "scripts/<species>-sdm-pairwise.R")`, replacing `<species>` with the species name as in step 1 of [Running analyses](#running-analyses).  After running this script, two things to note:
+3. Run the analyses by typing the following command in the **Console** tab of RStudio: `source(file = "scripts/<species>-sdm-pairwise.R")`, replacing `<species>` with the species name as in step 1 of [Running analyses](#running-analyses).  After running this script, two things to note:
     1. A map will be saved in the `output` folder; the file name will start with the value you used for "MY_SPECIES" in step 2.3, above.
     2. In the console you should see the % of the modeled plant's range that is occupied by the insect. Comparing this to the map, the value is the fraction of the area that is red, relative to the total red and green areas.
-4. For forecast models (the year 2070), the template files are called `scripts/run-future-sdm-single.R` and `scripts/run-future-sdm-pairwise.R` for single species and pairwise (butterflies & plants) analyses, respectively. They can be copied, altered, and run as in steps 1-3 above.
+
+#### Single species models, forecast climate data
+#### Pairwise species (butterfly & plant) models, forecast climate data
+1. Copy the file `run-future-sdm-pairwise.R` and rename the copy `<species>-future-sdm-pairwise.R`, replacing `<species>` with the name of the butterfly species. Use underscores instead of spaces; so for the species _L. xanthoides_, the file name would be `L_xanthoides-future-sdm-pairwise.R`.
+2. Open this new file and update the following values:
+    1. `butterfly.data.file <- "data/BUTTERFLY_DATA.csv"`
+    Change `"BUTTERFLY_DATA.csv"` so it matches the file of butterfly data you saved in [Setup](#setup), step 3.
+    2. `plant.data.file <- "data/PLANT_DATA.csv"`
+    Change `"PLANT_DATA.csv"` so it matches the file of plant data you saved in [Setup](#setup), step 4.
+    3. `outprefix <- "MY_SPECIES"` 
+    Replace `"MY_SPECIES"` with the name of the butterfly species. Use underscores instead of spaces; so for the species _L. xanthoides_, the line would read: 
+    `outprefix <- "L_xanthoides"`
+    4. Save the file with these updates
+3. Run the analyses by typing the following command in the **Console** tab of RStudio: `source(file = "scripts/<species>-future-sdm-pairwise.R")`, replacing `<species>` with the species name as in step 1 of [Running analyses](#running-analyses).  After running this script, two things to note:
+    1. A map will be saved in the `output` folder; the file name will start with the value you used for "MY_SPECIES" in step 2.3, above and end with `-pairwise-future-prediction.pdf`. So for the example _L. xanthoides_, the output pdf file will be at `output/L_xanthoides-pairwise-future-prediction.pdf`
+    2. In the console you should see the % of the modeled plant's range that is occupied by the insect. Comparing this to the map, the value is the fraction of the area that is red, relative to the total red and green areas.

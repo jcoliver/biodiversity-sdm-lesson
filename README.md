@@ -27,6 +27,7 @@ Five additional R packages are required:
   + prepareData.R: functions used in species distribution models
 + output (contents are not under version control)
 + scripts
+  + examples: example scripts implementing the four `run-*` scripts
   + get-observation-data.R: Harvest data from iNaturalist using their API; 
   called from command line terminal
     + Usage: `Rscript --vanilla get-observation-data.R <taxon_id>`
