@@ -10,9 +10,9 @@ rm(list = ls())
 # Gather path information
 # Load dependancies
 
-butterfly.data.file <- "data/L_xanthoides.csv"
-plant.data.file <- "data/R_salicifolius.csv"
-outprefix <- "L_xanthoides"
+butterfly.data.file <- "data/Lycaena_xanthoides_data.csv"
+plant.data.file <- "data/Rumex_salicifolius_data.csv"
+outprefix <- "Lycaena_xanthoides"
 outpath <- "output/"
 
 # Make sure the output path ends with "/" (and append one if it doesn't)

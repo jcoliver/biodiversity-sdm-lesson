@@ -1,5 +1,5 @@
 # Lesson on biodiversity data and species distribution models
-## v0.9.0
+## v0.9.1
 
 ## Overview
 Introductory lesson to generate range maps for butterfly-host plant interactions and predict distributional shifts using publicly available biodiversity data and data science tools.
@@ -9,7 +9,7 @@ Detailed instructions can be found in [instructions.md](instructions.md)
 Originally forked from [https://github.com/jcoliver/ebutterfly-sdm.git](https://github.com/jcoliver/ebutterfly-sdm.git)
 
 ## Dependencies
-Five additional R packages are required:
+Five additional R packages are required (these will be installed by running the the setup script, `scripts/setup.R`):
 
 + rgdal
 + raster
@@ -21,8 +21,8 @@ Five additional R packages are required:
 + data
   + wc2-5: climate data at 2.5 minute resolution from [WorldClim](http://www.worldclim.org) (_note_: this folder is not under version control, but will be created by running the setup script (`scripts/setup.R`))
   + cmip5: forcast climate data at 2.5 minute resolution from [WorldClim](http://www.worldclim.org) (_note_: this folder is not under version control, but will be created by running the setup script (`scripts/setup.R`))
-  + L_xanthoides.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Lycaena xanthoides_ (Lepidoptera: Lycaenidae)
-  + R_salicifolius.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Rumex salicifolius_ (Polygonaceae)
+  + Lycaena_xanthoides_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Lycaena xanthoides_ (Lepidoptera: Lycaenidae)
+  + Rumex_salicifolius_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Rumex salicifolius_ (Polygonaceae)
 + functions
   + prepareData.R: functions used in species distribution models
 + output (contents are not under version control)
