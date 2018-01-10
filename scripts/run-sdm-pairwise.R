@@ -10,6 +10,7 @@ rm(list = ls())
 # Gather path information
 # Load dependancies
 
+# Things to set:
 butterfly.data.file <- "data/BUTTERFLY_DATA.csv"
 plant.data.file <- "data/PLANT_DATA.csv"
 outprefix <- "MY_SPECIES"
