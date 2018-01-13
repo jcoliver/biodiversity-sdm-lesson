@@ -52,7 +52,7 @@ PrepareData <- function(file, sep = ",") {
 #' Finds minimum and maximum latitude and longitude
 #' 
 #' @param x a data.frame or list of data.frames
-MinMaxCoordinates <- function(x) {
+MinMaxCoordinates <- function(x, padding = 0.1) {
   # If passed a single data.frame, wrap in a list
   if(class(x) == "data.frame") {
     x <- list(x)
@@ -72,21 +72,31 @@ MinMaxCoordinates <- function(x) {
     min.lon = floor(min(x[[i]]$lon, min.lon))
   }
 
+  if (padding > 0) {
+    # Pad the values a bit so we don't end up with straight line distribution edges
+    lon.pad <- padding * (max.lon - min.lon)
+    lat.pad <- padding * (max.lat - min.lat)
+    max.lat <- max.lat + lat.pad
+    min.lat <- min.lat - lat.pad
+    max.lon <- max.lon + lon.pad
+    min.lon <- min.lon - lon.pad
+  }
+  
   # Format results and return
   min.max.coords <- c(min.lon, max.lon, min.lat, max.lat)
   names(min.max.coords) <- c("min.lon", "max.lon", "min.lat", "max.lat")
   return(min.max.coords)
 }
 
-
-
 ################################################################################
 #' Run species distribution modeling and return raster of predicted presence
 #'
 #' @param data data.frame with "lon" and "lat" values
-SDMRaster <- function(data) {
+#' @param padding numeric with percent to expand geographic extent to avoid 
+#' artificial straight-line distribution borders
+SDMRaster <- function(data, padding = 0.1) {
   # Determine minimum and maximum values of latitude and longitude
-  min.max <- MinMaxCoordinates(x = data)
+  min.max <- MinMaxCoordinates(x = data, padding = padding)
   geographic.extent <- extent(x = min.max)
   
   # Run the analysis and extract model & threshold
@@ -141,9 +151,9 @@ StackTwoRasters <- function(raster1, raster2) {
 #' of predicted presence
 #' 
 #' @param data data.frame with "lon" and "lat" values
-SDMForecast <- function(data) {
+SDMForecast <- function(data, padding = 0.1) {
   # Determine minimum and maximum values of latitude and longitude
-  min.max <- MinMaxCoordinates(x = data)
+  min.max <- MinMaxCoordinates(x = data, padding = padding)
   geographic.extent <- extent(x = min.max)
 
   # Run the analysis and extract model & threshold
@@ -188,7 +198,7 @@ SDMForecast <- function(data) {
 #' Run species distribution model and return model and threshold
 #' 
 #' @param data data.frame with "lon" and "lat" values
-SDMBioclim <- function(data) {
+SDMBioclim <- function(data, padding = 0.1) {
   ########################################
   # SETUP
   # Load dependancies
@@ -204,7 +214,7 @@ SDMBioclim <- function(data) {
   
   # Prepare data
   # Determine minimum and maximum values of latitude and longitude
-  min.max <- MinMaxCoordinates(x = data)
+  min.max <- MinMaxCoordinates(x = data, padding = padding)
   geographic.extent <- extent(x = min.max)
   
   # Get the biolim data
@@ -225,7 +235,8 @@ SDMBioclim <- function(data) {
   
   # Random points for background (same number as our observed points)
   set.seed(19470909)
-  background.points <- randomPoints(mask = mask, n = nrow(data), ext = geographic.extent, extf = 1.25)
+  background.extent <- extent(x = MinMaxCoordinates(x = data, padding = 0.0))
+  background.points <- randomPoints(mask = mask, n = nrow(data), ext = background.extent, extf = 1.25)
   colnames(background.points) <- c("lon", "lat")
   
   # Data for observation sites (presence and background)
@@ -264,7 +275,7 @@ SDMBioclim <- function(data) {
 #' Run SDM with generalized linear regression model
 #' 
 #' @param data data.frame with "lon" and "lat" values
-SDMGLM <- function(data) {
+SDMGLM <- function(data, padding = 0.1) {
   ########################################
   # SETUP
   # Load dependancies
@@ -280,7 +291,7 @@ SDMGLM <- function(data) {
   
   # Prepare data
   # Determine minimum and maximum values of latitude and longitude
-  min.max <- MinMaxCoordinates(x = data)
+  min.max <- MinMaxCoordinates(x = data, padding = padding)
   geographic.extent <- extent(x = min.max)
   
   # Get the biolim data
@@ -298,7 +309,8 @@ SDMGLM <- function(data) {
   
   # Random points for background (same number as our observed points)
   set.seed(19470909)
-  background.points <- randomPoints(mask = mask, n = nrow(data), ext = geographic.extent, extf = 1.25)
+  background.extent <- extent(x = MinMaxCoordinates(x = data, padding = 0.0))
+  background.points <- randomPoints(mask = mask, n = nrow(data), ext = background.extent, extf = 1.25)
   colnames(background.points) <- c("lon", "lat")
   
   # Data for observation sites (presence and background)

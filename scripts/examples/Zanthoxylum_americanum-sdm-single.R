@@ -14,6 +14,9 @@ rm(list = ls())
 infile <- "data/Zanthoxylum_americanum_data.csv"
 outprefix <- "Zanthoxylum_americanum"
 outpath <- "output/"
+# Padding the bioclim crop by 5 percent of lat/long range, in an effort to 
+# reduce artificial straight-line distribution boundaries
+padding <- 0.05
 
 # Make sure the input file exists
 if (!file.exists(infile)) {
@@ -78,6 +81,18 @@ max.lat = ceiling(max(obs.data$lat))
 min.lat = floor(min(obs.data$lat))
 max.lon = ceiling(max(obs.data$lon))
 min.lon = floor(min(obs.data$lon))
+
+# Want background sampling to be restricted to observed distribution
+background.extent <- extent(x = c(min.lon, max.lon, min.lat, max.lat))
+
+# Pad it a bit so we don't end up with straight line distribution edges
+lon.pad <- padding * (max.lon - min.lon)
+lat.pad <- padding * (max.lat - min.lat)
+max.lat <- max.lat + lat.pad
+min.lat <- min.lat - lat.pad
+max.lon <- max.lon + lon.pad
+min.lon <- min.lon - lon.pad
+
 geographic.extent <- extent(x = c(min.lon, max.lon, min.lat, max.lat))
 
 # Get the biolim data
@@ -96,7 +111,7 @@ mask <- raster(bil.files[1])
 
 # Random points for background (same number as our observed points)
 set.seed(19470909)
-background.points <- randomPoints(mask = mask, n = nrow(obs.data), ext = geographic.extent, extf = 1.25)
+background.points <- randomPoints(mask = mask, n = nrow(obs.data), ext = background.extent, extf = 1.25)
 colnames(background.points) <- c("lon", "lat")
 
 # Data for observation sites (presence and background)
@@ -128,7 +143,8 @@ sdm.model.threshold <- threshold(x = sdm.model.eval,
                                  stat = "spec_sens")
 predict.presence <- predict(x = bioclim.data, 
                             object = sdm.model, 
-                            ext = geographic.extent, 
+                            ext = geographic.extent,
+                            # ext = crop.extent,  # To allow some prediction beyond observed range
                             progress = "")
 
 # Save image to file
