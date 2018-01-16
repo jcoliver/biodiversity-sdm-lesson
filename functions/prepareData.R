@@ -66,10 +66,10 @@ MinMaxCoordinates <- function(x, padding = 0.1) {
   
   # Iterate over all elements of list x and find min/max values
   for (i in 1:length(x)) {
-    max.lat = ceiling(max(x[[i]]$lat, max.lat))
-    min.lat = floor(min(x[[i]]$lat, min.lat))
-    max.lon = ceiling(max(x[[i]]$lon, max.lon))
-    min.lon = floor(min(x[[i]]$lon, min.lon))
+    max.lat <- ceiling(max(x[[i]]$lat, max.lat))
+    min.lat <- floor(min(x[[i]]$lat, min.lat))
+    max.lon <- ceiling(max(x[[i]]$lon, max.lon))
+    min.lon <- floor(min(x[[i]]$lon, min.lon))
   }
 
   if (padding > 0) {
@@ -269,126 +269,4 @@ SDMBioclim <- function(data, padding = 0.1) {
                                    stat = "spec_sens")
   
   return(list(sdm = sdm.model, sdm.threshold = sdm.model.threshold))
-}
-
-################################################################################
-#' Run SDM with generalized linear regression model
-#' 
-#' @param data data.frame with "lon" and "lat" values
-SDMGLM <- function(data, padding = 0.1) {
-  ########################################
-  # SETUP
-  # Load dependancies
-  # Prepare data
-  
-  # Load dependancies
-  if (!require("raster")) {
-    stop("SDMRaster requires raster package, but package is missing.")
-  }
-  if (!require("dismo")) {
-    stop("SDMRaster requires dismo package, but package is missing.")
-  }
-  
-  # Prepare data
-  # Determine minimum and maximum values of latitude and longitude
-  min.max <- MinMaxCoordinates(x = data, padding = padding)
-  geographic.extent <- extent(x = min.max)
-  
-  # Get the biolim data
-  bioclim.data <- getData(name = "worldclim",
-                          var = "bio",
-                          res = 2.5, # Could try for better resolution, 0.5, but would then need to provide lat & long...
-                          path = "data/")
-  bioclim.data <- crop(x = bioclim.data, y = geographic.extent)
-  
-  # Create pseudo-absence points (making them up, using 'background' approach)
-  bil.files <- list.files(path = "data/wc2-5", 
-                          pattern = "*.bil$", 
-                          full.names = TRUE)
-  mask <- raster(bil.files[1])
-  
-  # Random points for background (same number as our observed points)
-  set.seed(19470909)
-  background.extent <- extent(x = MinMaxCoordinates(x = data, padding = 0.0))
-  background.points <- randomPoints(mask = mask, n = nrow(data), ext = background.extent, extf = 1.25)
-  colnames(background.points) <- c("lon", "lat")
-  
-  # Data for observation sites (presence and background)
-  presence.values <- extract(x = bioclim.data, y = data)
-  absence.values <- extract(x = bioclim.data, y = background.points)
-  
-  ########################################
-  # ANALYSIS
-  # Divide data into testing and training
-  # Generate species distribution model
-  
-  # Divide data into testing and training
-  group.presence <- kfold(data, 5)
-  testing.group <- 1
-  presence.train <- data[group.presence != testing.group, ]
-  presence.test <- data[group.presence == testing.group, ]
-  group.background <- kfold(background.points, 5)
-  background.train <- background.points[group.background != testing.group, ]
-  background.test <- background.points[group.background == testing.group, ]
-  
-  # ====== START GLM DIVERGENCE ======== #
-  # Transform data to data.frame from raster data
-  # Combine the lat/long data for presence and "absence" data
-  train <- rbind(presence.train, background.train)
-  # Create binary vector indicating presence or absence
-  pres.abs <- c(rep(x = 1, times = nrow(presence.train)),
-                rep(x = 0, times = nrow(background.train)))
-  training.data <- extract(x = bioclim.data, y = train)
-  training.data <- data.frame(cbind(pa = pres.abs, training.data))
-  
-  testing.presence <- data.frame(extract(x = bioclim.data, y = presence.test))
-  testing.background <- data.frame(extract(x = bioclim.data, y = background.test))
-
-    
-  # train <- rbind(pres_train, backg_train)
-  # pb_train <- c(rep(1, nrow(pres_train)), rep(0, nrow(backg_train)))
-  # envtrain <- extract(predictors, train)
-  # envtrain <- data.frame( cbind(pa=pb_train, envtrain) )
-  # envtrain[,'biome'] = factor(envtrain[,'biome'], levels=1:14)
-  # head(envtrain)
-  # ##   pa bio1 bio12 bio16 bio17 bio5 bio6 bio7 bio8 biome
-  # ## 1  1  263  1639   724    62  338  191  147  261     1
-  # ## 2  1  263  1639   724    62  338  191  147  261     1
-  # ## 3  1  253  3624  1547   373  329  150  179  271     1
-  # ## 4  1  243  1693   775   186  318  150  168  264     1
-  # ## 5  1  252  2501  1081   280  326  154  172  270     1
-  # ## 6  1  240  1214   516   146  317  150  168  261     2
-  # 
-  # testpres <- data.frame( extract(predictors, pres_test) )
-  # testbackg <- data.frame( extract(predictors, backg_test) )
-  # testpres[ ,'biome'] = factor(testpres[ ,'biome'], levels=1:14)
-  # testbackg[ ,'biome'] = factor(testbackg[ ,'biome'], levels=1:14)
-  glm.1 <- glm(pa ~ bio1 + bio2 + bio3 + bio4 + bio5 + bio6 + 
-               bio7, family = binomial(link = "logit"), 
-             data = training.data)
-  glm.evaluate <- evaluate(p = testing.presence,
-                           a = testing.background,
-                           model = glm.1)
-  glm.threshold <- threshold(x = glm.evaluate, "spec_sens")
-  glm.predict <- predict(x = bioclim.data, 
-                         object = glm.1,
-                         ext = geographic.extent,
-                         progress = "")
-  
-  # ====== STOP GLM DIVERGENCE ========= #
-  
-  
-    # Generate species distribution model
-  sdm.model <- bioclim(x = bioclim.data, p = presence.train)
-  # Evaluate performance so we can determine predicted presence 
-  # threshold cutoff
-  sdm.model.eval <- evaluate(p = presence.test, 
-                             a = background.test, 
-                             model = sdm.model, 
-                             x = bioclim.data)
-  sdm.model.threshold <- threshold(x = sdm.model.eval, 
-                                   stat = "spec_sens")
-  
-  return(list(sdm = sdm.model, sdm.threshold = sdm.model.threshold))
-  
 }
