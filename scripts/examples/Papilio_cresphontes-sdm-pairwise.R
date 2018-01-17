@@ -42,7 +42,7 @@ if (length(missing.packages) > 0) {
   stop(paste0("Missing one or more required packages. The following packages are required for run-sdm: ", paste(missing.packages, sep = "", collapse = ", ")), ".\n")
 }
 
-source(file = "functions/prepareData.R")
+source(file = "functions/sdm-functions.R")
 
 ################################################################################
 # ANALYSES

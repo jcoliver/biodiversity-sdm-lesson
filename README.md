@@ -24,7 +24,7 @@ Five additional R packages are required (these will be installed by running the 
   + Lycaena_xanthoides_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Lycaena xanthoides_ (Lepidoptera: Lycaenidae)
   + Rumex_salicifolius_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Rumex salicifolius_ (Polygonaceae)
 + functions
-  + prepareData.R: functions used in species distribution models
+  + sdm-functions.R: functions used in species distribution models
 + output (contents are not under version control)
 + scripts
   + examples: example scripts implementing the four `run-*` scripts
