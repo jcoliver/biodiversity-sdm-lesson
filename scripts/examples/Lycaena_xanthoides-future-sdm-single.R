@@ -52,130 +52,54 @@ if (length(missing.packages) > 0) {
   stop(paste0("Missing one or more required packages. The following packages are required for run-sdm: ", paste(missing.packages, sep = "", collapse = ", ")), ".\n")
 }
 
-################################################################################
-# DATA
-# Read in raw data
-# Extract data of interest
-# Data cleanup and extent
-# Create pseudo-absence points
-iNaturalist.data <- read.csv(file = infile,
-                             stringsAsFactors = FALSE)
-if (!(any(colnames(iNaturalist.data) == "longitude") 
-    && any(colnames(iNaturalist.data) == "latitude"))) {
-  stop("Missing required column(s); input file must have 'latitude' and 'longitude' columns.\n")
-}
 
-obs.data <- iNaturalist.data[, c("longitude", "latitude")]
-colnames(obs.data) <- c("lon", "lat")
-
-# Remove duplicate rows
-duplicate.rows <- duplicated(x = obs.data)
-obs.data <- obs.data[!duplicate.rows, ]
-obs.data <- na.omit(obs.data)
-
-# Determine geographic extent of our data
-max.lat = ceiling(max(obs.data$lat))
-min.lat = floor(min(obs.data$lat))
-max.lon = ceiling(max(obs.data$lon))
-min.lon = floor(min(obs.data$lon))
-geographic.extent <- extent(x = c(min.lon, max.lon, min.lat, max.lat))
-
-# Get the biolim data
-bioclim.data <- getData(name = "worldclim",
-                        var = "bio",
-                        res = 2.5, # Could try for better resolution, 0.5, but would then need to provide lat & long...
-                        path = "data/")
-bioclim.data <- crop(x = bioclim.data, y = geographic.extent)
-
-# Create pseudo-absence points (making them up, using 'background' approach)
-bil.files <- list.files(path = "data/wc2-5/", 
-                        pattern = "*.bil", 
-                        full.names = TRUE)
-mask <- raster(bil.files[1])
-
-# Random points for background (same number as our observed points)
-set.seed(19470909)
-background.points <- randomPoints(mask = mask, n = nrow(obs.data), ext = geographic.extent, extf = 1.25)
-colnames(background.points) <- c("lon", "lat")
-
-# Data for observation sites (presence and background)
-presence.values <- extract(x = bioclim.data, y = obs.data)
-absence.values <- extract(x = bioclim.data, y = background.points)
+source(file = "functions/sdm-functions.R")
 
 ################################################################################
-# ANALYSIS
-# Divide data into testing and training
-# Run SDM
-# Save graphics and raster files
+# ANALYSES
+# Prepare data
+# Run species distribution modeling
+# Combine results from butterflies and plants
 
-# Separate training & testing data
-group.presence <- kfold(obs.data, 5)
-testing.group <- 1
-presence.train <- obs.data[group.presence != testing.group, ]
-presence.test <- obs.data[group.presence == testing.group, ]
-group.background <- kfold(background.points, 5)
-background.train <- background.points[group.background != testing.group, ]
-background.test <- background.points[group.background == testing.group, ]
+# Prepare data
+prepared.data <- PrepareData(file = infile)
 
-# Do species distribution modeling
-sdm.model <- bioclim(x = bioclim.data, p = presence.train)
-sdm.model.eval <- evaluate(p = presence.test, 
-                           a = background.test, 
-                           model = sdm.model, 
-                           x = bioclim.data)
-sdm.model.threshold <- threshold(x = sdm.model.eval, 
-                                 stat = "spec_sens")
+# Run species distribution modeling
+sdm.raster <- SDMForecast(data = prepared.data)
 
-# Get forcast data
-forecast.data <- getData(name = "CMIP5", # forecast
-                         var = "bio", # bioclim
-                         res = 2.5,
-                         path = "data/",
-                         model = "GD", # GFDL-ESM2G
-                         rcp = "45", # CO2 increase 4.5
-                         year = 70) # 2070
-forecast.data <- crop(x = forecast.data, y = geographic.extent)
-names(forecast.data) <- names(bioclim.data)
+################################################################################
+# PLOT
+# Determine size of plot
+# Plot to pdf file
 
-# Predict presence probability from model and bioclim data
-predict.presence <- predict(x = forecast.data, 
-                            object = sdm.model, 
-                            ext = geographic.extent, 
-                            progress = "")
+# Add small value to all raster pixels so plot is colored correctly
+sdm.raster <- sdm.raster + 0.00001
 
-# Save image to file
-data(wrld_simpl) # Need this for the map
+# Determine the geographic extent of our plot
+xmin <- extent(sdm.raster)[1]
+xmax <- extent(sdm.raster)[2]
+ymin <- extent(sdm.raster)[3]
+ymax <- extent(sdm.raster)[4]
+
+# Plot the model; save to pdf
 plot.file <- paste0(outpath, outprefix, "-single-future-prediction.pdf")
 pdf(file = plot.file, useDingbats = FALSE)
-par(mar = c(3, 3, 3, 1) + 0.1)
-plot(wrld_simpl, 
-     xlim = c(min.lon, max.lon), 
-     ylim = c(min.lat, max.lat), 
-     col = "#F2F2F2",
-     axes = TRUE)
-plot(predict.presence > sdm.model.threshold, 
-     main = "Presence/Absence",
-     legend = FALSE,
-     add = TRUE)
-# Redraw borders
-plot(wrld_simpl,
-     add = TRUE,
-     border = "dark grey")
-box()
-# Restore default margins
-par(mar = c(5, 4, 4, 2) + 0.1)
+
+# Load in data for map borders
+data(wrld_simpl)
+
+# Draw the base map
+plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = "gray95")
+
+# Add the model rasters
+plot(sdm.raster, legend = FALSE, add = TRUE, main = gsub(pattern = "_", replacement = " ", x = outprefix))
+
+# Redraw the borders of the base map
+plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", col = NA)
+
 dev.off()
 
-# Save raster to files
-suppressMessages(writeRaster(x = predict.presence, 
-                             filename = paste0(outpath, outprefix, "-single-future-prediction.grd"),
-                             format = "raster",
-                             overwrite = TRUE))
-
-suppressMessages(writeRaster(x = predict.presence > sdm.model.threshold, 
-                             filename = paste0(outpath, outprefix, "-single-future-prediction-threshold.grd"),
-                             format = "raster",
-                             overwrite = TRUE))
-cat("Finished with file writing.\n")
+# Let user know analysis is done.
+message(paste0("\nAnalysis complete. Map image written to ", plot.file, "."))
 
 rm(list = ls())
