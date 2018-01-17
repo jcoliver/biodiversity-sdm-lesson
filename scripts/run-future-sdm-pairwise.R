@@ -16,6 +16,22 @@ plant.data.file <- "data/PLANT_DATA.csv"
 outprefix <- "MY_SPECIES"
 outpath <- "output/"
 
+# Make sure the input files exist
+if (!file.exists(butterfly.data.file)) {
+  stop(paste0("Cannot find ", butterfly.data.file, ", file does not exist.\n"))
+}
+if (!file.exists(plant.data.file)) {
+  stop(paste0("Cannot find ", plant.data.file, ", file does not exist.\n"))
+}
+
+# Make sure the input files are readable
+if (file.access(names = butterfly.data.file, mode = 4) != 0) {
+  stop(paste0("You do not have sufficient access to read ", butterfly.data.file, "\n"))
+}
+if (file.access(names = plant.data.file, mode = 4) != 0) {
+  stop(paste0("You do not have sufficient access to read ", plant.data.file, "\n"))
+}
+
 # Make sure the output path ends with "/" (and append one if it doesn't)
 if (substring(text = outpath, first = nchar(outpath), last = nchar(outpath)) != "/") {
   outpath <- paste0(outpath, "/")
