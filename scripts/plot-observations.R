@@ -1,4 +1,4 @@
-# Papilio cresphontes observation point map
+# Species observation point map
 # Jeff Oliver
 # jcoliver@email.arizona.edu
 # 2018-01-19

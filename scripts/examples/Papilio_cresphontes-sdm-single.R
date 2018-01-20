@@ -1,4 +1,4 @@
-# Script to run Species Distribution Model using "bioclim" approach
+# Script to run contemporary species distribution model for Papilio cresphontes
 # Jeff Oliver
 # jcoliver@email.arizona.edu
 # 2018-01-10

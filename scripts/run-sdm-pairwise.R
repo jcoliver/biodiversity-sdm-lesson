@@ -1,4 +1,4 @@
-# Script to run Species Distribution Model using "bioclim" approach
+# Script to run contemporary species distribution model for pair of species
 # Jeff Oliver
 # jcoliver@email.arizona.edu
 # 2017-09-07

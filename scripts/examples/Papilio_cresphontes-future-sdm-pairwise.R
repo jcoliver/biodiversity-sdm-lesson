@@ -1,4 +1,4 @@
-# Script to run Species Distribution Model using "bioclim" approach
+# Script to run forecast species distribution model for Papilio cresphontes & Zanthoxylum americanum
 # Jeff Oliver
 # jcoliver@email.arizona.edu
 # 2018-01-10

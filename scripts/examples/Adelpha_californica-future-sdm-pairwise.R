@@ -1,4 +1,4 @@
-# Script to run Species Distribution Model using "bioclim" approach
+# Script to run forecast species distribution model for Adelpha californica & Quercus chrysolepis
 # Jeff Oliver
 # jcoliver@email.arizona.edu
 # 2017-09-07
