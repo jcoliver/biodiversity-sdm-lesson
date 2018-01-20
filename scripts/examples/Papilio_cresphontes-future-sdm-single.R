@@ -89,10 +89,11 @@ pdf(file = plot.file, useDingbats = FALSE)
 data(wrld_simpl)
 
 # Draw the base map
-plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = "gray95")
+plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = "gray95", 
+     main = paste0(gsub(pattern = "_", replacement = " ", x = outprefix), " - future"))
 
 # Add the model rasters
-plot(sdm.raster, legend = FALSE, add = TRUE, main = gsub(pattern = "_", replacement = " ", x = outprefix))
+plot(sdm.raster, legend = FALSE, add = TRUE)
 
 # Redraw the borders of the base map
 plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", col = NA)
