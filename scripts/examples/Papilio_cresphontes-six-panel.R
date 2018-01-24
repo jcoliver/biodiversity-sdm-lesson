@@ -8,6 +8,7 @@ rm(list = ls())
 #' TODO:
 #' Make text font smaller
 #' Make title font smaller
+#' Change colors of butterfly & plant to match those in combined plots
 #' Make margins (at least vertical ones) for each plot smaller
 #' Add a, b, c, etc. to titles?
 #' Make this generic & add to top-level scripts directory
@@ -88,6 +89,14 @@ combined.raster.current <- StackTwoRasters(raster1 = butterfly.raster.current,
 # Add small value to all raster pixels so plot is colored correctly
 combined.raster.current <- combined.raster.current + 0.00001
 
+# Change zeros to NAs
+butterfly.raster.current[butterfly.raster.current <= 0] <- NA
+plant.raster.current[plant.raster.current <= 0] <- NA
+
+# Add small value to all raster pixels so plot is colored correctly
+butterfly.raster.current <- butterfly.raster.current + 0.00001
+plant.raster.current <- plant.raster.current + 0.00001
+
 # Run species distribution modeling, future
 butterfly.raster.future <- SDMForecast(data = butterfly.data)
 plant.raster.future <- SDMForecast(data = plant.data)
@@ -114,6 +123,9 @@ pdf(file = plot.file, useDingbats = FALSE)
 
 # Setup plot
 par(mfrow = c(3, 2))
+butterfly.color <- "plum3"
+plant.color <- "darkolivegreen3"
+overlap.color <- "orangered4"
 
 ################################################################################
 # PLOT 1: Observation of butterfly species
@@ -182,13 +194,27 @@ plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = 
      main = paste0(gsub(pattern = "_", replacement = " ", x = butterfly.species), " - current"))
 
 # Add the model rasters
-plot(butterfly.raster.current, legend = FALSE, add = TRUE)
+plot(butterfly.raster.current, legend = FALSE, add = TRUE, breaks = c(0, 1, 2, 3), col = c("white", "orange", "black", "green"))
 
 # Redraw the borders of the base map
 plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", col = NA)
 
 # Add bounding box around map
 box()
+
+
+# Plot the models for butterfly, plant and overlap
+breakpoints <- c(0, 1, 2, 3, 4)
+plot.colors <- c("white", "plum3","darkolivegreen3", "orangered4", "black")
+
+# Add the model rasters
+plot(combined.raster.future, legend = FALSE, add = TRUE, breaks = breakpoints, col = plot.colors)
+
+# Redraw the borders of the base map
+plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", col = NA)
+
+
+
 
 ################################################################################
 # PLOT 4: Contemporary SDM of plant species
