@@ -76,6 +76,8 @@ source(file = "functions/sdm-functions.R")
 # Run SDMs
 # Combine SDMs
 
+message("Starting species distribution modeling")
+
 # Prepare data
 butterfly.data <- PrepareData(file = butterfly.data.file)
 plant.data <- PrepareData(file = plant.data.file)
@@ -106,6 +108,8 @@ combined.raster.future <- StackTwoRasters(raster1 = butterfly.raster.future,
 # Add small value to all raster pixels so plot is colored correctly
 combined.raster.future <- combined.raster.future + 0.00001
 
+message("Species distribution modeling complete; starting plots.")
+
 ################################################################################
 # PLOTTING
 # Setup destination
@@ -127,6 +131,9 @@ butterfly.color <- "plum3"
 plant.color <- "darkolivegreen3"
 overlap.color <- "orangered4"
 
+# Load in data for map borders
+data(wrld_simpl)
+
 ################################################################################
 # PLOT 1: Observation of butterfly species
 
@@ -135,9 +142,6 @@ xmin <- min(butterfly.data$lon)
 xmax <- max(butterfly.data$lon)
 ymin <- min(butterfly.data$lat)
 ymax <- max(butterfly.data$lat)
-
-# Load in data for map borders
-data(wrld_simpl)
 
 # Draw the base map
 plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = "gray95",
@@ -161,9 +165,6 @@ xmax <- max(plant.data$lon)
 ymin <- min(plant.data$lat)
 ymax <- max(plant.data$lat)
 
-# Load in data for map borders
-data(wrld_simpl)
-
 # Draw the base map
 plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = "gray95",
      main = paste0("Observations of ", gsub(pattern = "_", replacement = " ", x = plant.species)))
@@ -186,35 +187,18 @@ xmax <- extent(butterfly.raster.current)[2]
 ymin <- extent(butterfly.raster.current)[3]
 ymax <- extent(butterfly.raster.current)[4]
 
-# Load in data for map borders
-data(wrld_simpl)
-
 # Draw the base map
 plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = "gray95", 
      main = paste0(gsub(pattern = "_", replacement = " ", x = butterfly.species), " - current"))
 
 # Add the model rasters
-plot(butterfly.raster.current, legend = FALSE, add = TRUE, breaks = c(0, 1, 2, 3), col = c("white", "orange", "black", "green"))
+plot(butterfly.raster.current, legend = FALSE, add = TRUE, breaks = c(0, 1, 2), col = c("white", butterfly.color, "white"))
 
 # Redraw the borders of the base map
 plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", col = NA)
 
 # Add bounding box around map
 box()
-
-
-# Plot the models for butterfly, plant and overlap
-breakpoints <- c(0, 1, 2, 3, 4)
-plot.colors <- c("white", "plum3","darkolivegreen3", "orangered4", "black")
-
-# Add the model rasters
-plot(combined.raster.future, legend = FALSE, add = TRUE, breaks = breakpoints, col = plot.colors)
-
-# Redraw the borders of the base map
-plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", col = NA)
-
-
-
 
 ################################################################################
 # PLOT 4: Contemporary SDM of plant species
@@ -225,15 +209,12 @@ xmax <- extent(plant.raster.current)[2]
 ymin <- extent(plant.raster.current)[3]
 ymax <- extent(plant.raster.current)[4]
 
-# Load in data for map borders
-data(wrld_simpl)
-
 # Draw the base map
 plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = "gray95", 
      main = paste0(gsub(pattern = "_", replacement = " ", x = plant.species), " - current"))
 
 # Add the model rasters
-plot(plant.raster.current, legend = FALSE, add = TRUE)
+plot(plant.raster.current, legend = FALSE, add = TRUE, breaks = c(0, 1, 2), col = c("white", plant.color, "white"))
 
 # Redraw the borders of the base map
 plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", col = NA)
@@ -250,19 +231,20 @@ xmax <- extent(combined.raster.current)[2]
 ymin <- extent(combined.raster.current)[3]
 ymax <- extent(combined.raster.current)[4]
 
-# Plot the models for butterfly, plant and overlap
+# Coloring breakpoints
 breakpoints <- c(0, 1, 2, 3, 4)
-plot.colors <- c("white", "plum3","darkolivegreen3", "orangered4", "black")
-
-# Load in data for map borders
-data(wrld_simpl)
+plot.colors <- c("white", butterfly.color, plant.color, overlap.color, "white")
 
 # Draw the base map
 plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = "gray95",
      main = "Combined Contemporary SDMs")
 
 # Add the model rasters
-plot(combined.raster.current, legend = FALSE, add = TRUE, breaks = breakpoints, col = plot.colors)
+plot(combined.raster.current, 
+     legend = FALSE, 
+     add = TRUE, 
+     breaks = breakpoints, 
+     col = plot.colors)
 
 # Redraw the borders of the base map
 plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", col = NA)
@@ -285,19 +267,20 @@ xmax <- extent(combined.raster.future)[2]
 ymin <- extent(combined.raster.future)[3]
 ymax <- extent(combined.raster.future)[4]
 
-# Plot the models for butterfly, plant and overlap
+# Coloring breakpoints
 breakpoints <- c(0, 1, 2, 3, 4)
-plot.colors <- c("white", "plum3","darkolivegreen3", "orangered4", "black")
-
-# Load in data for map borders
-data(wrld_simpl)
+plot.colors <- c("white", butterfly.color, plant.color, overlap.color, "white")
 
 # Draw the base map
 plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = "gray95",
      main = "Combined Forecast SDMs")
 
 # Add the model rasters
-plot(combined.raster.future, legend = FALSE, add = TRUE, breaks = breakpoints, col = plot.colors)
+plot(combined.raster.future, 
+     legend = FALSE, 
+     add = TRUE, 
+     breaks = breakpoints, 
+     col = plot.colors)
 
 # Redraw the borders of the base map
 plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", col = NA)
