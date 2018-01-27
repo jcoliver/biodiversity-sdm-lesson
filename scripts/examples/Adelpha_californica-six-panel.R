@@ -11,10 +11,10 @@ rm(list = ls())
 # Load dependancies
 
 # Things to set:
-butterfly.data.file <- "data/Papilio_cresphontes_data.csv"
-plant.data.file <- "data/Zanthoxylum_americanum_data.csv"
-butterfly.species <- "Papilio_cresphontes"
-plant.species <- "Zanthoxylum_americanum"
+butterfly.data.file <- "data/Adelpha_californica_data.csv"
+plant.data.file <- "data/Quercus_chrysolepis_data.csv"
+butterfly.species <- "Adelpha_californica"
+plant.species <- "Quercus_chrysolepis"
 outpath <- "output/"
 
 # Make sure the input files exist
