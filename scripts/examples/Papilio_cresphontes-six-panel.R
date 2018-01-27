@@ -6,11 +6,6 @@
 rm(list = ls())
 
 #' TODO:
-#' Make text font smaller
-#' Make title font smaller
-#' Change colors of butterfly & plant to match those in combined plots
-#' Make margins (at least vertical ones) for each plot smaller
-#' Add a, b, c, etc. to titles?
 #' Make this generic & add to top-level scripts directory
 
 ################################################################################
@@ -126,10 +121,15 @@ plot.file <- paste0(outpath, butterfly.species, "-six-panel.pdf")
 pdf(file = plot.file, useDingbats = FALSE)
 
 # Setup plot
-par(mfrow = c(3, 2))
+par(mfrow = c(3, 2),
+    cex.main = 0.95,
+    cex.axis = 0.8,
+    las = 1,
+    mar = c(3, 4, 3, 2) + 0.1)
 butterfly.color <- "plum3"
 plant.color <- "darkolivegreen3"
 overlap.color <- "orangered4"
+legend.cex = 0.6
 
 # Load in data for map borders
 data(wrld_simpl)
@@ -253,7 +253,9 @@ plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border 
 legend("topright", legend = c(gsub(pattern = "_", replacement = " ", x = butterfly.species), 
                               gsub(pattern = "_", replacement = " ", x = plant.species), 
                               "Overlap"), 
-       fill = plot.colors[2:4], bg = "#FFFFFF")
+       fill = plot.colors[2:4], 
+       bg = "#FFFFFF",
+       cex = legend.cex)
 
 # Add bounding box around map
 box()
@@ -289,13 +291,19 @@ plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border 
 legend("topright", legend = c(gsub(pattern = "_", replacement = " ", x = butterfly.species), 
                               gsub(pattern = "_", replacement = " ", x = plant.species), 
                               "Overlap"), 
-       fill = plot.colors[2:4], bg = "#FFFFFF")
+       fill = plot.colors[2:4], 
+       bg = "#FFFFFF",
+       cex = legend.cex)
 
 # Add bounding box around map
 box()
 
 # Reset default graphics parameters
-par(mfrow = c(1, 1))
+par(mfrow = c(1, 1),
+    cex.main = 1.0,
+    cex.lab = 1.0,
+    las = 0,
+    mar = c(5, 4, 4, 2) + 0.1)
 
 # Stop re-direction to PDF
 dev.off()
