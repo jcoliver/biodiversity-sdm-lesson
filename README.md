@@ -1,5 +1,5 @@
 # Lesson on biodiversity data and species distribution models
-## v0.9.1
+## v0.9.2
 
 ## Overview
 Introductory lesson to generate range maps for butterfly-host plant interactions and predict distributional shifts using publicly available biodiversity data and data science tools.
@@ -21,21 +21,27 @@ Five additional R packages are required (these will be installed by running the 
 + data
   + wc2-5: climate data at 2.5 minute resolution from [WorldClim](http://www.worldclim.org) (_note_: this folder is not under version control, but will be created by running the setup script (`scripts/setup.R`))
   + cmip5: forcast climate data at 2.5 minute resolution from [WorldClim](http://www.worldclim.org) (_note_: this folder is not under version control, but will be created by running the setup script (`scripts/setup.R`))
+  + Adelpha_californica_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Adelpha californica_ (Lepidoptera: Nymphalidae)
   + Lycaena_xanthoides_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Lycaena xanthoides_ (Lepidoptera: Lycaenidae)
-  + Rumex_salicifolius_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Rumex salicifolius_ (Polygonaceae)
+  + Papilio_cresphontes_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Papilio cresphontes_ (Lepidoptera: Papilionidae)
+  + Quercus_chrysolepis_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Quercus chrysolepus_ (Fagales: Fagaceae)
+  + Rumex_salicifolius_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Rumex salicifolius_ (Caryophyllales: Polygonaceae)
+  + Zanthoxylum_americanum_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Zanthoxylum americanum_ (Sapindales: Rutaceae)
 + functions
   + sdm-functions.R: functions used in species distribution models
 + output (contents are not under version control)
 + scripts
-  + examples: example scripts implementing the four `run-*` scripts
+  + examples: example scripts implementing the four `run-*` scripts and two `plot-*` scripts
   + get-observation-data.R: Harvest data from iNaturalist using their API; 
   called from command line terminal
     + Usage: `Rscript --vanilla get-observation-data.R <taxon_id>`
     + Example: `Rscript --vanilla get-observation-data.R 60606`
-  + run-future-sdm-pairwise.R: Run species distirbution model for an insect and its host plant species based on forecast climate model
-  + run-future-sdm-single.R: Run species distirbution model for a single species based on forecast climate model
-  + run-sdm-pairwise.R: Run species distirbution model for an insect and its host plant species based on current climate data
-  + run-sdm-single.R: Run species distirbution model for a single species based on current climate data
+  + plot-observations.R: Template to plot observations on a map
+  + plot-six-panel.R: Template to generate species distribution models for a pair of species (generally, an insect and host plant) and create a six panel plot with the following panels: (1) Observations of species one (e.g. an insect), (2) observations of species two (e.g. a plant), (3) contemporary species distribution model for species one, (4) contemporary species distribution model for species two, (5) contemporary species distribution models of species one and two, showing areas of difference and overlap, (6) forecast species distribution models of species one and two, showing areas of difference and overlap
+  + run-future-sdm-pairwise.R: Template to run species distirbution model for an insect and its host plant species based on forecast climate model
+  + run-future-sdm-single.R: Template to run species distirbution model for a single species based on forecast climate model
+  + run-sdm-pairwise.R: Template to run species distirbution model for an insect and its host plant species based on current climate data
+  + run-sdm-single.R: Template to run species distirbution model for a single species based on current climate data
   + setup.R: Setup script to run at start of project; installs dependencies and downloads climate data.
 
 ## Resources
