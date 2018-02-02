@@ -102,6 +102,11 @@ plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border 
 
 # Add the legend
 legend("topright", legend = c("Insect", "Plant", "Both"), fill = plot.colors[2:4], bg = "#FFFFFF")
+
+# Add bounding box around map
+box()
+
+# Stop re-direction to PDF graphics device
 dev.off()
 
 # Let user know analysis is done.

@@ -1,7 +1,7 @@
-# Script to run contemporary species distribution model for Adelpha californica
+# Script to run forecast species distribution model for Papilio cresphontes
 # Jeff Oliver
 # jcoliver@email.arizona.edu
-# 2017-09-07
+# 2018-01-10
 
 rm(list = ls())
 
@@ -11,8 +11,8 @@ rm(list = ls())
 # Load dependancies
 
 # Things to set:
-infile <- "data/Adelpha_californica_data.csv"
-outprefix <- "Adelpha_californica"
+infile <- "data/Zanthoxylum_americanum_data.csv"
+outprefix <- "Zanthoxylum_americanum"
 outpath <- "output/"
 
 # Make sure the input file exists
@@ -52,6 +52,7 @@ if (length(missing.packages) > 0) {
   stop(paste0("Missing one or more required packages. The following packages are required for run-sdm: ", paste(missing.packages, sep = "", collapse = ", ")), ".\n")
 }
 
+
 source(file = "functions/sdm-functions.R")
 
 ################################################################################
@@ -64,7 +65,7 @@ source(file = "functions/sdm-functions.R")
 prepared.data <- PrepareData(file = infile)
 
 # Run species distribution modeling
-sdm.raster <- SDMRaster(data = prepared.data)
+sdm.raster <- SDMForecast(data = prepared.data)
 
 ################################################################################
 # PLOT
@@ -81,7 +82,7 @@ ymin <- extent(sdm.raster)[3]
 ymax <- extent(sdm.raster)[4]
 
 # Plot the model; save to pdf
-plot.file <- paste0(outpath, outprefix, "-single-prediction.pdf")
+plot.file <- paste0(outpath, outprefix, "-single-future-prediction.pdf")
 pdf(file = plot.file, useDingbats = FALSE)
 
 # Load in data for map borders
@@ -89,7 +90,7 @@ data(wrld_simpl)
 
 # Draw the base map
 plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = "gray95", 
-     main = paste0(gsub(pattern = "_", replacement = " ", x = outprefix), " - current"))
+     main = paste0(gsub(pattern = "_", replacement = " ", x = outprefix), " - future"))
 
 # Add the model rasters
 plot(sdm.raster, legend = FALSE, add = TRUE)

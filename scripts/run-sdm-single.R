@@ -97,6 +97,10 @@ plot(sdm.raster, legend = FALSE, add = TRUE)
 # Redraw the borders of the base map
 plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", col = NA)
 
+# Add bounding box around map
+box()
+
+# Stop re-direction to PDF graphics device
 dev.off()
 
 # Let user know analysis is done.

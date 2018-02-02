@@ -100,7 +100,7 @@ combined.raster.future <- StackTwoRasters(raster1 = butterfly.raster.future,
 # Add small value to all raster pixels so plot is colored correctly
 combined.raster.future <- combined.raster.future + 0.00001
 
-message("Species distribution modeling complete; starting plots.")
+message("Species distribution modeling complete; starting plots")
 
 ################################################################################
 # PLOTTING
@@ -302,6 +302,6 @@ par(mfrow = c(1, 1),
 dev.off()
 
 # Let user know analysis is done.
-message(paste0("\nAnalysis and plotting complete. Images written to ", plot.file, "."))
+message(paste0("Analysis and plotting complete; images written to ", plot.file))
 
 rm(list = ls())
