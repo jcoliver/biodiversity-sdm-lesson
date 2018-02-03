@@ -40,11 +40,11 @@ Five additional R packages are required (these will be installed by running the 
     + Example: `Rscript --vanilla get-observation-data.R 60606`
   + plot-observations.R: Template to plot observations on a map
   + plot-six-panel.R: Template to generate species distribution models for a pair of species (generally, an insect and host plant) and create a six panel plot with the following panels: (1) Observations of species one (e.g. an insect), (2) observations of species two (e.g. a plant), (3) contemporary species distribution model for species one, (4) contemporary species distribution model for species two, (5) contemporary species distribution models of species one and two, showing areas of difference and overlap, (6) forecast species distribution models of species one and two, showing areas of difference and overlap
-  + run-future-sdm-pairwise.R: Template to run species distirbution model for an insect and its host plant species based on forecast climate model
-  + run-future-sdm-single.R: Template to run species distirbution model for a single species based on forecast climate model
-  + run-sdm-pairwise.R: Template to run species distirbution model for an insect and its host plant species based on current climate data
-  + run-sdm-single.R: Template to run species distirbution model for a single species based on current climate data
-  + setup.R: Setup script to run at start of project; installs dependencies and downloads climate data.
+  + run-future-sdm-pairwise.R: Template to run species distribution model for an insect and its host plant species based on forecast climate model
+  + run-future-sdm-single.R: Template to run species distribution model for a single species based on forecast climate model
+  + run-sdm-pairwise.R: Template to run species distribution model for an insect and its host plant species based on current climate data
+  + run-sdm-single.R: Template to run species distribution model for a single species based on current climate data
+  + setup.R: Setup script to run at start of project; installs dependencies and downloads climate data
 
 ## Resources
 ### Species distribution models in R
