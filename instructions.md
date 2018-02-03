@@ -1,6 +1,6 @@
 # Species Distribution Modeling
 ## Instructions
-This document includes instructions for running species distribution modeling analyses and creating graphics. If you encounter problems, there are troubleshooting tips available on the [troubleshooting.md](troubleshoting.md) page.
+This document includes instructions for running species distribution modeling analyses and creating graphics. If you encounter problems, there are troubleshooting tips available on the [troubleshooting.md](troubleshooting.md) page.
 
 ### Installations
 1. Install [R](http://cran.r-project.org/mirrors.html)
