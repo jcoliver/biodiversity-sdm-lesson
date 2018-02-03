@@ -9,7 +9,7 @@
     4. Some additional troubleshooting tips for Git/RStudio integration can be found at [http://happygitwithr.com/troubleshooting.html](http://happygitwithr.com/troubleshooting.html).
 2. **Git configuration**. Before cloning a repository, it is a good idea to add your Git credentials for your machine. You will need to do this through a Terminal window (*not* the RStudio **Console**). In the terminal, enter the following two commands (hitting `Enter` after each one):
 
-> `git config --global user.name 'Your Name'` (replacing "Your Name" with your actual name or user name; be sure to surround it in single quotes)
+> `git config --global user.name 'Your Name'` (replacing "Your Name" with your actual name or user name; be sure to surround it in single quotes)  
 `git config --global user.email 'your@email.com'` (replacing "your@email.com" with your actual e-mail address; be sure to surround it in single quotes)
 
 Note there are a number of ways to open a Terminal window. In newer versions of RStudio, there should be a **Terminal** tab next to the **Console** tab in the lower-left pane. If you do not see a **Terminal** tab, you can open one via `Tools > Terminal > New Terminal`. If neither of those are options, you can open a separate Terminal window via `Tools > Shell...`.
