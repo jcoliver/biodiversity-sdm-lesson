@@ -86,7 +86,7 @@ ymax <- extent(combined.raster)[4]
 plot.file <- paste0(outpath, outprefix, "-pairwise-future-prediction.pdf")
 pdf(file = plot.file, useDingbats = FALSE)
 breakpoints <- c(0, 1, 2, 3, 4)
-plot.colors <- c("white", "plum3","darkolivegreen3", "orangered4", "black")
+plot.colors <- c("white", "purple3","darkolivegreen4", "orangered4", "black")
 
 # Load in data for map borders
 data(wrld_simpl)

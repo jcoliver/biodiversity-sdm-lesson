@@ -27,8 +27,10 @@ Five additional R packages are required (these will be installed by running the 
   + Quercus_chrysolepis_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Quercus chrysolepus_ (Fagales: Fagaceae)
   + Rumex_salicifolius_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Rumex salicifolius_ (Caryophyllales: Polygonaceae)
   + Zanthoxylum_americanum_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Zanthoxylum americanum_ (Sapindales: Rutaceae)
++ dev: developmental scripts for example images
 + functions
   + sdm-functions.R: functions used in species distribution models
++ img: images for [Instructions](instructions.md)
 + output (contents are not under version control)
 + scripts
   + examples: example scripts implementing the four `run-*` scripts and two `plot-*` scripts

@@ -1,7 +1,7 @@
-# Script to run contemporary species distribution model for Adelpha californica & Quercus chrysolepis
+# Script to run contemporary species distribution model for Papilio cresphontes & Zanthoxylum americanum
 # Jeff Oliver
 # jcoliver@email.arizona.edu
-# 2017-09-07
+# 2018-01-10
 
 rm(list = ls())
 
@@ -10,10 +10,10 @@ rm(list = ls())
 # Gather path information
 # Load dependancies
 
-butterfly.data.file <- "data/Adelpha_californica_data.csv"
-plant.data.file <- "data/Quercus_chrysolepis_data.csv"
-outprefix <- "Adelpha_californica"
-outpath <- "output/"
+butterfly.data.file <- "data/Papilio_cresphontes_data.csv"
+plant.data.file <- "data/Zanthoxylum_americanum_data.csv"
+outprefix <- "Papilio_cresphontes"
+outpath <- "img/"
 
 # Make sure the output path ends with "/" (and append one if it doesn't)
 if (substring(text = outpath, first = nchar(outpath), last = nchar(outpath)) != "/") {
@@ -83,8 +83,8 @@ ymin <- extent(combined.raster)[3]
 ymax <- extent(combined.raster)[4]
 
 # Plot the models for butterfly, plant and overlap; save to pdf
-plot.file <- paste0(outpath, outprefix, "-pairwise-prediction.pdf")
-pdf(file = plot.file, useDingbats = FALSE)
+plot.file <- paste0(outpath, outprefix, "-current-pairwise.png")
+png(file = plot.file)
 breakpoints <- c(0, 1, 2, 3, 4)
 plot.colors <- c("white", "purple3","darkolivegreen4", "orangered4", "black")
 
@@ -106,11 +106,7 @@ legend("topright", legend = c("Insect", "Plant", "Both"), fill = plot.colors[2:4
 # Add bounding box around map
 box()
 
-# Stop re-direction to PDF graphics device
+# Stop re-direction to PNG graphics device
 dev.off()
-
-# Let user know analysis is done.
-message(paste0("\nAnalysis complete. Map image written to ", plot.file, "."))
-message(paste0("Amount of plant range occupied by insect: ", plant.percent, "%."))
 
 rm(list = ls())
