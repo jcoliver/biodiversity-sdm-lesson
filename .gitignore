@@ -8,3 +8,4 @@ data/cmip5
 output/*
 !*.gitkeep
 !output/*/
+img/class-2-slides-*
