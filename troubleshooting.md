@@ -26,15 +26,6 @@ Note there are a number of ways to open a Terminal window. In newer versions of 
 1. R is *case sensitive*, so upper case letters mean something different than lower case letters. This is also true for file names. So if you save a file with the name `my_data.csv`, but try to refer to it in R as `My_Data.csv`, R will produce an error message (generally something like `"cannot find input file"` or `"no such file or directory"`).
 2. Avoid setting the working directory in R (i.e. don't use the `setwd` command).
 
-### Downloading iNaturalist data
-1. You will need to download occurrence data for both butterfly and one of its host plants. To do so, go to iNaturalist and search for one of the two species.
-2. Click on the `Filters` button to the right of the search bar near the top of the screen. Here you can change the filters to sort your observations to only include verifiable or research grade (note these will affect the number of observations you have to work with). Be sure to record any filters you place on your search.
-3. Click the `Download` button in the lower right hand area of this pop up window. This will bring you to a new screen with many different options. At the very least you should see the species you searched for in the **Taxon** box about 1/3 of the way down the screen. Scroll through this page and select the options you would like. Importantly, the more options you choose in **3. Choose Columns**, the longer it will take to download your data. You should look carefully and think about the data that might be useful to you when considering your results. At the very least, you _must_ have the **latitude** and **longitude** columns checked as these are necessary for generating maps in the next part of the project.
-4. Once you have made your selections, click `Create export`. This may take a few minutes depending on how much data you downloaded.
-5. Save the file as a csv file in the data folder within the `biodiversity-sdm-lesson` folder you downloaded from Git through RStudio. Rename the file `<genus_species>_data.csv` (replace <genus_species> with the appropriate names; for example, if you downloaded data for _Papilio cresphontes_, the file should be called `Papilio_cresphontes_data.csv`). Note: there can be no spaces in your file names - use an underscore ("_") any place you would otherwise want to put a space.
-6. Repeat for the second species of interest.
-
-
 ### Additional resources
 + [Setup and configure R and RStudio on a Mac](https://www.youtube.com/watch?v=cmj8Oi6PFe0) (16:18)
 + [Brief navigation introduction to RStudio on a Mac](https://www.youtube.com/watch?v=bGBgjZd6YHw) (2:21)
