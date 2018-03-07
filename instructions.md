@@ -7,6 +7,8 @@ This document includes instructions for running species distribution modeling an
 2. Install [RStudio](https://www.rstudio.com/products/rstudio/)
 3. Install [Git](https://git-scm.org/downloads)
 
+_Aside: [What's the difference between R/RStudio & Git/GitHub, anyway?](#git-vs-github)_
+
 ### Setup
 1. Open RStudio and clone the Git repository at [https://github.com/jcoliver/biodiversity-sdm-lesson.git](https://github.com/jcoliver/biodiversity-sdm-lesson.git)
 2. Run the setup script in RStudio by running this command in the **Console** tab of RStudio:
@@ -87,3 +89,11 @@ This document includes instructions for running species distribution modeling an
     2. A map will be saved in the `output` folder; the file name will start with the value you used for "MY_SPECIES" in step 2.3, above, and end with `-pairwise-future-prediction.pdf`. So for the example _P. cresphontes_, the output pdf file will be at `output/Papilio_cresphontes-pairwise-future-prediction.pdf`.
 
 ![](img/Papilio_cresphontes-future-pairwise.png)
+
+### Git vs GitHub
+So what's all this talk of Git and GitHub? How are they different? Aren't they just the same thing? And what about R and RStudio? Do I need both of them for this stuff to work?
+
++ **Git vs GitHub**: In short, _Git_ is a piece of software that keeps track of versions, much like the "Track changes" option for your favorite word processing program. _GitHub_ is a website. That's it. Well, it's a website that has Git running in the background and allows you to collaborate with other folks. There are other websites like GitHub that also use Git, including [Bitbucket](https://bitbucket.org) and [GitLab](https://about.gitlab.com), but the R code for this project all lives on GitHub. In this project, Git is how your computer talks with the code that is stored on GitHub. And RStudio makes that communication that much easier...
++ **R vs RStudio**: _R_ is a programming language that we use to analyze data and produce graphics. _RStudio_ is a piece of software that we use to interact with R. You don't actually need RStudio to run the analyses and produce the maps described above. However, the RStudio program _does_ make it much easier to interact with GitHub. It is also, in general, a nicer experience than working directly with the R programming languages, especially for those with little to no programming experience.
+
+Back to the [top](#installations)
