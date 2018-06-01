@@ -5,7 +5,7 @@ This document includes instructions for running species distribution modeling an
 ### Installations
 1. Install [R](http://cran.r-project.org/mirrors.html)
 2. Install [RStudio](https://www.rstudio.com/products/rstudio/)
-3. Install [Git](https://git-scm.org/downloads) **and** look at the Git section of the [Troubleshooting](troubleshooting.md) page.
+3. Install [Git](https://git-scm.org/downloads) **and** look at the Git section of the [Troubleshooting](troubleshooting.md#git) page.
 
 _Aside: [What's the difference between R/RStudio & Git/GitHub, anyway?](#git-vs-github)_
 
@@ -13,7 +13,7 @@ _Aside: [What's the difference between R/RStudio & Git/GitHub, anyway?](#git-vs-
 1. Open RStudio and clone the Git repository at [https://github.com/jcoliver/biodiversity-sdm-lesson.git](https://github.com/jcoliver/biodiversity-sdm-lesson.git)
 2. Run the setup script in RStudio by running this command in the **Console** tab of RStudio:
     `source(file = "scripts/setup.R")`
-    This script may take a while to run, depending on the speed of your machine and internet connection. Note also that it may ask you if you want to restart R before installing/upgrading packages; if you receive this prompt, answer **Yes** to restarting R. This script installs additional R packages necessary for analyses, makes sure the `data` folder exists, and downloads climate data necessary to run the species distribution models. If you are prompted to choose a CRAN mirror, select the mirror that is geographically closest to you. If this script fails (or produces errors), see point #3 in the R section of the [Troubleshooting](troubleshooting.md#R) page.
+    This script may take a while to run, depending on the speed of your machine and internet connection. Note also that it may ask you if you want to restart R before installing/upgrading packages; if you receive this prompt, answer **Yes** to restarting R. This script installs additional R packages necessary for analyses, makes sure the `data` folder exists, and downloads climate data necessary to run the species distribution models. If you are prompted to choose a CRAN mirror, select the mirror that is geographically closest to you. If this script fails (or produces errors), see point #3 in the R section of the [Troubleshooting](troubleshooting.md#r) page.
   
 ### Downloading iNaturalist data
 1. You will need to download occurrence data for both butterfly and one of its host plants. To do so, go to iNaturalist and search for one of the two species.
