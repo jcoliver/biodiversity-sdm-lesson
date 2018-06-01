@@ -25,6 +25,13 @@ Note there are a number of ways to open a Terminal window. In newer versions of 
 ### R
 1. R is *case sensitive*, so upper case letters mean something different than lower case letters. This is also true for file names. So if you save a file with the name `my_data.csv`, but try to refer to it in R as `My_Data.csv`, R will produce an error message (generally something like `"cannot find input file"` or `"no such file or directory"`).
 2. Avoid setting the working directory in R (i.e. don't use the `setwd` command).
+3. If running the setup script (`source(file = scripts/setup.R)`) does not work, you should try installing the additional packages manually (see point 4, below, too). There are five additional packages that will need to be installed; however, we only need to instruct R to install three of them (the other two, `sp` and `raster`, will be installed automatically when you install `dismo`). To install these packages, enter the following commands into the R console:
+> install.packages("rgdal")
+install.packages("maptools")
+install.packages("dismo")
+
+If there are still problems installing these packages, we recommend visiting the respective package's web resource for additional troubleshooting advice ([rgdal](https://cran.r-project.org/web/packages/rgdal/index.html), [maptools](https://cran.r-project.org/web/packages/maptools/index.html), [dismo](https://cran.r-project.org/web/packages/dismo/index.html)). Or find your nearest R guru and bribe them with cookies to help you solve the problem.
+4. You should have a recent version of R installed; we recommend version 3.4.4 or newer. To find out which version of R you have installed, enter this command on the R console: `R.Version()` (note the upper case "Version"). The version will be stored in the `version.string` element (which should be printed to the screen when you run `R.Version()`). If your version of R is older than 3.4.4, download the latest version from the [R Website](http://cran.r-project.org/mirrors.html) and restart RStudio.
 
 ### Additional resources
 + [Setup and configure R and RStudio on a Mac](https://www.youtube.com/watch?v=cmj8Oi6PFe0) (16:18)
