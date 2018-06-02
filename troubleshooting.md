@@ -26,6 +26,7 @@ Note there are a number of ways to open a Terminal window. In newer versions of 
 1. R is *case sensitive*, so upper case letters mean something different than lower case letters. This is also true for file names. So if you save a file with the name `my_data.csv`, but try to refer to it in R as `My_Data.csv`, R will produce an error message (generally something like `"cannot find input file"` or `"no such file or directory"`).
 2. Avoid setting the working directory in R (i.e. don't use the `setwd` command).
 3. If running the setup script (`source(file = scripts/setup.R)`) does not work, you should try installing the additional packages manually (see point 4, below, too). There are five additional packages that will need to be installed; however, we only need to instruct R to install three of them (the other two, `sp` and `raster`, will be installed automatically when you install `dismo`). To install these packages, enter the following commands into the R console:
+
         ```r
         install.packages("rgdal")
         install.packages("maptools")
