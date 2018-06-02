@@ -32,7 +32,7 @@ Note there are a number of ways to open a Terminal window. In newer versions of 
         install.packages("maptools")
         install.packages("dismo")
         ```
-  If there are still problems installing these packages, we recommend visiting the respective package's web resource for additional troubleshooting advice ([rgdal](https://cran.r-project.org/web/packages/rgdal/index.html), [maptools](https://cran.r-project.org/web/packages/maptools/index.html), [dismo](https://cran.r-project.org/web/packages/dismo/index.html)). Or find your nearest R guru and bribe them with cookies to help you solve the problem.
+    If there are still problems installing these packages, we recommend visiting the respective package's web resource for additional troubleshooting advice ([rgdal](https://cran.r-project.org/web/packages/rgdal/index.html), [maptools](https://cran.r-project.org/web/packages/maptools/index.html), [dismo](https://cran.r-project.org/web/packages/dismo/index.html)). Or find your nearest R guru and bribe them with cookies to help you solve the problem.
 4. You should have a recent version of R installed; we recommend version 3.4.4 or newer. To find out which version of R you have installed, enter this command on the R console: `R.Version()` (note the upper case "Version"). The version will be stored in the `version.string` element (which should be printed to the screen when you run `R.Version()`). If your version of R is older than 3.4.4, download the latest version from the [R Website](http://cran.r-project.org/mirrors.html) and restart RStudio.
 
 ### Additional resources
