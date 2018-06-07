@@ -13,6 +13,16 @@
 required <- c("rgdal", "raster", "sp", "dismo", "maptools")
 install.packages(required)
 
+# Make sure packages all installed
+successful <- required %in% rownames(installed.packages())
+unsuccessful <- required[!successful]
+
+if (length(unsuccessful) > 0) {
+  unsuccessful.string <- paste0(unsuccessful, collapse = ", ")
+  stop(paste0("One or more required packages could not be installed: ", 
+              unsuccessful.string))
+}
+
 ################################################################################
 # Download climate data
 
@@ -44,4 +54,4 @@ forecast.data <- getData(name = "CMIP5", # forecast
                          year = 70) # 2070
 
 # Clean up workspace
-rm(required, bioclim.data, forecast.data)
+rm(required, successful, unsuccessful, bioclim.data, forecast.data)

@@ -34,7 +34,7 @@ Five additional R packages are required (these will be installed by running the 
 + output (contents are not under version control)
 + scripts
   + examples: example scripts implementing the four `run-*` scripts and two `plot-*` scripts
-  + get-observation-data.R: Harvest data from iNaturalist using their API; 
+  + get-observation-data.R: Harvest data from iNaturalist using their API based on a taxon ID; 
   called from command line terminal
     + Usage: `Rscript --vanilla get-observation-data.R <taxon_id>`
     + Example: `Rscript --vanilla get-observation-data.R 60606`
@@ -44,7 +44,11 @@ Five additional R packages are required (these will be installed by running the 
   + run-future-sdm-single.R: Template to run species distribution model for a single species based on forecast climate model
   + run-sdm-pairwise.R: Template to run species distribution model for an insect and its host plant species based on current climate data
   + run-sdm-single.R: Template to run species distribution model for a single species based on current climate data
-  + setup.R: Setup script to run at start of project; installs dependencies and downloads climate data
+  + setup.R: Setup script to run at start of project, it will:
+    + Install five additional R packages that are necessary for this lesson (rgdal, raster, sp, dismo, maptools)
+    + Check to make sure the `data` folder was copied correctly during the cloning of the GitHub repository
+    + Download climate data from the [WorldClim website](http://www.worldclim.org)
+  If it does not successfully complete all these tasks, please reference the [Troubleshooting](troubleshooting.md) page.
 
 ## Resources
 ### Species distribution models in R
