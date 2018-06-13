@@ -17,20 +17,20 @@ The four scripts prefaced with "`run-`" in the `scripts` folder are all doing la
         3. Divide data into a "training" set and a "testing" set. Because we will need to evaluate the performance of the SDM, we reserve some portion of the observation data (and pseudo-absence data), in this case 20% of the observations; this is the "testing" data. The remaining 80% of the observations are used for "training" the SDM. These _independent_ data sets afford an unbiased evaluation of the models.
         4. Using the bioclim approach and the **training** data, estimate the effects of the climate variables on the probability that our species of interest will occur in a given location. From an abstract perspective, we are building a model
                 
-        _y = b<sub>1</sub>x<sub>1</sub> + b<sub>2</sub>x<sub>2</sub> + b<sub>3</sub>x<sub>3</sub> + ... + b<sub>k</sub>x<sub>k</sub>_
+> _y = b<sub>1</sub>x<sub>1</sub> + b<sub>2</sub>x<sub>2</sub> + b<sub>3</sub>x<sub>3</sub> + ... + b<sub>k</sub>x<sub>k</sub>_
 
-            Where _x<sub>i</sub>_ is the value of the _i<super>th</super>_ climate variable (e.g. annual rainfall) for a particular geographic location and _b<sub>i</sub>_ is the slope for the effect of that climate variable on the probability of presence of the species of interest at a particular geographic location. In this case the values of _x<sub>i</sub>_ are the current climate data that were downloaded from the WorldClim site. You can find out more about the bioclim algorithm in the [documentation for the dismo package](https://www.rdocumentation.org/packages/dismo/versions/1.1-4/topics/bioclim). 
+          Where _x<sub>i</sub>_ is the value of the _i<super>th</super>_ climate variable (e.g. annual rainfall) for a particular geographic location and _b<sub>i</sub>_ is the slope for the effect of that climate variable on the probability of presence of the species of interest at a particular geographic location. In this case the values of _x<sub>i</sub>_ are the current climate data that were downloaded from the WorldClim site. You can find out more about the bioclim algorithm in the [documentation for the dismo package](https://www.rdocumentation.org/packages/dismo/versions/1.1-4/topics/bioclim). 
         5. Using the **testing** data, including presence points and the randomly-generated pseudo-absence points, evaluate the SDM. This compares the probability of presence estimated by the SDM at a particular geographic location to the actual presence and (psuedo-)absence of the species of interest. Note this evaluation _only_ considers locations for which we actually have data (presence or pseudo-absence).
         6. Use the current climate data to predict the probability of presence at **every** point in the geographic area of interest.
     4. Plot the results of the species distribution model on a map and save it to a PDF file.
 
 ### run-future-sdm-single.R
 + Summary: This is the template for the creation and evaluation of a species distribution model (SDM) for a single species based on **future** climate data. It plots the output of this model onto a map, which is saved as a pdf file.
-+ Process: Identical to that of `run-sdm-single.R`, except that in step iii.6, this script uses estimated climate data for the year 2070.
++ Process: Identical to that of `run-sdm-single.R`, except that in step iii.f, this script uses estimated climate data for the year 2070.
 
 ### run-sdm-pairwise.R
 + Summary: This script provides the template for running two separate SDMs: one based on data for an insect and one based on data for the insect's host plant. The resultant predicted ranges are based on current climate data. 
-+ Process: This is effectively running the single SDM script (`run-sdm-pairwise.R`) twice, once for the insect data and once for the plant data. The two models are estimated and evaluated independently of one another. After the climate data are used to predict the probability of presence for each species (step iii.6 in [run-sdm-pairwise.R](#run-sdm-pairwise.r)), a single map is created, showing the predicted ranges of the insect, the plant, and areas where the ranges overlap.
++ Process: This is effectively running the single SDM script (`run-sdm-single.R`) twice, once for the insect data and once for the plant data. The two models are estimated and evaluated independently of one another. After the climate data are used to predict the probability of presence for each species, a single map is created, showing the predicted ranges of the insect, the plant, and areas where the ranges overlap.
 
 ### run-future-sdm-pairwise.R
 + Summary: This script provides the template for running two separate SDMs: one based on data for an insect and one based on data for the insect's host plant. The resultant predicted ranges are based on future climate data (2070). 

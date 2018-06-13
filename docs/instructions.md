@@ -36,7 +36,7 @@ _Aside: [What's the difference between R/RStudio & Git/GitHub, anyway?](#git-vs-
     3. Save the file with these updates
 3. Run the analyses by typing the following command in the **Console** tab of RStudio: `source(file = "scripts/<species>-sdm-single.R")`, replacing `<species>` with the species name as in step 1 of [Running analyses](#running-analyses). For the _P. cresphontes_ analysis, we would thus type the command: `source(file = "scripts/Papilio_cresphontes-sdm-single.R"`. After running this script, a map will be saved in the `output` folder; the file name will start with the value you used for "MY_SPECIES" in step 2.3, above, and end with `-single-prediction.pdf`. So for the example _P. cresphontes_, the output pdf file will be at `output/Papilio_cresphontes-single-prediction.pdf`.
 
-![](img/Papilio_cresphontes-current-single.png)
+![](../img/Papilio_cresphontes-current-single.png)
 
 #### Pairwise species (butterfly & plant) models, current climate data
 1. In the `scripts` directory, copy the file `run-sdm-pairwise.R` and rename the copy `<species>-sdm-pairwise.R`, replacing `<species>` with the name of the butterfly species. Use underscores instead of spaces; so for the species _Papilio cresphontes_, the file name would be `Papilio_cresphontes-sdm-pairwise.R`.
@@ -55,7 +55,7 @@ _Aside: [What's the difference between R/RStudio & Git/GitHub, anyway?](#git-vs-
     1. In the console you should see the % of the modeled plant's range that is occupied by the insect. Comparing this to the map, the value is the fraction of the area that is red, relative to the total red and green areas.
     2. A map will be saved in the `output` folder; the file name will start with the value you used for "MY_SPECIES" in step 2.3, above, and end with `-pairwise-prediction.pdf`. So for the example _P. cresphontes_, the output pdf file will be at `output/Papilio_cresphontes-pairwise-prediction.pdf`.
 
-![](img/Papilio_cresphontes-current-pairwise.png)
+![](../img/Papilio_cresphontes-current-pairwise.png)
 
 #### Single species models, forecast climate data
 1. In the `scripts` directory, copy the file `run-future-sdm-single.R` and rename the copy `<species>-future-sdm-single.R`, replacing `<species>` with the name of the butterfly species. Use underscores instead of spaces; so for the species _Papilio cresphontes_, the file name would be `Papilio_cresphontes-future-sdm-single.R`.
@@ -69,7 +69,7 @@ _Aside: [What's the difference between R/RStudio & Git/GitHub, anyway?](#git-vs-
     3. Save the file with these updates
 3. Run the analyses by typing the following command in the **Console** tab of RStudio: `source(file = "scripts/<species>-future-sdm-single.R")`, replacing `<species>` with the species name as in step 1 of [Running analyses](#running-analyses). For the _P. cresphontes_ analysis, we would thus type the command: `source(file = "scripts/Papilio_cresphontes-future-sdm-single.R"`. After running this script, a map will be saved in the `output` folder; the file name will start with the value you used for "MY_SPECIES" in step 2.3, above, and end with `-single-future-prediction.pdf`. So for the example _P. cresphontes_, the output pdf file will be at `output/Papilio_cresphontes-single-future-prediction.pdf`.
 
-![](img/Papilio_cresphontes-future-single.png)
+![](../img/Papilio_cresphontes-future-single.png)
 
 #### Pairwise species (butterfly & plant) models, forecast climate data
 1. In the `scripts` directory, copy the file `run-future-sdm-pairwise.R` and rename the copy `<species>-future-sdm-pairwise.R`, replacing `<species>` with the name of the butterfly species. Use underscores instead of spaces; so for the species _P. cresphontes_, the file name would be `Papilio_cresphontes-future-sdm-pairwise.R`.
@@ -88,7 +88,7 @@ _Aside: [What's the difference between R/RStudio & Git/GitHub, anyway?](#git-vs-
     1. In the console you should see the % of the modeled plant's range that is occupied by the insect. Comparing this to the map, the value is the fraction of the area that is red, relative to the total red and green areas.
     2. A map will be saved in the `output` folder; the file name will start with the value you used for "MY_SPECIES" in step 2.3, above, and end with `-pairwise-future-prediction.pdf`. So for the example _P. cresphontes_, the output pdf file will be at `output/Papilio_cresphontes-pairwise-future-prediction.pdf`.
 
-![](img/Papilio_cresphontes-future-pairwise.png)
+![](../img/Papilio_cresphontes-future-pairwise.png)
 
 ### Git vs GitHub
 So what's all this talk of Git and GitHub? How are they different? Aren't they just the same thing? And what about R and RStudio? Do I need both of them for this stuff to work?

@@ -36,7 +36,7 @@ Five additional R packages are required (these will be installed by running the 
   + sdm-functions.R: functions used in species distribution models
 + img: images for [Instructions](docs/instructions.md)
 + output (contents are not under version control)
-+ scripts
++ scripts (The [Script Explanation](docs/script-explanation.md) page provides more in-depth explanations of the species distribution modeling scripts)
   + examples: example scripts implementing the four `run-*` scripts and two `plot-*` scripts
   + get-observation-data.R: Harvest data from iNaturalist using their API based on a taxon ID; 
   called from command line terminal
