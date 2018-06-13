@@ -4,7 +4,7 @@
 ## Overview
 Introductory lesson to generate range maps for butterfly-host plant interactions and predict distributional shifts using publicly available biodiversity data and data science tools.
 
-Detailed instructions can be found in [instructions.md](instructions.md)
+Detailed instructions can be found in [docs/instructions.md](docs/instructions.md)
 
 Originally forked from [https://github.com/jcoliver/ebutterfly-sdm.git](https://github.com/jcoliver/ebutterfly-sdm.git)
 
@@ -28,9 +28,13 @@ Five additional R packages are required (these will be installed by running the 
   + Rumex_salicifolius_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Rumex salicifolius_ (Caryophyllales: Polygonaceae)
   + Zanthoxylum_americanum_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Zanthoxylum americanum_ (Sapindales: Rutaceae)
 + dev: developmental scripts for example images
++ docs: documentation for this code and lesson
+    + instructions.md: instructions for installing software, downloading data, and running analyses
+    + script-explanation.md: explanations of the four species distribution modeling scripts (all prefixed with "`run-*`") in the `scripts` folder
+    + troubleshooting.md: common challenges and possible solutions related to installing software and running analyses
 + functions
   + sdm-functions.R: functions used in species distribution models
-+ img: images for [Instructions](instructions.md)
++ img: images for [Instructions](docs/instructions.md)
 + output (contents are not under version control)
 + scripts
   + examples: example scripts implementing the four `run-*` scripts and two `plot-*` scripts
@@ -48,7 +52,7 @@ Five additional R packages are required (these will be installed by running the 
     + Install five additional R packages that are necessary for this lesson (rgdal, raster, sp, dismo, maptools)
     + Check to make sure the `data` folder was copied correctly during the cloning of the GitHub repository
     + Download climate data from the [WorldClim website](http://www.worldclim.org)
-  If it does not successfully complete all these tasks, please reference the [Troubleshooting](troubleshooting.md) page.
+  If it does not successfully complete all these tasks, please reference the [Troubleshooting](docs/troubleshooting.md) page.
 
 ## Resources
 ### Species distribution models in R
