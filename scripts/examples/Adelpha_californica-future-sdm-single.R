@@ -3,7 +3,7 @@
 # jcoliver@email.arizona.edu
 # 2017-09-07
 
-rm(list = ls())
+
 
 ################################################################################
 # SETUP
@@ -40,7 +40,7 @@ if (any(write.access != 0)) {
 }
 
 # Load dependancies, keeping track of any that fail
-required.packages <- c("rgdal", "raster", "sp", "dismo", "maptools")
+required.packages <- c("raster", "sp", "dismo", "maptools")
 missing.packages <- character(0)
 for (one.package in required.packages) {
   if (!suppressMessages(require(package = one.package, character.only = TRUE))) {
@@ -107,4 +107,3 @@ dev.off()
 # Let user know analysis is done.
 message(paste0("\nAnalysis complete. Map image written to ", plot.file, "."))
 
-rm(list = ls())

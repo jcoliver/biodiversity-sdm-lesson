@@ -3,7 +3,7 @@
 # jcoliver@email.arizona.edu
 # 2018-01-19
 
-rm(list = ls())
+
 
 ################################################################################
 # SETUP
@@ -95,4 +95,4 @@ dev.off()
 # Let user know plotting is done.
 message(paste0("\nPlot complete. Map image written to ", plot.file, "."))
 
-rm(list = ls())
+

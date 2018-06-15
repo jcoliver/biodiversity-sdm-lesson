@@ -11,7 +11,6 @@ Originally forked from [https://github.com/jcoliver/ebutterfly-sdm.git](https://
 ## Dependencies
 Five additional R packages are required (these will be installed by running the the setup script, `scripts/setup.R`):
 
-+ rgdal
 + raster
 + sp
 + dismo
