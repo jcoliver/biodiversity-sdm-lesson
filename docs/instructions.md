@@ -10,7 +10,7 @@ This document includes instructions for running species distribution modeling an
 _Aside: [What's the difference between R/RStudio & Git/GitHub, anyway?](#git-vs-github)_
 
 ### Setup
-1. Open RStudio and clone the Git repository at [https://github.com/jcoliver/biodiversity-sdm-lesson.git](https://github.com/jcoliver/biodiversity-sdm-lesson.git)
+1. Open RStudio and clone the Git repository at [https://github.com/jcoliver/biodiversity-sdm-lesson.git](https://github.com/jcoliver/biodiversity-sdm-lesson.git). If you're not sure how to do this, take a look at point #3 "Cloning a repository" in the Git section of the [Troubleshooting](troubleshooting.md#git).
 2. Run the setup script in RStudio by running this command in the **Console** tab of RStudio:
     `source(file = "scripts/setup.R")`
     This script may take a while to run, depending on the speed of your machine and internet connection. Note also that it may ask you if you want to restart R before installing/upgrading packages; if you receive this prompt, answer **Yes** to restarting R. This script installs additional R packages necessary for analyses, makes sure the `data` folder exists, and downloads climate data necessary to run the species distribution models. If you are prompted to choose a CRAN mirror, select the mirror that is geographically closest to you. If this script fails (or produces errors), see point #3 in the R section of the [Troubleshooting](troubleshooting.md#r) page.
