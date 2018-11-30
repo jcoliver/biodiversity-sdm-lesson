@@ -37,21 +37,46 @@ if (!require(package = "raster")) {
 }
 
 # Download bioclim data
+message("Downloading climate data from WorldClim")
 bioclim.data <- getData(name = "worldclim",
                         var = "bio",
                         res = 2.5, # Could try for better resolution, 0.5, but would then need to provide lat & long...
                         path = "data/")
 
-# Download forcast data
+# Unzip forecast data
+message("Extracting forecast climate data (this may take a moment)")
+unzip(zipfile = "data/cmip5/2_5m/forecast-data.zip")
+
+# Downloading of forecast data deprecated to avoid dependency on troublesome 
+# rgdal. Instead use 
+#   `forecast.data <- raster::stack(x = "data/cmip5/2_5m/forecast-raster.gri")`
+# when forecast data are needed
+# Download forecast data
 # See https://link.springer.com/article/10.1007/s00382-014-2418-8
 # for recommendations of the model to use
-forecast.data <- getData(name = "CMIP5", # forecast
-                         var = "bio", # bioclim
-                         res = 2.5,
-                         path = "data/",
-                         model = "GD", # GFDL-ESM2G
-                         rcp = "45", # CO2 increase 4.5
-                         year = 70) # 2070
+# forecast.data <- getData(name = "CMIP5", # forecast
+#                          var = "bio", # bioclim
+#                          res = 2.5,
+#                          path = "data/",
+#                          model = "GD", # GFDL-ESM2G
+#                          rcp = "45", # CO2 increase 4.5
+#                          year = 70) # 2070
+# For those interested, the workaround was:
+#  1. With rgdal installed, use the getData code as above
+#  2. With the `bioclim.data` object in memory, run 
+#      `names(forecast.data) <- names(bioclim.data)`
+#  3. Save the file as a raster using `raster::writeRaster` with default 
+#      format (.gri)
+#  4. Compress the resultant .gri and .grd files via
+#     `zip(zipfile = "data/cmip5/2_5m/forecast-data.zip", 
+#          files = c("data/cmip5/2_5m/forcast-raster.grd", 
+#                    "data/cmip5/2_5m/forcast-raster.gri"))`
+#  6. Include that zip archive under version control, but not the .gri and .grd
+#      files
+#  5. Update this file (scripts/setup.R) to unzip the archive, inflating the 
+#      .grd and .gri files (directory structure was preserved by `zip` command)
 
 # Clean up workspace
-rm(required, successful, unsuccessful, bioclim.data, forecast.data)
+rm(required, successful, unsuccessful, bioclim.data)
+
+message("Setup complete.")

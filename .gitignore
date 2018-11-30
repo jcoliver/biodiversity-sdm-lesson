@@ -4,7 +4,8 @@
 .Ruserdata
 biodiversity-sdm-lesson.Rproj
 data/wc2-5
-data/cmip5
+data/cmip5/2_5m/forecast-raster.gri
+data/cmip5/2_5m/forecast-raster.grd
 output/*
 !*.gitkeep
 !output/*/

@@ -152,6 +152,14 @@ StackTwoRasters <- function(raster1, raster2) {
 #' 
 #' @param data data.frame with "lon" and "lat" values
 SDMForecast <- function(data, padding = 0.1) {
+  # Load dependancies
+  if (!require("raster")) {
+    stop("SDMForecast requires raster package, but package is missing.")
+  }
+  if (!require("sp")) {
+    stop("SDMForecast requires sp package, but package is missing.")
+  }
+
   # Determine minimum and maximum values of latitude and longitude
   min.max <- MinMaxCoordinates(x = data, padding = padding)
   geographic.extent <- extent(x = min.max)
@@ -162,7 +170,7 @@ SDMForecast <- function(data, padding = 0.1) {
   sdm.model.threshold <- sdm.bioclim$sdm.threshold
 
   # FORECAST
-  # Get bioclim & forcast data
+  # Get bioclim & forecast data
   # Precict based on sdm.model
   
   # Get the biolim data (for column names to use in forecast data)
@@ -171,17 +179,10 @@ SDMForecast <- function(data, padding = 0.1) {
                           res = 2.5,
                           path = "data/")
   bioclim.data <- crop(x = bioclim.data, y = geographic.extent)
-  
-  # Get forcast data
-  forecast.data <- getData(name = "CMIP5", # forecast
-                           var = "bio", # bioclim
-                           res = 2.5,
-                           path = "data/",
-                           model = "GD", # GFDL-ESM2G
-                           rcp = "45", # CO2 increase 4.5
-                           year = 70) # 2070
+
+  # Load forecast data
+  forecast.data <- raster::stack(x = "data/cmip5/2_5m/forecast-raster.gri")
   forecast.data <- crop(x = forecast.data, y = geographic.extent)
-  names(forecast.data) <- names(bioclim.data)
 
   # Predict presence probability from model and bioclim data
   predict.presence <- predict(x = forecast.data, 
@@ -236,7 +237,12 @@ SDMBioclim <- function(data, padding = 0.1) {
   # Random points for background (same number as our observed points)
   set.seed(19470909)
   background.extent <- extent(x = MinMaxCoordinates(x = data, padding = 0.0))
-  background.points <- randomPoints(mask = mask, n = nrow(data), ext = background.extent, extf = 1.25)
+  # raster package will complain about not having coordinate reference system,
+  # so we suppress that warning
+  background.points <- suppressWarnings(randomPoints(mask = mask, 
+                                                     n = nrow(data), 
+                                                     ext = background.extent, 
+                                                     extf = 1.25))
   colnames(background.points) <- c("lon", "lat")
   
   # Data for observation sites (presence and background)

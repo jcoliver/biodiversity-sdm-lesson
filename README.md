@@ -1,5 +1,5 @@
 # Lesson on biodiversity data and species distribution models
-## v0.9.3
+## v0.9.4
 
 ## Overview
 Introductory lesson to generate range maps for butterfly-host plant interactions and predict distributional shifts using publicly available biodiversity data and data science tools.
@@ -9,7 +9,7 @@ Detailed instructions can be found in [docs/instructions.md](docs/instructions.m
 Originally forked from [https://github.com/jcoliver/ebutterfly-sdm.git](https://github.com/jcoliver/ebutterfly-sdm.git)
 
 ## Dependencies
-Five additional R packages are required (these will be installed by running the the setup script, `scripts/setup.R`):
+Four additional R packages are required (these will be installed by running the the setup script, `scripts/setup.R`):
 
 + raster
 + sp
@@ -19,14 +19,22 @@ Five additional R packages are required (these will be installed by running the 
 ## Structure
 + data
   + wc2-5: climate data at 2.5 minute resolution from [WorldClim](http://www.worldclim.org) (_note_: this folder is not under version control, but will be created by running the setup script (`scripts/setup.R`))
-  + cmip5: forcast climate data at 2.5 minute resolution from [WorldClim](http://www.worldclim.org) (_note_: this folder is not under version control, but will be created by running the setup script (`scripts/setup.R`))
+  + cmip5: forcast climate data at 2.5 minute resolution from [WorldClim](http://www.worldclim.org). These data were originally downloaded from the WorldClim website, but stored in the `.RData` format for ease of use.
   + Adelpha_californica_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Adelpha californica_ (Lepidoptera: Nymphalidae)
+  + Danaus_gilippus_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Danaus gilippus_ (Lepidoptera: Nymphalidae)
+  + Fraxinus_velutina_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Fraxinus velutina_ (Lamiales: Oleaceae)
+  + Limenitis_archippus_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Limenitis archippus_ (Lepidoptera: Nymphalidae)
   + Lycaena_xanthoides_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Lycaena xanthoides_ (Lepidoptera: Lycaenidae)
   + Papilio_cresphontes_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Papilio cresphontes_ (Lepidoptera: Papilionidae)
+  + Papilio_multicaudata_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Papilio multicaudata_ (Lepidoptera: Papilionidae)
+  + Platanus_wrightii_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Platanus wrightii_ (Proteales: Platanaceae)
   + Quercus_chrysolepis_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Quercus chrysolepus_ (Fagales: Fagaceae)
   + Rumex_salicifolius_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Rumex salicifolius_ (Caryophyllales: Polygonaceae)
+  + Speyeria_mormo_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Speyeria mormo_ (Lepidoptera: Nymphalidae)
+  + Suggested_pairs.csv: suggested species pairs (butterfly + plant) for lessons
+  + Urtica_dioica_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Urtica dioica_ (Rosales: Urticaceae)
   + Zanthoxylum_americanum_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Zanthoxylum americanum_ (Sapindales: Rutaceae)
-+ dev: developmental scripts for example images
++ dev: developmental scripts for example images and code testing
 + docs: documentation for this code and lesson
     + instructions.md: instructions for installing software, downloading data, and running analyses
     + script-explanation.md: explanations of the four species distribution modeling scripts (all prefixed with "`run-*`") in the `scripts` folder
@@ -48,7 +56,7 @@ Five additional R packages are required (these will be installed by running the 
   + run-sdm-pairwise.R: Template to run species distribution model for an insect and its host plant species based on current climate data
   + run-sdm-single.R: Template to run species distribution model for a single species based on current climate data
   + setup.R: Setup script to run at start of project, it will:
-    + Install five additional R packages that are necessary for this lesson (rgdal, raster, sp, dismo, maptools)
+    + Install four additional R packages that are necessary for this lesson (raster, sp, dismo, maptools)
     + Check to make sure the `data` folder was copied correctly during the cloning of the GitHub repository
     + Download climate data from the [WorldClim website](http://www.worldclim.org)
   If it does not successfully complete all these tasks, please reference the [Troubleshooting](docs/troubleshooting.md) page.
