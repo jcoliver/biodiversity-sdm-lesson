@@ -47,6 +47,10 @@ bioclim.data <- getData(name = "worldclim",
 message("Extracting forecast climate data (this may take a moment)")
 unzip(zipfile = "data/cmip5/2_5m/forecast-data.zip")
 
+# NOPE archive is too big (> 100 MB) for GitHub. But there might be a solution
+# GitHub large file storage https://git-lfs.github.com/
+# Better yet, just make a few (4?) smaller archives
+
 # Downloading of forecast data deprecated to avoid dependency on troublesome 
 # rgdal. Instead use 
 #   `forecast.data <- raster::stack(x = "data/cmip5/2_5m/forecast-raster.gri")`

@@ -6,7 +6,6 @@ biodiversity-sdm-lesson.Rproj
 data/wc2-5
 data/cmip5/2_5m/forecast-raster.gri
 data/cmip5/2_5m/forecast-raster.grd
-data/cmip5/2_5m/forecast-data.zip
 output/*
 !*.gitkeep
 !output/*/
