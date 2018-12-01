@@ -30,7 +30,11 @@ rm(list = ls())
 
 ########################################
 # LOAD DEPENDENCIES
-install.packages("rgdal")
+rgdal.existed <- TRUE
+if (!require("rgdal")) {
+  rgdal.existed <- FALSE
+  install.packages("rgdal")
+}
 library("raster")
 library("rgdal")
 
@@ -43,6 +47,13 @@ forecast.data <- getData(name = "CMIP5", # forecast
                          model = "GD", # GFDL-ESM2G
                          rcp = "45", # CO2 increase 4.5
                          year = 70) # 2070
+# Also grab bioclim data so we can update names appropriately (saves headaches
+# downstream)
+bioclim.data <- getData(name = "worldclim",
+                        var = "bio",
+                        res = 2.5, # Could try for better resolution, 0.5, but would then need to provide lat & long...
+                        path = "data/")
+names(forecast.data) <- names(bioclim.data)
 
 ########################################
 # WRITE EACH LAYER TO RASTER FORMAT FILE
@@ -50,6 +61,7 @@ writeRaster(x = forecast.data,
             filename = paste0("data/cmip5/2_5m/", names(forecast.data)), 
             bylayer = TRUE,
             format = "raster")
+rm(forecast.data, bioclim.data)
 
 ########################################
 # CREATE MULTIPLE ZIP FILES
@@ -78,12 +90,17 @@ for (i in 1:num.archives) {
       files = raster.files[fileindexes])
 }
 
-
-
 ########################################
 # REMOVE ALL tif, gri, AND grd FILES
 obsolete.files <- list.files(path = "data/cmip5/2_5m",
-                             pattern = "gd45bi*",
+                             pattern = "^gd45bi|^bio",
                              full.names = TRUE)
 
 file.remove(obsolete.files)
+if (!rgdal.existed) {
+  remove.packages("rgdal")
+}
+
+########################################
+# UPDATE setup.R to extract zip files
+# UPDATE SDMForecast in sdm-functions.R to create RasterStack from .gri files

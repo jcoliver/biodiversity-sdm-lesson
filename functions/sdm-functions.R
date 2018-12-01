@@ -184,10 +184,11 @@ SDMForecast <- function(data, padding = 0.1) {
   forecast.files <- list.files(path = "data/cmip5/2_5m",
                                pattern = "*.gri$",
                                full.names = TRUE)
-  
   # forecast.data <- raster::stack(x = "data/cmip5/2_5m/forecast-raster.gri")
   forecast.data <- raster::stack(forecast.files)
-  names(forecast.data) <- names(bioclim.data)
+  
+  # Update layer names to match bioclim.data layer names
+  # names(forecast.data) <- names(bioclim.data)
   forecast.data <- crop(x = forecast.data, y = geographic.extent)
 
   # Predict presence probability from model and bioclim data

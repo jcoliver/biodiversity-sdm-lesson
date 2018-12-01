@@ -48,7 +48,7 @@ message("Extracting forecast climate data (this may take a moment)")
 forecast.archives <- list.files(path = "data/cmip5/2_5m", 
                                 pattern = "*.zip$",
                                 full.names = TRUE)
-lapply(X = forecast.archives, FUN = unzip)
+forecast.data <- lapply(X = forecast.archives, FUN = unzip)
 # unzip(zipfile = "data/cmip5/2_5m/forecast-data.zip")
 
 # NOPE archive is too big (> 100 MB) for GitHub. But there might be a solution
@@ -85,6 +85,6 @@ lapply(X = forecast.archives, FUN = unzip)
 #      .grd and .gri files (directory structure was preserved by `zip` command)
 
 # Clean up workspace
-rm(required, successful, unsuccessful, bioclim.data)
+rm(required, successful, unsuccessful, bioclim.data, forecast.archives, forecast.data)
 
 message("Setup complete.")
