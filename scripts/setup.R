@@ -45,7 +45,11 @@ bioclim.data <- getData(name = "worldclim",
 
 # Unzip forecast data
 message("Extracting forecast climate data (this may take a moment)")
-unzip(zipfile = "data/cmip5/2_5m/forecast-data.zip")
+forecast.archives <- list.files(path = "data/cmip5/2_5m", 
+                                pattern = "*.zip$",
+                                full.names = TRUE)
+lapply(X = forecast.archives, FUN = unzip)
+# unzip(zipfile = "data/cmip5/2_5m/forecast-data.zip")
 
 # NOPE archive is too big (> 100 MB) for GitHub. But there might be a solution
 # GitHub large file storage https://git-lfs.github.com/

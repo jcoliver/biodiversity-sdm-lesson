@@ -26,7 +26,7 @@ rm(list = ls())
 #' 6. Update functions/sdm-functions.R to appropriately load in raster 
 #'    (remember) to deal with names, i.e. 
 #'    `names(forecast-data) <- names(bioclim.data)`
-#' 7. remove rgdal
+#' 7. Cleanup by removing remove rgdal
 
 ########################################
 # LOAD DEPENDENCIES
@@ -47,10 +47,43 @@ forecast.data <- getData(name = "CMIP5", # forecast
 ########################################
 # WRITE EACH LAYER TO RASTER FORMAT FILE
 writeRaster(x = forecast.data, 
-            filename = names(forecast.data), 
+            filename = paste0("data/cmip5/2_5m/", names(forecast.data)), 
             bylayer = TRUE,
             format = "raster")
 
 ########################################
 # CREATE MULTIPLE ZIP FILES
+raster.files <- list.files(path = "data/cmip5/2_5m", 
+                           pattern = "*.gr[id]$", 
+                           full.names = TRUE)
 
+# Aiming for four archives, see how many files go in each
+num.archives <- 4
+archive.size <- ceiling(length(raster.files) / num.archives)
+# Ensure archive has even number of files (to keep .grd and .gri files together)
+if (archive.size %% 2 != 0) {
+  archive.size <- archive.size + 1
+}
+
+for (i in 1:num.archives) {
+  offset <- (i - 1) * archive.size
+  fileindexes <- c(1:archive.size) + offset
+  num.remaining.files <- length(raster.files[fileindexes[1]:length(raster.files)])
+  # Fewer files, need to adjust fileindexes
+  if (num.remaining.files < archive.size) {
+    fileindexes <- fileindexes[1:num.remaining.files]
+  }
+  cat(paste0("====  Archive ", i, "  ===="), raster.files[fileindexes], sep = "\n")
+  zip(zipfile = paste0("data/cmip5/2_5m/forecast", i),
+      files = raster.files[fileindexes])
+}
+
+
+
+########################################
+# REMOVE ALL tif, gri, AND grd FILES
+obsolete.files <- list.files(path = "data/cmip5/2_5m",
+                             pattern = "gd45bi*",
+                             full.names = TRUE)
+
+file.remove(obsolete.files)
