@@ -13,3 +13,5 @@ for (i in 1:length(example.files)) {
   message(paste0("Running script ", i, " of ", length(example.files), ": ", example.files[i]))
   source(file = example.files[i])
 }
+
+rm(list = ls())

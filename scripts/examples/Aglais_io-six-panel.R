@@ -3,7 +3,7 @@
 # jcoliver@email.arizona.edu
 # 2017-09-07
 
-rm(list = ls())
+
 
 ################################################################################
 # SETUP
@@ -303,5 +303,3 @@ dev.off()
 
 # Let user know analysis is done.
 message(paste0("Analysis and plotting complete; images written to ", plot.file))
-
-rm(list = ls())

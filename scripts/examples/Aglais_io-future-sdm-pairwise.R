@@ -3,7 +3,7 @@
 # jcoliver@email.arizona.edu
 # 2017-09-07
 
-rm(list = ls())
+
 
 ################################################################################
 # SETUP
@@ -129,5 +129,3 @@ dev.off()
 # Let user know analysis is done.
 message(paste0("\nAnalysis complete. Map image written to ", plot.file, "."))
 message(paste0("Amount of plant range occupied by insect: ", plant.percent, "%."))
-
-rm(list = ls())
