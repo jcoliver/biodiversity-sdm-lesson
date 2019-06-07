@@ -2,7 +2,7 @@
 ## v0.9.4
 
 ## Overview
-Introductory lesson to generate range maps for butterfly-host plant interactions and predict distributional shifts using publicly available biodiversity data and data science tools.
+Introductory lesson to generate range maps for butterfly-host plant interactions and predict distributional shifts using publicly available biodiversity data and data science tools. See [Clement _et al._ (2018) TIEE **14**](http://tiee.esa.org/vol/v14/experiments/clement/abstract.html) for additional information.
 
 Detailed instructions can be found in [docs/instructions.md](docs/instructions.md)
 
