@@ -19,7 +19,7 @@ Four additional R packages are required (these will be installed by running the 
 ## Structure
 + data
   + wc2-5: climate data at 2.5 minute resolution from [WorldClim](http://www.worldclim.org) (_note_: this folder is not under version control, but will be created by running the setup script (`scripts/setup.R`))
-  + cmip5: forcast climate data at 2.5 minute resolution from [WorldClim](http://www.worldclim.org). These data were originally downloaded from the WorldClim website, but stored in the `.RData` format for ease of use.
+  + cmip5: forcast climate data at 2.5 minute resolution from [WorldClim](http://www.worldclim.org). These data were originally downloaded from the WorldClim website, but stored in the `.RData` format for ease of use. The data are for the year 2070, based on the GFDL-ESM2G model with an RCP of 4.5 CO~2~. For an examination of different forecast models, see [McSweeney et al. 2015](https://link.springer.com/article/10.1007/s00382-014-2418-8).
   + Adelpha_californica_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Adelpha californica_ (Lepidoptera: Nymphalidae)
   + Danaus_gilippus_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Danaus gilippus_ (Lepidoptera: Nymphalidae)
   + Fraxinus_velutina_data.csv: data harvested from [iNaturalist](http://www.inaturalist.org) for _Fraxinus velutina_ (Lamiales: Oleaceae)
@@ -69,6 +69,9 @@ Four additional R packages are required (these will be installed by running the 
 + [Run a range of species distribution models](https://rdrr.io/cran/biomod2/man/BIOMOD_Modeling.html)
 + [SDM polygons on a Google map](https://rdrr.io/rforge/dismo/man/gmap.html)
 + [R package 'maxnet' for functionality of Java maxent package](https://cran.r-project.org/web/packages/maxnet/maxnet.pdf)
+
+### Climate forecast models
++ [McSweeney et al. 2015](https://link.springer.com/article/10.1007/s00382-014-2418-8).
 
 ### iNaturalist
 + [API documentation](https://www.inaturalist.org/pages/api+reference)
