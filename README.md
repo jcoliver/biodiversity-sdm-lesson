@@ -1,6 +1,13 @@
 # Lesson on biodiversity data and species distribution models
 ## v0.9.4
 
+**NOTE**: This lesson relies on several R packages that were retired in late 
+2023 (e.g. maptools, raster, sp). The lesson will need to be updated with the 
+successor packages (e.g. terra, geodata, predicts). In the meantime, you can 
+find a lesson using current R packages for making predictions on a single 
+species at 
+[https://jcoliver.github.io/learn-r/011-species-distribution-models.html](https://jcoliver.github.io/learn-r/011-species-distribution-models.html).
+
 ## Overview
 Introductory lesson to generate range maps for butterfly-host plant interactions and predict distributional shifts using publicly available biodiversity data and data science tools. See [Clement _et al._ (2018) TIEE **14**](http://tiee.esa.org/vol/v14/experiments/clement/abstract.html) for additional information.
 
