@@ -7,6 +7,8 @@ data/wc2-5
 data/cmip5/2_5m/*.tif
 data/cmip5/2_5m/*.gri
 data/cmip5/2_5m/*.grd
+data/gadm
+data/wc2.1_2.5m
 output/*
 !*.gitkeep
 !output/*/
