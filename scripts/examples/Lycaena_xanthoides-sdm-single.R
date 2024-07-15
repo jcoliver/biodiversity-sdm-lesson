@@ -3,8 +3,6 @@
 # jcoliver@email.arizona.edu
 # 2017-09-07
 
-
-
 ################################################################################
 # SETUP
 # Gather path information

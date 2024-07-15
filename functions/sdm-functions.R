@@ -126,27 +126,27 @@ SDMRaster <- function(data, padding = 0.1) {
 }
 
 ################################################################################
-#' Combine two presence/absence rasters into a single composite raster
+#' Combine two presence/absence SpatRaster into a single composite SpatRaster
 #' 
-#' @param raster1
-#' @param raster2
-#' @return raster::RasterLayer with the following values:
+#' @param raster1 SpatRaster
+#' @param raster2 SpatRaster
+#' @return SpatRaster with the following values:
 #'   * NA: no pixels in either raster
 #'   * 1: pixels >= 1 in raster1 and <= 0 in raster2
 #'   * 2: pixels >= 1 in raster2 and <= 0 in raster1
 #'   * 3: pixels >= 1 in raster1 and raster2
 StackTwoRasters <- function(raster1, raster2) {
-  if (!require("raster")) {
-    stop("SDMRaster requires raster package, but package is missing.")
+  if (!require("terra")) {
+    stop("SDMRaster requires the terra package, but package is missing.")
   }
   raster1[raster1 <= 0] <- NA
   raster2[raster2 <= 0] <- NA
   raster2[raster2 >= 1] <- 2
   
   # Create a mosaic by summing pixel values
-  raster.mosaic <- mosaic(x = raster1, y = raster2, fun = sum)
-  raster.mosaic[raster.mosaic <= 0] <- NA
-  return(raster.mosaic)
+  raster_mosaic <- terra::mosaic(x = raster1, y = raster2, fun = "sum")
+  raster_mosaic[raster_mosaic <= 0] <- NA
+  return(raster_mosaic)
 }
 
 ################################################################################
