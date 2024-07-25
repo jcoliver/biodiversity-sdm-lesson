@@ -100,6 +100,12 @@ MinMaxCoordinates <- function(x, padding = 0.1) {
 #' 
 #' @return SpatRaster with binary predicted absence/presence (0/1) values
 SDMRaster <- function(data, padding = 0.1) {
+  if (!require("terra")) {
+    stop("SDMRaster requires the terra package, but package is missing.")
+  }
+  if (!require("geodata")) {
+    stop("SDMRaster requires the geodata package, but package is missing.")
+  }
   # Determine minimum and maximum values of latitude and longitude
   min_max <- MinMaxCoordinates(x = data, padding = padding)
   geographic_extent <- terra::ext(x = min_max)
@@ -137,7 +143,7 @@ SDMRaster <- function(data, padding = 0.1) {
 #'   * 3: pixels >= 1 in raster1 and raster2
 StackTwoRasters <- function(raster1, raster2) {
   if (!require("terra")) {
-    stop("SDMRaster requires the terra package, but package is missing.")
+    stop("StackTwoRasters requires the terra package, but package is missing.")
   }
   raster1[raster1 <= 0] <- NA
   raster2[raster2 <= 0] <- NA
@@ -159,16 +165,16 @@ StackTwoRasters <- function(raster1, raster2) {
 #' straight-line distribution borders
 SDMForecast <- function(data, padding = 0.1) {
   # Load dependancies
-  if (!require("raster")) {
-    stop("SDMForecast requires raster package, but package is missing.")
+  if (!require("terra")) {
+    stop("SDMForecast requires the terra package, but package is missing.")
   }
-  if (!require("sp")) {
-    stop("SDMForecast requires sp package, but package is missing.")
+  if (!require("geodata")) {
+    stop("SDMForecast requires the geodata package, but package is missing.")
   }
-
+  
   # Determine minimum and maximum values of latitude and longitude
-  min.max <- MinMaxCoordinates(x = data, padding = padding)
-  geographic_extent <- terra::ext(x = min.max)
+  min_max <- MinMaxCoordinates(x = data, padding = padding)
+  geographic_extent <- terra::ext(x = min_max)
 
   # Run the analysis and extract model & threshold
   sdm_bioclim <- SDMBioclim(data = data)
@@ -176,32 +182,31 @@ SDMForecast <- function(data, padding = 0.1) {
   sdm_model_threshold <- sdm_bioclim$sdm_threshold
 
   # FORECAST
-  # Get bioclim & forecast data
+  # Get forecast data
   # Precict based on sdm_model
   
-  # Get the biolim data (for column names to use in forecast data)
-  bioclim_data <- getData(name = "worldclim",
-                          var = "bio",
-                          res = 2.5,
-                          path = "data/")
-  bioclim_data <- crop(x = bioclim_data, y = geographic_extent)
+  # Get the biolim data for updating names in data to match those in model
+  bioclim_data <- geodata::worldclim_global(var = "bio",
+                                            res = 2.5,
+                                            path = "data")
 
-  # Load forecast data
-  forecast.files <- list.files(path = "data/cmip5/2_5m",
-                               pattern = "*.gri$",
-                               full.names = TRUE)
-  # forecast.data <- raster::stack(x = "data/cmip5/2_5m/forecast-raster.gri")
-  forecast.data <- raster::stack(forecast.files)
-  
+  # Get forecast data
+  forecast_data <- geodata::cmip6_world(model = "GFDL-ESM4", 
+                                        ssp = "370", 
+                                        time = "2061-2080", 
+                                        var = "bioc", 
+                                        res = 2.5, 
+                                        path = "data")
+
   # Update layer names to match bioclim_data layer names
-  # names(forecast.data) <- names(bioclim_data)
-  forecast.data <- crop(x = forecast.data, y = geographic_extent)
+  names(forecast_data) <- names(bioclim_data)
+  
+  # forecast.data <- crop(x = forecast.data, y = geographic_extent)
+  forecast_data <- terra::crop(x = forecast_data, y = geographic_extent)
 
   # Predict presence probability from model and bioclim data
-  predict_presence <- predict(x = forecast.data, 
-                              object = sdm_model, 
-                              ext = geographic_extent, 
-                              progress = "")
+  predict_presence <- predict(sdm_model, 
+                              forecast_data)
   
   # Return raster with values indicating whether probability of 
   # presence was >= threshold (1) or < threshold (0)
@@ -291,13 +296,9 @@ SDMBioclim <- function(data, padding = 0.1) {
   # Divide data into testing and training
   group_presence <- predicts::folds(x = data, k = 5)
   testing_group <- 1
-  # presence_train <- data[group_presence != testing_group, ]
-  # presence_test <- data[group_presence == testing_group, ]
   presence_train <- presence_values[group_presence != testing_group, ]
   presence_test <- presence_values[group_presence == testing_group, ]
   group_background <- predicts::folds(x = background_points, k = 5)
-  # background_train <- background_points[group_background != testing_group, ]
-  # background_test <- background_points[group_background == testing_group, ]
 
   # Generate species distribution model
   sdm_model <- predicts::envelope(x = presence_train)
