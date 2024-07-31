@@ -10,6 +10,7 @@ data/cmip5/2_5m/*.grd
 data/gadm
 data/wc2.1_2.5m
 data/climate
+data/inaturalist
 output/*
 !*.gitkeep
 !output/*/
