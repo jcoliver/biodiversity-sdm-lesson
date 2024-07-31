@@ -1,14 +1,12 @@
 # Script to run forecast species distribution model for a single species
 # Jeff Oliver
-# jcoliver@email.arizona.edu
-# 2017-09-07
-
-rm(list = ls())
+# jcoliver@arizona.edu
+# 2024-07-31
 
 ################################################################################
 # SETUP
 # Gather path information
-# Load dependancies
+# Load dependencies
 
 # Things to set:
 infile <- "data/MY_SPECIES.csv"
@@ -40,18 +38,17 @@ if (any(write.access != 0)) {
 }
 
 # Load dependancies, keeping track of any that fail
-required.packages <- c("raster", "sp", "dismo", "maptools")
-missing.packages <- character(0)
-for (one.package in required.packages) {
-  if (!suppressMessages(require(package = one.package, character.only = TRUE))) {
-    missing.packages <- cbind(missing.packages, one.package)
+required_packages <- c("terra", "geodata", "predicts")
+missing_packages <- character(0)
+for (one_package in required_packages) {
+  if (!suppressMessages(require(package = one_package, character.only = TRUE))) {
+    missing_packages <- cbind(missing_packages, one_package)
   }
 }
 
-if (length(missing.packages) > 0) {
-  stop(paste0("Missing one or more required packages. The following packages are required for run-sdm: ", paste(missing.packages, sep = "", collapse = ", ")), ".\n")
+if (length(missing_packages) > 0) {
+  stop(paste0("Missing one or more required packages. The following packages are required for run-sdm: ", paste(missing_packages, sep = "", collapse = ", ")), ".\n")
 }
-
 
 source(file = "functions/sdm-functions.R")
 
@@ -62,10 +59,10 @@ source(file = "functions/sdm-functions.R")
 # Combine results from butterflies and plants
 
 # Prepare data
-prepared.data <- PrepareData(file = infile)
+prepared_data <- PrepareData(file = infile)
 
 # Run species distribution modeling
-sdm.raster <- SDMForecast(data = prepared.data)
+sdm_raster <- SDMForecast(data = prepared_data)
 
 ################################################################################
 # PLOT
@@ -73,38 +70,43 @@ sdm.raster <- SDMForecast(data = prepared.data)
 # Plot to pdf file
 
 # Add small value to all raster pixels so plot is colored correctly
-sdm.raster <- sdm.raster + 0.00001
+sdm_raster <- sdm_raster + 0.00001
 
 # Determine the geographic extent of our plot
-xmin <- extent(sdm.raster)[1]
-xmax <- extent(sdm.raster)[2]
-ymin <- extent(sdm.raster)[3]
-ymax <- extent(sdm.raster)[4]
+xmin <- terra::ext(sdm_raster)[1]
+xmax <- terra::ext(sdm_raster)[2]
+ymin <- terra::ext(sdm_raster)[3]
+ymax <- terra::ext(sdm_raster)[4]
 
 # Plot the model; save to pdf
-plot.file <- paste0(outpath, outprefix, "-single-future-prediction.pdf")
-pdf(file = plot.file, useDingbats = FALSE)
+plot_file <- paste0(outpath, outprefix, "-single-future-prediction.pdf")
+pdf(file = plot_file, useDingbats = FALSE)
 
-# Load in data for map borders
-data(wrld_simpl)
+# Get data for map borders
+country_borders <- geodata::world(resolution = 4,
+                                  path = "data")
 
 # Draw the base map
-plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = "gray95", 
+plot(country_borders, 
+     xlim = c(xmin, xmax), 
+     ylim = c(ymin, ymax), 
+     axes = TRUE, 
+     col = "gray95", 
      main = paste0(gsub(pattern = "_", replacement = " ", x = outprefix), " - future"))
 
 # Add the model rasters
-plot(sdm.raster, legend = FALSE, add = TRUE)
+plot(sdm_raster, legend = FALSE, add = TRUE, col = c("gray95", "#77CC77"))
 
 # Redraw the borders of the base map
-plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", col = NA)
-
-# Add bounding box around map
-box()
+plot(country_borders, 
+     xlim = c(xmin, xmax), 
+     ylim = c(ymin, ymax), 
+     add = TRUE, 
+     border = "gray10", 
+     col = NA)
 
 # Stop re-direction to PDF graphics device
 dev.off()
 
 # Let user know analysis is done.
-message(paste0("\nAnalysis complete. Map image written to ", plot.file, "."))
-
-rm(list = ls())
+message(paste0("\nAnalysis complete. Map image written to ", plot_file, "."))

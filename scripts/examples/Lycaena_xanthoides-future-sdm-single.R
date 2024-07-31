@@ -1,12 +1,12 @@
 # Script to run forecast species distribution model for Lycaena xanthoides
 # Jeff Oliver
-# jcoliver@email.arizona.edu
-# 2017-09-07
+# jcoliver@arizona.edu
+# 2024-07-31
 
 ################################################################################
 # SETUP
 # Gather path information
-# Load dependancies
+# Load dependencies
 
 # Things to set:
 infile <- "data/Lycaena_xanthoides_data.csv"
@@ -95,7 +95,7 @@ plot(country_borders,
      main = paste0(gsub(pattern = "_", replacement = " ", x = outprefix), " - future"))
 
 # Add the model rasters
-plot(sdm_raster, legend = FALSE, add = TRUE)
+plot(sdm_raster, legend = FALSE, add = TRUE, col = c("gray95", "#77CC77"))
 
 # Redraw the borders of the base map
 plot(country_borders, 

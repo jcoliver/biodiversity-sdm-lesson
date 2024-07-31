@@ -1,7 +1,7 @@
-# Data preparation function for running sdm on iNaturalist data
-# Jeffrey C. Oliver
-# jcoliver@email.arizona.edu
-# 2017-10-31
+# Data preparation and sdm functions
+# Jeff Oliver
+# jcoliver@arizona.edu
+# 2024-07-31
 
 ################################################################################
 #' Read in data from files
@@ -128,7 +128,7 @@ SDMRaster <- function(data, padding = 0.1) {
   
   # Return SpatRaster with values indicating whether probability of 
   # presence was >= threshold (1) or < threshold (0)
-  return(predict_presence > sdm_model_threshold)
+  return(as.numeric(predict_presence > sdm_model_threshold))
 }
 
 ################################################################################
@@ -210,7 +210,7 @@ SDMForecast <- function(data, padding = 0.1) {
   
   # Return raster with values indicating whether probability of 
   # presence was >= threshold (1) or < threshold (0)
-  return(predict_presence > sdm_model_threshold)
+  return(as.numeric(predict_presence > sdm_model_threshold))
 }
 
 ################################################################################

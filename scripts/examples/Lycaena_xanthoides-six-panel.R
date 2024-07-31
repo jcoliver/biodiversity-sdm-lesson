@@ -1,12 +1,12 @@
 # Script for six-panel figure of Papilio cresphontes & Zanthoxylum americanum
 # Jeff Oliver
-# jcoliver@email.arizona.edu
-# 2017-09-07
+# jcoliver@arizona.edu
+# 2024-07-31
 
 ################################################################################
 # SETUP
 # Gather path information
-# Load dependancies
+# Load dependencies
 
 # Things to set:
 butterfly_data_file <- "data/Lycaena_xanthoides_data.csv"
@@ -326,5 +326,3 @@ dev.off()
 
 # Let user know analysis is done.
 message(paste0("Analysis and plotting complete; images written to ", plot_file))
-
-

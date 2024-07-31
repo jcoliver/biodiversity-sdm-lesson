@@ -1,12 +1,12 @@
 # Script to run forecast species distribution model for Lycaena xanthoides & Rumex salicifolius
 # Jeff Oliver
-# jcoliver@email.arizona.edu
-# 2017-09-07
+# jcoliver@arizona.edu
+# 2024-07-31
 
 ################################################################################
 # SETUP
 # Gather path information
-# Load dependancies
+# Load dependencies
 
 butterfly_data_file <- "data/Lycaena_xanthoides_data.csv"
 plant_data_file <- "data/Rumex_salicifolius_data.csv"
