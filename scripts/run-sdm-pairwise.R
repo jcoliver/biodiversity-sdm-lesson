@@ -8,6 +8,7 @@
 # Gather path information
 # Load dependencies
 
+# Things to set:
 butterfly_data_file <- "data/BUTTERFLY_DATA.csv"
 plant_data_file <- "data/PLANT_DATA.csv"
 outprefix <- "MY_SPECIES"

@@ -8,6 +8,7 @@
 # Gather path information
 # Load dependencies
 
+# Things to set:
 butterfly_data_file <- "data/Lycaena_xanthoides_data.csv"
 plant_data_file <- "data/Rumex_salicifolius_data.csv"
 outprefix <- "Lycaena_xanthoides"

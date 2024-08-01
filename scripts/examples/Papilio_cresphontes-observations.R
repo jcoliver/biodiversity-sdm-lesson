@@ -1,14 +1,12 @@
-# Papilio cresphontes observation point map
+# Species observation point map for Papilio cresphontes
 # Jeff Oliver
-# jcoliver@email.arizona.edu
-# 2018-01-19
-
-
+# jcoliver@arizona.edu
+# 2024-07-31
 
 ################################################################################
 # SETUP
 # Gather path information
-# Load dependancies
+# Load dependencies
 
 # Things to set:
 infile <- "data/Papilio_cresphontes_data.csv"
@@ -31,25 +29,26 @@ if (substring(text = outpath, first = nchar(outpath), last = nchar(outpath)) != 
 }
 
 # Make sure directories are writable
-required.writables <- c("data", outpath)
-write.access <- file.access(names = required.writables)
-if (any(write.access != 0)) {
+required_writables <- c("data", outpath)
+write_access <- file.access(names = required_writables)
+if (any(write_access != 0)) {
   stop(paste0("You do not have sufficient write access to one or more directories. ",
               "The following directories do not appear writable: \n",
-              paste(required.writables[write.access != 0], collapse = "\n")))
+              paste(required_writables[write_access != 0], collapse = "\n")))
 }
 
-# Load dependancies, keeping track of any that fail
-required.packages <- c("sp", "maptools")
-missing.packages <- character(0)
-for (one.package in required.packages) {
-  if (!suppressMessages(require(package = one.package, character.only = TRUE))) {
-    missing.packages <- cbind(missing.packages, one.package)
+# Load dependencies, keeping track of any that fail
+required_packages <- c("terra", "geodata")
+missing_packages <- character(0)
+for (one_package in required_packages) {
+  if (!suppressMessages(require(package = one_package, character.only = TRUE))) {
+    missing_packages <- cbind(missing_packages, one_package)
   }
 }
 
-if (length(missing.packages) > 0) {
-  stop(paste0("Missing one or more required packages. The following packages are required for run-sdm: ", paste(missing.packages, sep = "", collapse = ", ")), ".\n")
+if (length(missing_packages) > 0) {
+  stop(paste0("Missing one or more required packages. The following packages are required for plot-observations: ", 
+              paste(missing_packages, sep = "", collapse = ", ")), ".\n")
 }
 
 source(file = "functions/sdm-functions.R")
@@ -61,38 +60,44 @@ source(file = "functions/sdm-functions.R")
 # Plot to pdf file
 
 # Prepare data
-prepared.data <- PrepareData(file = infile)
+prepared_data <- PrepareData(file = infile)
 
 # Determine the geographic extent of our plot
-xmin <- min(prepared.data$lon)
-xmax <- max(prepared.data$lon)
-ymin <- min(prepared.data$lat)
-ymax <- max(prepared.data$lat)
+xmin <- min(prepared_data$lon)
+xmax <- max(prepared_data$lon)
+ymin <- min(prepared_data$lat)
+ymax <- max(prepared_data$lat)
+
+# Get data for map borders
+country_borders <- geodata::world(resolution = 4,
+                                  path = "data")
 
 # Plot the observations & save to pdf
-plot.file <- paste0(outpath, outprefix, "-observations.pdf")
-pdf(file = plot.file, useDingbats = FALSE)
-
-# Load in data for map borders
-data(wrld_simpl)
+plot_file <- paste0(outpath, outprefix, "-observations.pdf")
+pdf(file = plot_file, useDingbats = FALSE)
 
 # Draw the base map
-plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = "gray95",
+plot(country_borders, 
+     xlim = c(xmin, xmax), 
+     ylim = c(ymin, ymax), 
+     axes = TRUE, 
+     col = "gray95",
      main = paste0("Observations of ", gsub(pattern = "_", replacement = " ", x = outprefix)))
 
 # Add observation points
-points(x = prepared.data$lon, y = prepared.data$lat, col = "#003300", pch = 20, cex = 0.7)
+points(x = prepared_data$lon, y = prepared_data$lat, col = "#003300", 
+       pch = 20, cex = 0.7)
 
 # Redraw the borders of the base map
-plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", col = NA)
-
-# Add bounding box around map
-box()
+plot(country_borders, 
+     xlim = c(xmin, xmax), 
+     ylim = c(ymin, ymax), 
+     add = TRUE, 
+     border = "gray10", 
+     col = NA)
 
 # Stop writing to PDF
 dev.off()
 
 # Let user know plotting is done.
-message(paste0("\nPlot complete. Map image written to ", plot.file, "."))
-
-
+message(paste0("\nPlot complete. Map image written to ", plot_file, "."))
