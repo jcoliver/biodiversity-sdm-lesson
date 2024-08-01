@@ -148,7 +148,7 @@ StackTwoRasters <- function(raster1, raster2) {
   raster1[raster1 <= 0] <- NA
   raster2[raster2 <= 0] <- NA
   raster2[raster2 >= 1] <- 2
-  
+ 
   # Create a mosaic by summing pixel values
   raster_mosaic <- terra::mosaic(x = raster1, y = raster2, fun = "sum")
   raster_mosaic[raster_mosaic <= 0] <- NA
