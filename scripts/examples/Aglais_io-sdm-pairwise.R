@@ -102,10 +102,6 @@ plot(country_borders,
 plot(combined_raster, legend = FALSE, add = TRUE, 
      breaks = breakpoints, col = plot_colors)
 
-# Add the legend
-terra::add_legend("topright", legend = c("Insect", "Plant", "Both"), 
-                  fill = plot_colors[2:4], bg = "#FFFFFF")
-
 # Redraw the borders of the base map
 plot(country_borders, 
      xlim = c(xmin, xmax), 
@@ -113,6 +109,10 @@ plot(country_borders,
      add = TRUE, 
      border = "gray10", 
      col = NA)
+
+# Add the legend
+terra::add_legend("topright", legend = c("Insect", "Plant", "Both"), 
+                  fill = plot_colors[2:4], bg = "#FFFFFF")
 
 # Stop re-direction to PDF graphics device
 dev.off()

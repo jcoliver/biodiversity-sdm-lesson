@@ -255,6 +255,14 @@ plot(country_borders,
 plot(combined_raster_current, legend = FALSE, add = TRUE, 
      breaks = breakpoints, col = plot_colors)
 
+# Redraw the borders of the base map
+plot(country_borders, 
+     xlim = c(xmin, xmax), 
+     ylim = c(ymin, ymax), 
+     add = TRUE, 
+     border = "gray10", 
+     col = NA)
+
 # Add the legend
 terra::add_legend("topright", 
                   legend = c(gsub(pattern = "_", replacement = " ", x = butterfly_species), 
@@ -263,14 +271,6 @@ terra::add_legend("topright",
                   fill = plot_colors[2:4], 
                   bg = "#FFFFFF",
                   cex = legend_cex)
-
-# Redraw the borders of the base map
-plot(country_borders, 
-     xlim = c(xmin, xmax), 
-     ylim = c(ymin, ymax), 
-     add = TRUE, 
-     border = "gray10", 
-     col = NA)
 
 ################################################################################
 # PLOT 6: Forecast SDMs of butterfly & plant species with overlap
@@ -297,6 +297,14 @@ plot(country_borders,
 plot(combined_raster_future, legend = FALSE, add = TRUE, 
      breaks = breakpoints, col = plot_colors)
 
+# Redraw the borders of the base map
+plot(country_borders, 
+     xlim = c(xmin, xmax), 
+     ylim = c(ymin, ymax), 
+     add = TRUE, 
+     border = "gray10", 
+     col = NA)
+
 # Add the legend
 terra::add_legend("topright", 
                   legend = c(gsub(pattern = "_", replacement = " ", x = butterfly_species), 
@@ -305,14 +313,6 @@ terra::add_legend("topright",
                   fill = plot_colors[2:4], 
                   bg = "#FFFFFF",
                   cex = legend_cex)
-
-# Redraw the borders of the base map
-plot(country_borders, 
-     xlim = c(xmin, xmax), 
-     ylim = c(ymin, ymax), 
-     add = TRUE, 
-     border = "gray10", 
-     col = NA)
 
 # Reset default graphics parameters
 par(mfrow = c(1, 1),
