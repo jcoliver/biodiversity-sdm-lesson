@@ -84,7 +84,10 @@ ymax <- terra::ext(combined_raster)[4]
 # Plot the models for butterfly, plant and overlap; save to pdf
 plot_file <- paste0(outpath, outprefix, "-pairwise-prediction.pdf")
 pdf(file = plot_file, useDingbats = FALSE)
-breakpoints <- c(0, 1, 2, 3, 4)
+
+# So ugly, but too lazy to find out what terra::plot idiosyncrasy forces me to 
+# do this with the breakpoints.
+breakpoints <- c(0, 1, 1.9, 2.9, 3.9, 4)
 plot_colors <- c("white", "purple3","darkolivegreen4", "orangered4", "black")
 
 # Get data for map borders
