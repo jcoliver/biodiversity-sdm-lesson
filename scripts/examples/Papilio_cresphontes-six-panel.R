@@ -240,7 +240,7 @@ ymin <- terra::ext(combined_raster_current)[3]
 ymax <- terra::ext(combined_raster_current)[4]
 
 # Coloring breakpoints
-breakpoints <- c(0, 1, 2, 3, 4)
+breakpoints <- c(0, 1, 1.9, 2.9, 3.9, 4)
 plot_colors <- c(NA, butterfly_color, plant_color, overlap_color, NA)
 
 # Draw the base map
@@ -282,7 +282,7 @@ ymin <- terra::ext(combined_raster_future)[3]
 ymax <- terra::ext(combined_raster_future)[4]
 
 # Coloring breakpoints
-breakpoints <- c(0, 1, 2, 3, 4)
+breakpoints <- c(0, 1, 1.9, 2.9, 3.9, 4)
 plot_colors <- c(NA, butterfly_color, plant_color, overlap_color, NA)
 
 # Draw the base map
