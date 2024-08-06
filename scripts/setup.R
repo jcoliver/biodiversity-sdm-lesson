@@ -32,8 +32,8 @@ if (file.access(names = "data") != 0) {
 }
 
 # Make sure raster package was installed and load it
-if (!require(package = "raster")) {
-  stop("Setup requires the raster package, which does not appear to be available.\n")
+if (!require(package = "geodata")) {
+  stop("Setup requires the geodata package, which does not appear to be available.\n")
 }
 
 # Download bioclim data

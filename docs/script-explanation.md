@@ -4,13 +4,13 @@
 
 This document provides a more in-depth explanation of what the four species 
 distribution modeling scripts are doing. All scripts are documented in the 
-actual code, so if you want _even more_ detail, feel free to look through the R 
-code itself. If you want to know how to _use_ the scripts, visit the 
+actual code, so if you want *even more* detail, feel free to look through the R 
+code itself. If you want to know how to *use* the scripts, visit the 
 [Instructions](instructions.md) page. If you are running into problems with 
 installation or running the analyses, visit the 
 [Troubleshooting](troubleshooting.md) page.
 
-The four scripts prefaced with "`run-`" in the `scripts` folder are all doing 
+The four scripts prefaced with "run-" in the scripts folder are all doing 
 largely the same thing, but they differ in (1) the species observation data 
 being used and (2) the climate data being used. Considering each script in 
 turn, we start with the simplest one, and describe the remaining three in terms 
@@ -34,8 +34,8 @@ plots the output of this model onto a map, which is saved as a pdf file.
         2. Create "pseudo-absence" points. In order to evaluate the performance 
         of the model, we need both presence points (where the species of 
         interest is known to occur) and absence points (where the species of 
-        interest is known to _not_ occur). The challenge is that most 
-        biodiversity observation data are _presence only_. One common work 
+        interest is known to *not* occur). The challenge is that most 
+        biodiversity observation data are *presence only*. One common work 
         around for coercing presence-only data for use with presence/absence 
         approaches is to use pseudo-absence, or "background" points. While 
         "pseudo-absence" sounds fancy, it really just means that one randomly 
@@ -49,7 +49,7 @@ plots the output of this model onto a map, which is saved as a pdf file.
         portion of the observation data (and pseudo-absence data), in this case 
         20% of the observations; this is the "testing" data. The remaining 80% 
         of the observations are used for "training" the SDM. These 
-        _independent_ data sets afford an unbiased evaluation of the models.
+        *independent* data sets afford an unbiased evaluation of the models.
         4. Using the bioclim approach and the **training** data, estimate the 
         effects of the climate variables on the probability that our species of 
         interest will occur in a given location. From an abstract perspective, 
@@ -67,7 +67,7 @@ plots the output of this model onto a map, which is saved as a pdf file.
         compares the probability of presence estimated by the SDM at a 
         particular geographic location to the actual presence and 
         (psuedo-)absence of the species of interest. Note this evaluation 
-        _only_ considers locations for which we actually have data (presence or 
+        *only* considers locations for which we actually have data (presence or 
         pseudo-absence).
         6. Use the current climate data to predict the probability of presence 
         at **every** point in the geographic area of interest.
@@ -79,7 +79,7 @@ plots the output of this model onto a map, which is saved as a pdf file.
 + Summary: This is the template for the creation and evaluation of a species 
 distribution model (SDM) for a single species based on **future** climate data. 
 It plots the output of this model onto a map, which is saved as a pdf file.
-+ Process: Identical to that of `run-sdm-single.R`, except that in step iii.f, 
++ Process: Identical to that of run-sdm-single.R, except that in step iii.f, 
 this script uses estimated climate data for the year 2070.
 
 ### run-sdm-pairwise.R
@@ -88,7 +88,7 @@ this script uses estimated climate data for the year 2070.
 based on data for an insect and one based on data for the insect's host plant. 
 The resultant predicted ranges are based on current climate data. 
 + Process: This is effectively running the single SDM script 
-(`run-sdm-single.R`) twice, once for the insect data and once for the plant 
+(run-sdm-single.R) twice, once for the insect data and once for the plant 
 data. The two models are estimated and evaluated independently of one another. 
 After the climate data are used to predict the probability of presence for each 
 species, a single map is created, showing the predicted ranges of the insect, 
@@ -99,7 +99,7 @@ the plant, and areas where the ranges overlap.
 + Summary: This script provides the template for running two separate SDMs: one 
 based on data for an insect and one based on data for the insect's host plant. 
 The resultant predicted ranges are based on future climate data (2070). 
-+ Process: Differs only from `run-sdm-pairwise.R` in the data used for 
++ Process: Differs only from run-sdm-pairwise.R in the data used for 
 predicting the ranges of insect and plant: in this case climate data estimated 
 for 2070 are used, rather than current climate data.
 
