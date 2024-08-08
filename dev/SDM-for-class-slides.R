@@ -1,7 +1,7 @@
 # SDM images for class presentation
 # Jeff Oliver
 # jcoliver@arizona.edu
-# 2018-02-26
+# 2024-08-08
 
 ################################################################################
 
@@ -52,8 +52,8 @@ plot(country_borders,
      main = paste0("Observations of ", species_name))
 
 # Add observation points
-points(x = butterfly_data$lon, 
-       y = butterfly_data$lat, 
+points(x = prepared_data$lon, 
+       y = prepared_data$lat, 
        col = "#003300", 
        pch = 20, cex = 0.7)
 
@@ -102,15 +102,13 @@ dev.off()
 presence_values <- terra::extract(x = bioclim_data, 
                                   y = prepared_data, 
                                   ID = FALSE)
+
 # Generate species distribution model
-sdm_model <- predicts::envelope(x = presence_train)
+sdm_model <- predicts::envelope(x = presence_values)
 
 # Use model to predict probability of occurrence
-# TODO: Need to explicitly call predicts::predict
-predict_presence <- predict(x = bioclim_data, 
-                            object = sdm_model, 
-                            ext = geographic_extent, 
-                            progress = "")
+predict_presence <- predict(bioclim_data, 
+                            sdm_model)
 
 # Convert zero probabilities to NAs (makes map nicer)
 predict_presence[predict_presence == 0] <- NA
