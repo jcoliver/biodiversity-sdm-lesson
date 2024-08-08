@@ -1,9 +1,7 @@
 # SDM images for class presentation
 # Jeff Oliver
-# jcoliver@email.arizona.edu
+# jcoliver@arizona.edu
 # 2018-02-26
-
-rm(list = ls())
 
 ################################################################################
 
@@ -11,14 +9,13 @@ rm(list = ls())
 # occurrence map -occurrence
 # bioclim maps   -bioclim
 # sdm map        -sdm
-require("sp")
-require("maptools")
-require("raster")
-require("dismo")
+require("terra")
+require("geodata")
+require("predicts")
 
 # Things to set:
 infile <- "data/Papilio_cresphontes_data.csv"
-species.name <- "Papilio cresphontes"
+species_name <- "Papilio cresphontes"
 outprefix <- "class-2-slides"
 outpath <- "img/"
 
@@ -31,34 +28,43 @@ source(file = "functions/sdm-functions.R")
 # Plot to png file
 
 # Prepare data
-prepared.data <- PrepareData(file = infile)
+prepared_data <- PrepareData(file = infile)
 
 # Determine the geographic extent of our plot
-xmin <- min(prepared.data$lon)
-xmax <- max(prepared.data$lon)
-ymin <- min(prepared.data$lat)
-ymax <- max(prepared.data$lat)
+xmin <- min(prepared_data$lon)
+xmax <- max(prepared_data$lon)
+ymin <- min(prepared_data$lat)
+ymax <- max(prepared_data$lat)
 
-plot.file <- paste0(outpath, outprefix, "-observations.png")
-png(file = plot.file)
+# Get data for map borders
+country_borders <- geodata::world(resolution = 4,
+                                  path = "data")
 
-# Load in data for map borders
-data(wrld_simpl)
+plot_file <- paste0(outpath, outprefix, "-observations.png")
+png(file = plot_file)
 
 # Draw the base map
-plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = "gray95",
-     main = paste0("Observations of ", species.name))
+plot(country_borders, 
+     xlim = c(xmin, xmax), 
+     ylim = c(ymin, ymax), 
+     axes = TRUE, 
+     col = "gray95",
+     main = paste0("Observations of ", species_name))
 
 # Add observation points
-points(x = prepared.data$lon, y = prepared.data$lat, col = "#003300", pch = 20, cex = 0.7)
+points(x = butterfly_data$lon, 
+       y = butterfly_data$lat, 
+       col = "#003300", 
+       pch = 20, cex = 0.7)
 
 # Redraw the borders of the base map
-plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", col = NA)
+plot(country_borders, 
+     xlim = c(xmin, xmax), 
+     ylim = c(ymin, ymax), 
+     add = TRUE, 
+     border = "gray10", 
+     col = NA)
 
-# Add bounding box around map
-box()
-
-# Stop writing to PNG
 dev.off()
 
 ################################################################################
@@ -67,21 +73,19 @@ dev.off()
 # Determine size of plot
 # Plot to png file
 
-# Get the bioclim data
-bioclim.data <- getData(name = "worldclim",
-                        var = "bio",
-                        res = 2.5,
-                        path = "data/")
+bioclim_data <- geodata::worldclim_global(var = "bio",
+                                          res = 2.5,
+                                          path = "data")
 
 # Store geographic extent and crop the bioclim data to that region
-geographic.extent <- extent(x = c(xmin, xmax, ymin, ymax))
-bioclim.data <- crop(x = bioclim.data, y = geographic.extent)
+geographic_extent <- terra::ext(x = c(xmin, xmax, ymin, ymax))
+bioclim_data <- terra::crop(x = bioclim_data, y = geographic_extent)
 
 # Plot the bioclim maps to PNG file
-plot.file <- paste0(outpath, outprefix, "-bioclim.png")
-png(file = plot.file)
+plot_file <- paste0(outpath, outprefix, "-bioclim.png")
+png(file = plot_file)
 
-plot(bioclim.data)
+plot(bioclim_data)
 
 # Stop writing to PNG
 dev.off()
@@ -92,37 +96,49 @@ dev.off()
 # Determine size of plot
 # Plot to png file
 
-# Run species distribution modeling
-sdm.model <- bioclim(x = bioclim.data, p = prepared.data)
+# Run species distribution modeling (presence-only data)
+
+# Extract climate data for observation points
+presence_values <- terra::extract(x = bioclim_data, 
+                                  y = prepared_data, 
+                                  ID = FALSE)
+# Generate species distribution model
+sdm_model <- predicts::envelope(x = presence_train)
 
 # Use model to predict probability of occurrence
-predict.presence <- predict(x = bioclim.data, 
-                            object = sdm.model, 
-                            ext = geographic.extent, 
+# TODO: Need to explicitly call predicts::predict
+predict_presence <- predict(x = bioclim_data, 
+                            object = sdm_model, 
+                            ext = geographic_extent, 
                             progress = "")
 
 # Convert zero probabilities to NAs (makes map nicer)
-predict.presence[predict.presence == 0] <- NA
+predict_presence[predict_presence == 0] <- NA
 
 # Plot the SDM to PNG file
-plot.file <- paste0(outpath, outprefix, "-sdm.png")
-png(file = plot.file)
-
-# Load in data for map borders
-data(wrld_simpl)
+plot_file <- paste0(outpath, outprefix, "-sdm.png")
+png(file = plot_file)
 
 # Draw the base map
-plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = "gray95",
-     main = paste0(species.name, " distribution model"))
+plot(country_borders, 
+     xlim = c(xmin, xmax), 
+     ylim = c(ymin, ymax), 
+     axes = TRUE, 
+     col = "gray95",
+     main = paste0(species_name, " distribution model"))
 
 # Add model probabilities
-plot(predict.presence, add = TRUE, legend = FALSE)
+plot(predict_presence, 
+     add = TRUE, 
+     legend = FALSE)
 
 # Redraw the borders of the base map
-plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", col = NA)
-
-# Add bounding box around map
-box()
+plot(country_borders, 
+     xlim = c(xmin, xmax), 
+     ylim = c(ymin, ymax), 
+     add = TRUE, 
+     border = "gray10", 
+     col = NA)
 
 # Stop writing to PNG
 dev.off()
