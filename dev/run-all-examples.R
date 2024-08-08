@@ -1,13 +1,13 @@
 # Run all examples in scripts/examples
 # Jeff Oliver
 # jcoliver@arizona.edu
-# 2018-06-15
+# 2024-08-06
 
 ################################################################################
 
-example.files <- list.files(path = "scripts/examples", full.names = TRUE)
+example_files <- list.files(path = "scripts/examples", full.names = TRUE)
 
-for (i in 1:length(example.files)) {
-  message(paste0("Running script ", i, " of ", length(example.files), ": ", example.files[i]))
-  source(file = example.files[i])
+for (i in 1:length(example_files)) {
+  message(paste0("Running script ", i, " of ", length(example_files), ": ", example_files[i]))
+  source(file = example_files[i])
 }

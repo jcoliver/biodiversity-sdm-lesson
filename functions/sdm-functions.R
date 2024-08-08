@@ -259,7 +259,7 @@ SDMBioclim <- function(data, padding = 0.1) {
   bioclim_data <- terra::crop(x = bioclim_data, y = geographic_extent)
   
   # Create pseudo-absence points (making them up, using 'background' approach)
-  tif_files <- list.files(path = "data/wc2.1_2.5m", 
+  tif_files <- list.files(path = "data/climate/wc2.1_2.5m", 
                           pattern = "*.tif$", 
                           full.names = TRUE)
   mask <- terra::rast(tif_files[1])

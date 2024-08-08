@@ -97,7 +97,6 @@ dev.off()
 # Plot to png file
 
 # Run species distribution modeling (presence-only data)
-
 # Extract climate data for observation points
 presence_values <- terra::extract(x = bioclim_data, 
                                   y = prepared_data, 
@@ -106,7 +105,7 @@ presence_values <- terra::extract(x = bioclim_data,
 # Generate species distribution model
 sdm_model <- predicts::envelope(x = presence_values)
 
-# Use model to predict probability of occurrence
+# Use model to predict probability of occurrence (can take half a minute)
 predict_presence <- predict(bioclim_data, 
                             sdm_model)
 
@@ -128,7 +127,8 @@ plot(country_borders,
 # Add model probabilities
 plot(predict_presence, 
      add = TRUE, 
-     legend = FALSE)
+     legend = FALSE,
+     col = map.pal(name = "inferno", n = 100))
 
 # Redraw the borders of the base map
 plot(country_borders, 
