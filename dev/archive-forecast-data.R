@@ -1,9 +1,9 @@
-# Development script preparing forcast data for version control on GitHub
+# Development script preparing forecast data for version control on GitHub
 # Jeff Oliver
-# jcoliver@email.arizona.edu
+# jcoliver@arizona.edu
 # 2018-11-30
 
-rm(list = ls())
+# DEPRECATED
 
 ################################################################################
 # Rationale: Forecast climate data are available in tif files, which require the 
@@ -100,7 +100,3 @@ file.remove(obsolete.files)
 if (!rgdal.existed) {
   remove.packages("rgdal")
 }
-
-########################################
-# UPDATE setup.R to extract zip files
-# UPDATE SDMForecast in sdm-functions.R to create RasterStack from .gri files

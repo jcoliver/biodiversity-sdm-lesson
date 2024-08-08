@@ -1,17 +1,16 @@
 # Script to run contemporary species distribution model for Adelpha californica & Quercus chrysolepis
 # Jeff Oliver
-# jcoliver@email.arizona.edu
-# 2017-09-07
-
-
+# jcoliver@arizona.edu
+# 2024-07-31
 
 ################################################################################
 # SETUP
 # Gather path information
-# Load dependancies
+# Load dependencies
 
-butterfly.data.file <- "data/Adelpha_californica_data.csv"
-plant.data.file <- "data/Quercus_chrysolepis_data.csv"
+# Things to set:
+butterfly_data_file <- "data/Adelpha_californica_data.csv"
+plant_data_file <- "data/Quercus_chrysolepis_data.csv"
 outprefix <- "Adelpha_californica"
 outpath <- "output/"
 
@@ -21,25 +20,25 @@ if (substring(text = outpath, first = nchar(outpath), last = nchar(outpath)) != 
 }
 
 # Make sure directories are writable
-required.writables <- c("data", outpath)
-write.access <- file.access(names = required.writables)
-if (any(write.access != 0)) {
+required_writables <- c("data", outpath)
+write_access <- file.access(names = required_writables)
+if (any(write_access != 0)) {
   stop(paste0("You do not have sufficient write access to one or more directories. ",
               "The following directories do not appear writable: \n",
-              paste(required.writables[write.access != 0], collapse = "\n")))
+              paste(required_writables[write_access != 0], collapse = "\n")))
 }
 
 # Load dependancies, keeping track of any that fail
-required.packages <- c("raster", "sp", "dismo", "maptools")
-missing.packages <- character(0)
-for (one.package in required.packages) {
-  if (!suppressMessages(require(package = one.package, character.only = TRUE))) {
-    missing.packages <- cbind(missing.packages, one.package)
+required_packages <- c("terra", "geodata", "predicts")
+missing_packages <- character(0)
+for (one_package in required_packages) {
+  if (!suppressMessages(require(package = one_package, character.only = TRUE))) {
+    missing_packages <- cbind(missing_packages, one_package)
   }
 }
 
-if (length(missing.packages) > 0) {
-  stop(paste0("Missing one or more required packages. The following packages are required for run-sdm: ", paste(missing.packages, sep = "", collapse = ", ")), ".\n")
+if (length(missing_packages) > 0) {
+  stop(paste0("Missing one or more required packages. The following packages are required for run-sdm: ", paste(missing_packages, sep = "", collapse = ", ")), ".\n")
 }
 
 source(file = "functions/sdm-functions.R")
@@ -51,22 +50,22 @@ source(file = "functions/sdm-functions.R")
 # Combine results from butterflies and plants
 
 # Prepare data
-butterfly.data <- PrepareData(file = butterfly.data.file)
-plant.data <- PrepareData(file = plant.data.file)
+butterfly_data <- PrepareData(file = butterfly_data_file)
+plant_data <- PrepareData(file = plant_data_file)
 
 # Run species distribution modeling
-butterfly.raster <- SDMRaster(data = butterfly.data)
-plant.raster <- SDMRaster(data = plant.data)
+butterfly_raster <- SDMRaster(data = butterfly_data)
+plant_raster <- SDMRaster(data = plant_data)
 
 # Combine results from butterflies and plants
-combined.raster <- StackTwoRasters(raster1 = butterfly.raster,
-                                   raster2 = plant.raster)
+combined_raster <- StackTwoRasters(raster1 = butterfly_raster,
+                                   raster2 = plant_raster)
 
 # Calculate the % of plant range occupied by butterfly
-pixel.freqs <- freq(combined.raster)
-plants <- pixel.freqs[which(pixel.freqs[, 1] == 2), 2]
-both <- pixel.freqs[which(pixel.freqs[, 1] == 3), 2]
-plant.percent <- round(100 * (both/(plants + both)), 2)
+pixel_freqs <- terra::freq(combined_raster)
+plants <- pixel_freqs[which(pixel_freqs[, 2] == 2), 3]
+both <- pixel_freqs[which(pixel_freqs[, 2] == 3), 3]
+plant_percent <- round(100 * (both/(plants + both)), 2)
 
 ################################################################################
 # PLOT
@@ -74,42 +73,53 @@ plant.percent <- round(100 * (both/(plants + both)), 2)
 # Plot to pdf file
 
 # Add small value to all raster pixels so plot is colored correctly
-combined.raster <- combined.raster + 0.00001
+combined_raster <- combined_raster + 0.00001
 
 # Determine the geographic extent of our plot
-xmin <- extent(combined.raster)[1]
-xmax <- extent(combined.raster)[2]
-ymin <- extent(combined.raster)[3]
-ymax <- extent(combined.raster)[4]
+xmin <- terra::ext(combined_raster)[1]
+xmax <- terra::ext(combined_raster)[2]
+ymin <- terra::ext(combined_raster)[3]
+ymax <- terra::ext(combined_raster)[4]
 
 # Plot the models for butterfly, plant and overlap; save to pdf
-plot.file <- paste0(outpath, outprefix, "-pairwise-prediction.pdf")
-pdf(file = plot.file, useDingbats = FALSE)
-breakpoints <- c(0, 1, 2, 3, 4)
-plot.colors <- c("white", "purple3","darkolivegreen4", "orangered4", "black")
+plot_file <- paste0(outpath, outprefix, "-pairwise-prediction.pdf")
+pdf(file = plot_file, useDingbats = FALSE)
 
-# Load in data for map borders
-data(wrld_simpl)
+# So ugly, but too lazy to find out what terra::plot idiosyncrasy forces me to 
+# do this with the breakpoints.
+breakpoints <- c(0, 1, 1.9, 2.9, 3.9, 4)
+plot_colors <- c("white", "purple3","darkolivegreen4", "orangered4", "black")
+
+# Get data for map borders
+country_borders <- geodata::world(resolution = 4,
+                                  path = "data")
 
 # Draw the base map
-plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = "gray95")
+plot(country_borders, 
+     xlim = c(xmin, xmax), 
+     ylim = c(ymin, ymax), 
+     axes = TRUE, 
+     col = "gray95")
 
 # Add the model rasters
-plot(combined.raster, legend = FALSE, add = TRUE, breaks = breakpoints, col = plot.colors)
+plot(combined_raster, legend = FALSE, add = TRUE, 
+     breaks = breakpoints, col = plot_colors)
 
 # Redraw the borders of the base map
-plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", col = NA)
+plot(country_borders, 
+     xlim = c(xmin, xmax), 
+     ylim = c(ymin, ymax), 
+     add = TRUE, 
+     border = "gray10", 
+     col = NA)
 
 # Add the legend
-legend("topright", legend = c("Insect", "Plant", "Both"), fill = plot.colors[2:4], bg = "#FFFFFF")
-
-# Add bounding box around map
-box()
+terra::add_legend("topright", legend = c("Insect", "Plant", "Both"), 
+                  fill = plot_colors[2:4], bg = "#FFFFFF")
 
 # Stop re-direction to PDF graphics device
 dev.off()
 
 # Let user know analysis is done.
-message(paste0("\nAnalysis complete. Map image written to ", plot.file, "."))
-message(paste0("Amount of plant range occupied by insect: ", plant.percent, "%."))
-
+message(paste0("\nAnalysis complete. Map image written to ", plot_file, "."))
+message(paste0("Amount of plant range occupied by insect: ", plant_percent, "%."))

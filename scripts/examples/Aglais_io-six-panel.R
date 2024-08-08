@@ -1,36 +1,34 @@
 # Script for six-panel figure of Aglais io & Urtica dioica
 # Jeff Oliver
-# jcoliver@email.arizona.edu
-# 2017-09-07
-
-
+# jcoliver@arizona.edu
+# 2024-07-31
 
 ################################################################################
 # SETUP
 # Gather path information
-# Load dependancies
+# Load dependencies
 
 # Things to set:
-butterfly.data.file <- "data/Aglais_io_data.csv"
-plant.data.file <- "data/Urtica_dioica_data.csv"
-butterfly.species <- "Aglais_io"
-plant.species <- "Urtica_dioica"
+butterfly_data_file <- "data/Aglais_io_data.csv"
+plant_data_file <- "data/Urtica_dioica_data.csv"
+butterfly_species <- "Aglais_io"
+plant_species <- "Urtica_dioica"
 outpath <- "output/"
 
 # Make sure the input files exist
-if (!file.exists(butterfly.data.file)) {
-  stop(paste0("Cannot find ", butterfly.data.file, ", file does not exist.\n"))
+if (!file.exists(butterfly_data_file)) {
+  stop(paste0("Cannot find ", butterfly_data_file, ", file does not exist.\n"))
 }
-if (!file.exists(plant.data.file)) {
-  stop(paste0("Cannot find ", plant.data.file, ", file does not exist.\n"))
+if (!file.exists(plant_data_file)) {
+  stop(paste0("Cannot find ", plant_data_file, ", file does not exist.\n"))
 }
 
 # Make sure the input files are readable
-if (file.access(names = butterfly.data.file, mode = 4) != 0) {
-  stop(paste0("You do not have sufficient access to read ", butterfly.data.file, "\n"))
+if (file.access(names = butterfly_data_file, mode = 4) != 0) {
+  stop(paste0("You do not have sufficient access to read ", butterfly_data_file, "\n"))
 }
-if (file.access(names = plant.data.file, mode = 4) != 0) {
-  stop(paste0("You do not have sufficient access to read ", plant.data.file, "\n"))
+if (file.access(names = plant_data_file, mode = 4) != 0) {
+  stop(paste0("You do not have sufficient access to read ", plant_data_file, "\n"))
 }
 
 # Make sure the output path ends with "/" (and append one if it doesn't)
@@ -39,25 +37,25 @@ if (substring(text = outpath, first = nchar(outpath), last = nchar(outpath)) != 
 }
 
 # Make sure directories are writable
-required.writables <- c("data", outpath)
-write.access <- file.access(names = required.writables)
-if (any(write.access != 0)) {
+required_writables <- c("data", outpath)
+write_access <- file.access(names = required_writables)
+if (any(write_access != 0)) {
   stop(paste0("You do not have sufficient write access to one or more directories. ",
               "The following directories do not appear writable: \n",
-              paste(required.writables[write.access != 0], collapse = "\n")))
+              paste(required_writables[write_access != 0], collapse = "\n")))
 }
 
-# Load dependancies, keeping track of any that fail
-required.packages <- c("raster", "sp", "dismo", "maptools")
-missing.packages <- character(0)
-for (one.package in required.packages) {
-  if (!suppressMessages(require(package = one.package, character.only = TRUE))) {
-    missing.packages <- cbind(missing.packages, one.package)
+# Load dependencies, keeping track of any that fail
+required_packages <- c("terra", "geodata", "predicts")
+missing_packages <- character(0)
+for (one_package in required_packages) {
+  if (!suppressMessages(require(package = one_package, character.only = TRUE))) {
+    missing_packages <- cbind(missing_packages, one_package)
   }
 }
 
-if (length(missing.packages) > 0) {
-  stop(paste0("Missing one or more required packages. The following packages are required for run-sdm: ", paste(missing.packages, sep = "", collapse = ", ")), ".\n")
+if (length(missing_packages) > 0) {
+  stop(paste0("Missing one or more required packages. The following packages are required for run-sdm: ", paste(missing_packages, sep = "", collapse = ", ")), ".\n")
 }
 
 source(file = "functions/sdm-functions.R")
@@ -71,34 +69,34 @@ source(file = "functions/sdm-functions.R")
 message("Starting species distribution modeling")
 
 # Prepare data
-butterfly.data <- PrepareData(file = butterfly.data.file)
-plant.data <- PrepareData(file = plant.data.file)
+butterfly_data <- PrepareData(file = butterfly_data_file)
+plant_data <- PrepareData(file = plant_data_file)
 
 # Run species distribution modeling, contemporary
-butterfly.raster.current <- SDMRaster(data = butterfly.data)
-plant.raster.current <- SDMRaster(data = plant.data)
+butterfly_raster_current <- SDMRaster(data = butterfly_data)
+plant_raster_current <- SDMRaster(data = plant_data)
 # Combine the two rasters into one
-combined.raster.current <- StackTwoRasters(raster1 = butterfly.raster.current,
-                                           raster2 = plant.raster.current)
+combined_raster_current <- StackTwoRasters(raster1 = butterfly_raster_current,
+                                           raster2 = plant_raster_current)
 # Add small value to all raster pixels so plot is colored correctly
-combined.raster.current <- combined.raster.current + 0.00001
+combined_raster_current <- combined_raster_current + 0.00001
 
 # Change zeros to NAs
-butterfly.raster.current[butterfly.raster.current <= 0] <- NA
-plant.raster.current[plant.raster.current <= 0] <- NA
+butterfly_raster_current[butterfly_raster_current <= 0] <- NA
+plant_raster_current[plant_raster_current <= 0] <- NA
 
 # Add small value to all raster pixels so plot is colored correctly
-butterfly.raster.current <- butterfly.raster.current + 0.00001
-plant.raster.current <- plant.raster.current + 0.00001
+butterfly_raster_current <- butterfly_raster_current + 0.00001
+plant_raster_current <- plant_raster_current + 0.00001
 
 # Run species distribution modeling, future
-butterfly.raster.future <- SDMForecast(data = butterfly.data)
-plant.raster.future <- SDMForecast(data = plant.data)
+butterfly_raster_future <- SDMForecast(data = butterfly_data)
+plant_raster_future <- SDMForecast(data = plant_data)
 # Combine the two rasters into one
-combined.raster.future <- StackTwoRasters(raster1 = butterfly.raster.future,
-                                           raster2 = plant.raster.future)
+combined_raster_future <- StackTwoRasters(raster1 = butterfly_raster_future,
+                                          raster2 = plant_raster_future)
 # Add small value to all raster pixels so plot is colored correctly
-combined.raster.future <- combined.raster.future + 0.00001
+combined_raster_future <- combined_raster_future + 0.00001
 
 message("Species distribution modeling complete; starting plots")
 
@@ -114,8 +112,8 @@ message("Species distribution modeling complete; starting plots")
 # PLOT 6: Forecast SDMs of butterfly & plant species with overlap
 
 # Setup destination
-plot.file <- paste0(outpath, butterfly.species, "-six-panel.pdf")
-pdf(file = plot.file, useDingbats = FALSE)
+plot_file <- paste0(outpath, butterfly_species, "-six-panel.pdf")
+pdf(file = plot_file, useDingbats = FALSE)
 
 # Setup plot
 par(mfrow = c(3, 2),
@@ -123,173 +121,198 @@ par(mfrow = c(3, 2),
     cex.axis = 0.8,
     las = 1,
     mar = c(3, 4, 3, 2) + 0.1)
-butterfly.color <- "purple3"
-plant.color <- "darkolivegreen4"
-overlap.color <- "orangered4"
-legend.cex = 0.6
+butterfly_color <- "purple3"
+plant_color <- "darkolivegreen4"
+overlap_color <- "orangered4"
+legend_cex = 0.5
 
-# Load in data for map borders
-data(wrld_simpl)
+# Get data for map borders
+country_borders <- geodata::world(resolution = 4,
+                                  path = "data")
 
 ################################################################################
 # PLOT 1: Observation of butterfly species
 
 # Determine the geographic extent of our plot
-xmin <- min(butterfly.data$lon)
-xmax <- max(butterfly.data$lon)
-ymin <- min(butterfly.data$lat)
-ymax <- max(butterfly.data$lat)
+xmin <- min(butterfly_data$lon)
+xmax <- max(butterfly_data$lon)
+ymin <- min(butterfly_data$lat)
+ymax <- max(butterfly_data$lat)
 
 # Draw the base map
-plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = "gray95", border = "gray10", lwd = 0.5,
-     main = paste0("Observations of ", gsub(pattern = "_", replacement = " ", x = butterfly.species)))
+plot(country_borders, 
+     xlim = c(xmin, xmax), 
+     ylim = c(ymin, ymax), 
+     axes = TRUE, 
+     col = "gray95",
+     main = paste0("Observations of ", gsub(pattern = "_", replacement = " ", x = butterfly_species)))
 
 # Add observation points
-points(x = butterfly.data$lon, y = butterfly.data$lat, col = "#003300", pch = 21, cex = 0.7, 
-       bg = butterfly.color, lwd = 0.5)
-
-# Add bounding box around map
-box()
+points(x = butterfly_data$lon, y = butterfly_data$lat, col = "#003300", 
+       pch = 21, cex = 0.7, bg = butterfly_color, lwd = 0.5)
 
 ################################################################################
 # PLOT 2: Observation of plant species
 
 # Determine the geographic extent of our plot
-xmin <- min(plant.data$lon)
-xmax <- max(plant.data$lon)
-ymin <- min(plant.data$lat)
-ymax <- max(plant.data$lat)
+xmin <- min(plant_data$lon)
+xmax <- max(plant_data$lon)
+ymin <- min(plant_data$lat)
+ymax <- max(plant_data$lat)
 
 # Draw the base map
-plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = "gray95", border = "gray10", lwd = 0.5,
-     main = paste0("Observations of ", gsub(pattern = "_", replacement = " ", x = plant.species)))
+plot(country_borders, 
+     xlim = c(xmin, xmax), 
+     ylim = c(ymin, ymax), 
+     axes = TRUE, 
+     col = "gray95",
+     main = paste0("Observations of ", gsub(pattern = "_", replacement = " ", x = plant_species)))
 
 # Add observation points
-points(x = plant.data$lon, y = plant.data$lat, col = "#003300", pch = 21, cex = 0.7,
-       bg = plant.color, lwd = 0.5)
-
-# Add bounding box around map
-box()
+points(x = plant_data$lon, y = plant_data$lat, col = "#003300", pch = 21, 
+       cex = 0.7, bg = plant_color, lwd = 0.5)
 
 ################################################################################
 # PLOT 3: Contemporary SDM of butterfly species
 
 # Determine the geographic extent of our plot
-xmin <- extent(butterfly.raster.current)[1]
-xmax <- extent(butterfly.raster.current)[2]
-ymin <- extent(butterfly.raster.current)[3]
-ymax <- extent(butterfly.raster.current)[4]
+xmin <- terra::ext(butterfly_raster_current)[1]
+xmax <- terra::ext(butterfly_raster_current)[2]
+ymin <- terra::ext(butterfly_raster_current)[3]
+ymax <- terra::ext(butterfly_raster_current)[4]
 
 # Draw the base map
-plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = "gray95", border = NA,
-     main = paste0(gsub(pattern = "_", replacement = " ", x = butterfly.species), " - current"))
+plot(country_borders, 
+     xlim = c(xmin, xmax), 
+     ylim = c(ymin, ymax), 
+     axes = TRUE, 
+     col = "gray95",
+     main = paste0(gsub(pattern = "_", replacement = " ", x = butterfly_species), " - current"))
 
 # Add the model rasters
-plot(butterfly.raster.current, legend = FALSE, add = TRUE, breaks = c(0, 1, 2), col = c("white", butterfly.color, "white"))
+plot(butterfly_raster_current, legend = FALSE, add = TRUE, 
+     col = butterfly_color)
 
 # Redraw the borders of the base map
-plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", lwd = 0.5, col = NA)
-
-# Add bounding box around map
-box()
+plot(country_borders, 
+     xlim = c(xmin, xmax), 
+     ylim = c(ymin, ymax), 
+     add = TRUE, 
+     border = "gray10", 
+     col = NA)
 
 ################################################################################
 # PLOT 4: Contemporary SDM of plant species
 
 # Determine the geographic extent of our plot
-xmin <- extent(plant.raster.current)[1]
-xmax <- extent(plant.raster.current)[2]
-ymin <- extent(plant.raster.current)[3]
-ymax <- extent(plant.raster.current)[4]
+xmin <- terra::ext(plant_raster_current)[1]
+xmax <- terra::ext(plant_raster_current)[2]
+ymin <- terra::ext(plant_raster_current)[3]
+ymax <- terra::ext(plant_raster_current)[4]
 
 # Draw the base map
-plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = "gray95", border = NA,
-     main = paste0(gsub(pattern = "_", replacement = " ", x = plant.species), " - current"))
+plot(country_borders, 
+     xlim = c(xmin, xmax), 
+     ylim = c(ymin, ymax), 
+     axes = TRUE, 
+     col = "gray95",
+     main = paste0(gsub(pattern = "_", replacement = " ", x = plant_species), " - current"))
 
 # Add the model rasters
-plot(plant.raster.current, legend = FALSE, add = TRUE, breaks = c(0, 1, 2), col = c("white", plant.color, "white"))
+plot(plant_raster_current, legend = FALSE, add = TRUE, 
+     col = plant_color)
 
 # Redraw the borders of the base map
-plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", lwd = 0.5, col = NA)
-
-# Add bounding box around map
-box()
+plot(country_borders, 
+     xlim = c(xmin, xmax), 
+     ylim = c(ymin, ymax), 
+     add = TRUE, 
+     border = "gray10", 
+     col = NA)
 
 ################################################################################
 # PLOT 5: Contemporary SDMs of butterfly & plant species with overlap
 
 # Determine the geographic extent of our plot
-xmin <- extent(combined.raster.current)[1]
-xmax <- extent(combined.raster.current)[2]
-ymin <- extent(combined.raster.current)[3]
-ymax <- extent(combined.raster.current)[4]
+xmin <- terra::ext(combined_raster_current)[1]
+xmax <- terra::ext(combined_raster_current)[2]
+ymin <- terra::ext(combined_raster_current)[3]
+ymax <- terra::ext(combined_raster_current)[4]
 
 # Coloring breakpoints
-breakpoints <- c(0, 1, 2, 3, 4)
-plot.colors <- c("white", butterfly.color, plant.color, overlap.color, "white")
+breakpoints <- c(0, 1, 1.9, 2.9, 3.9, 4)
+plot_colors <- c(NA, butterfly_color, plant_color, overlap_color, NA)
 
 # Draw the base map
-plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = "gray95", border = NA, 
+plot(country_borders, 
+     xlim = c(xmin, xmax), 
+     ylim = c(ymin, ymax), 
+     axes = TRUE, 
+     col = "gray95",
      main = "Combined Contemporary SDMs")
 
 # Add the model rasters
-plot(combined.raster.current, 
-     legend = FALSE, 
-     add = TRUE, 
-     breaks = breakpoints, 
-     col = plot.colors)
+plot(combined_raster_current, legend = FALSE, add = TRUE, 
+     breaks = breakpoints, col = plot_colors)
 
 # Redraw the borders of the base map
-plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", lwd = 0.5, col = NA)
+plot(country_borders, 
+     xlim = c(xmin, xmax), 
+     ylim = c(ymin, ymax), 
+     add = TRUE, 
+     border = "gray10", 
+     col = NA)
 
 # Add the legend
-legend("topright", legend = c(gsub(pattern = "_", replacement = " ", x = butterfly.species), 
-                              gsub(pattern = "_", replacement = " ", x = plant.species), 
-                              "Overlap"), 
-       fill = plot.colors[2:4], 
-       bg = "#FFFFFF",
-       cex = legend.cex)
-
-# Add bounding box around map
-box()
+terra::add_legend("topright", 
+                  legend = c(gsub(pattern = "_", replacement = " ", x = butterfly_species), 
+                             gsub(pattern = "_", replacement = " ", x = plant_species), 
+                             "Overlap"), 
+                  fill = plot_colors[2:4], 
+                  bg = "#FFFFFF",
+                  cex = legend_cex)
 
 ################################################################################
 # PLOT 6: Forecast SDMs of butterfly & plant species with overlap
 
 # Determine the geographic extent of our plot
-xmin <- extent(combined.raster.future)[1]
-xmax <- extent(combined.raster.future)[2]
-ymin <- extent(combined.raster.future)[3]
-ymax <- extent(combined.raster.future)[4]
+xmin <- terra::ext(combined_raster_future)[1]
+xmax <- terra::ext(combined_raster_future)[2]
+ymin <- terra::ext(combined_raster_future)[3]
+ymax <- terra::ext(combined_raster_future)[4]
 
 # Coloring breakpoints
-breakpoints <- c(0, 1, 2, 3, 4)
-plot.colors <- c("white", butterfly.color, plant.color, overlap.color, "white")
+breakpoints <- c(0, 1, 1.9, 2.9, 3.9, 4)
+plot_colors <- c(NA, butterfly_color, plant_color, overlap_color, NA)
 
 # Draw the base map
-plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), axes = TRUE, col = "gray95", border = NA,
+plot(country_borders, 
+     xlim = c(xmin, xmax), 
+     ylim = c(ymin, ymax), 
+     axes = TRUE, 
+     col = "gray95",
      main = "Combined Forecast SDMs")
 
 # Add the model rasters
-plot(combined.raster.future, 
-     legend = FALSE, 
-     add = TRUE, 
-     breaks = breakpoints, 
-     col = plot.colors)
+plot(combined_raster_future, legend = FALSE, add = TRUE, 
+     breaks = breakpoints, col = plot_colors)
 
 # Redraw the borders of the base map
-plot(wrld_simpl, xlim = c(xmin, xmax), ylim = c(ymin, ymax), add = TRUE, border = "gray10", lwd = 0.5, col = NA)
+plot(country_borders, 
+     xlim = c(xmin, xmax), 
+     ylim = c(ymin, ymax), 
+     add = TRUE, 
+     border = "gray10", 
+     col = NA)
 
 # Add the legend
-legend("topright", legend = c(gsub(pattern = "_", replacement = " ", x = butterfly.species), 
-                              gsub(pattern = "_", replacement = " ", x = plant.species), 
-                              "Overlap"), 
-       fill = plot.colors[2:4], 
-       bg = "#FFFFFF",
-       cex = legend.cex)
-
-# Add bounding box around map
-box()
+terra::add_legend("topright", 
+                  legend = c(gsub(pattern = "_", replacement = " ", x = butterfly_species), 
+                             gsub(pattern = "_", replacement = " ", x = plant_species), 
+                             "Overlap"), 
+                  fill = plot_colors[2:4], 
+                  bg = "#FFFFFF",
+                  cex = legend_cex)
 
 # Reset default graphics parameters
 par(mfrow = c(1, 1),
@@ -302,4 +325,4 @@ par(mfrow = c(1, 1),
 dev.off()
 
 # Let user know analysis is done.
-message(paste0("Analysis and plotting complete; images written to ", plot.file))
+message(paste0("Analysis and plotting complete; images written to ", plot_file))
