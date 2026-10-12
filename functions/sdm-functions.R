@@ -225,9 +225,16 @@ SDMForecast <- function(data, padding = 0.1) {
 #' \describe{
 #'   \item{sdm}{Climate envelope model, commonly referred to as the "bioclim" 
 #'   model; the output of a call to `predicts::envelope()`}
-#'   \item{sdm_threshold}{Threshold for determining presence / absence, in this 
-#'   case "the threshold at which the sum of the sensitivity (true positive 
-#'   rate) and specificity (true negative rate) is highest" ("max_spec_sens")}
+#'   \item{sdm_threshold}{Threshold for determining presence / absence, in most 
+#'   cases, this will be "the threshold at which the sum of the sensitivity 
+#'   (true positive rate) and specificity (true negative rate) is highest" 
+#'   (aka "max_spec_sens"). Sometimes, though, this results in a negative value 
+#'   for the threshold, which doesn't really work (all areas are suitable). In 
+#'   such a case, an alternative threshold will be used and indicated by the 
+#'   value in the \code{sdm_threshold_name} element}
+#'   \item{sdm_threshold_name}{The name of the threshold for determining 
+#'   presense/absence. Usually "max_spec_sens", but see notes above in the 
+#'   \code{sdm_threshold} element}
 #' } #' 
 SDMBioclim <- function(data, padding = 0.1) {
   ########################################
@@ -310,6 +317,28 @@ SDMBioclim <- function(data, padding = 0.1) {
                                           model = sdm_model,
                                           x = bioclim_data)
   sdm_model_threshold <- sdm_model_eval@thresholds$max_spec_sens
+  sdm_model_threshold_name <- "max_spec_sens"
   
-  return(list(sdm = sdm_model, sdm_threshold = sdm_model_threshold))
+  # Sometimes, pa_evaluate likes to return thresholds less than zero (not 
+  # cool!). We will add a little cludge to reduce headaches in students.
+  if (sdm_model_threshold <= 0) {
+    # Start by pulling out all the values in the threshold data.frame
+    thresholds <- t(sdm_model_eval@thresholds)
+    # Turn it into a vector
+    thresholds <- thresholds[, 1]
+    if (length(thresholds > 0)) {
+      # Only keep positive values
+      thresholds <- thresholds[thresholds > 0]
+      # We are going to be conservative, so grab the highest value
+      sdm_model_threshold <- thresholds[which.max(thresholds)]
+      sdm_model_threshold_name <- names(thresholds)[which.max(thresholds)]
+    } else {
+      warning("No suitable threshold found; interpret results with caution!")
+      sdm_model_threshold <- 0.1
+      sdm_model_threshold_name <- "dummy value: 0.1"
+    }
+  }
+  
+  return(list(sdm = sdm_model, sdm_threshold = sdm_model_threshold,
+              sdm_threshold_name = sdm_model_threshold_name))
 }
